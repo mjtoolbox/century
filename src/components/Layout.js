@@ -9,7 +9,7 @@ const Layout = () => {
     <Fragment>
       <Navbar />
       <Main />
-      {/* <About /> */}
+      <About />
       <Footer />
     </Fragment>
   );

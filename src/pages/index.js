@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import { Fragment } from 'react';
-import Layout from '@/components/Layout';
+import Layout from '../components/Layout';
 
 const inter = Inter({ subsets: ['latin'] });
 

@@ -3,7 +3,7 @@ import kendo from '../../public/kendo1.jpg';
 
 const Main = () => {
   return (
-    <section class="bg-center bg-no-repeat bg-[url('../../public/kendo1.jpg')] bg-gray-700 bg-blend-multiply">
+    <section class="bg-center bg-cover bg-no-repeat bg-[url('../../public/kendo.jpg')] bg-gray-600 bg-blend-multiply">
       <div class='px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56'>
         <h1 class='mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl'>
           We invest in the world’s potential
