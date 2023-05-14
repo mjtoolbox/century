@@ -13,7 +13,7 @@ export default function Document() {
         />
         <meta
           name='keywords'
-          content='Kendo, Kumdo, Korean, Vancouver, Langley, Coquitlam, Greater Vancouver'
+          content='Kendo, Kumdo, Korean, Vancouver, Langley, Coquitlam, Greater Vancouver, 밴쿠버, 검도, 한인'
         />
         <meta name='author' content='Century Kumdo Club' />
 
