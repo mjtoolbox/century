@@ -11,9 +11,9 @@ const Layout = () => {
     <Fragment>
       <Navbar />
       <Landing />
-      <Main />
       <About />
       <Schedule />
+      <Main />
       <Footer />
     </Fragment>
   );

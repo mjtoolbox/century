@@ -50,7 +50,18 @@ const Navbar = () => {
         </ul>
       </div>
       <div className='navbar-end'>
-        <a className='btn'>Login</a>
+        <a className='btn btn-sm mr-3'>Login</a>
+
+        <label className='swap swap-flip text-9xl'>
+          <input type='checkbox' />
+
+          <div className='swap-off'>
+            <img class='h-6 w-6 ' src='/korea.png' />
+          </div>
+          <div className='swap-on'>
+            <img class='h-6 w-6 ' src='/canada.png' />
+          </div>
+        </label>
       </div>
     </div>
   );
