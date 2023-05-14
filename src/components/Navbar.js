@@ -34,18 +34,18 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <a className='btn btn-ghost normal-case text-xl'>Century</a>
+        <a className='btn btn-ghost normal-case text-xl'>Century Kumdo Club</a>
       </div>
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
           <li>
-            <a>Item 1</a>
+            <a href='#about'>About</a>
           </li>
           <li>
-            <a>Item 2</a>
+            <a href='#schedule'>Schedule</a>
           </li>
           <li>
-            <a>Item 3</a>
+            <a href='#gallery'>Gallery</a>
           </li>
         </ul>
       </div>
@@ -54,7 +54,6 @@ const Navbar = () => {
 
         <label className='swap swap-flip text-9xl'>
           <input type='checkbox' />
-
           <div className='swap-off'>
             <img class='h-6 w-6 ' src='/korea.png' />
           </div>

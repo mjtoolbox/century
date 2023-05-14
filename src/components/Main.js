@@ -3,6 +3,9 @@ import React, { Fragment } from 'react';
 const Main = () => {
   return (
     <Fragment>
+      <div className='text-4xl font-bold text-center m-12' id='gallery'>
+        Gallery
+      </div>
       <div className='carousel w-full'>
         <div id='item1' className='carousel-item w-full'>
           <img src='/sample1.jpg' className='w-full' />

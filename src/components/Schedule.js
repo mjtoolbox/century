@@ -2,7 +2,7 @@ import React from 'react';
 
 const Schedule = () => {
   return (
-    <div class='flex justify-evenly flex-wrap'>
+    <div class='flex justify-evenly flex-wrap' id='schedule'>
       <div class='mx-9 my-8 min-h-min'>
         <div className='card w-96 bg-base-100 shadow-xl'>
           <div className='card-body'>
