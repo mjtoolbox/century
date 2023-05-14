@@ -2,34 +2,30 @@ import React from 'react';
 
 const Schedule = () => {
   return (
-    <div className='container'>
-      <div className='flex-row grid grid-cols-2 gap-60'>
-        <div className='mx-9 my-8 min-h-min'>
-          <h1 className='text-2xl font-bold'>LANGLEY</h1>
-          <div className='text-lg leading-loose'>Monday: 7pm - 9pm</div>
-          <div className='text-lg leading-loose'>Wednesday: 7pm - 9pm</div>
-        </div>
-        <div className='mx-9 my-8 min-h-min'>
-          <h1 className='text-2xl font-bold'>COQUITLAM</h1>
-          <p className='text-lg leading-loose'>Friday: 7:30pm - 9pm</p>
+    <div class='flex justify-evenly flex-wrap'>
+      <div class='mx-9 my-8 min-h-min'>
+        <div className='card w-96 bg-base-100 shadow-xl'>
+          <div className='card-body'>
+            <h1 className='card-title font-bold'>LANGLEY</h1>
+            <div className='text-lg '>Monday: 7pm - 9pm</div>
+            <div className='text-lg '>Wednesday: 7pm - 9pm</div>
+            <h3 className='text-xl mt-3 '>Address: </h3>
+            <div className='text-lg '>Lions Society West Langley Hall</div>
+            <div className='text-lg '>9400 208 St, Langley Twp, BC V1M 2Y9</div>
+          </div>
         </div>
       </div>
-
-      <div className='flex-row grid grid-cols-2 gap-60'>
-        <div className='mx-9 mb-8 min-h-min'>
-          <h1 className='text-xl font-bold'>Address: </h1>
-          <div className='text-lg leading-loose'>
-            Lions Society West Langley Hall
-          </div>
-          <div className='text-lg leading-loose'>
-            9400 208 St, Langley Twp, BC V1M 2Y9
-          </div>
-        </div>
-        <div className='mx-9 mb-8 min-h-min'>
-          <h1 className='text-xl font-bold'>Address:</h1>
-          <div className='text-lg leading-loose'>Harbour View Elementary</div>
-          <div className='text-lg leading-loose'>
-            960 Lillian St, Coquitlam, BC V3J 5C7
+      <div class='mx-9 my-8 min-h-min'>
+        <div className='card w-96 bg-base-100 shadow-xl'>
+          <div className='card-body'>
+            <h1 className='card-title font-bold'>COQUITLAM</h1>
+            <p className='text-lg '>Friday: 7:30pm - 9pm</p>
+            <p className='text-lg'>&nbsp; </p>
+            <h3 className='text-xl mt-3 '>Address: </h3>
+            <div className='text-lg '>Harbour View Elementary</div>
+            <div className='text-lg '>
+              960 Lillian St, Coquitlam, BC V3J 5C7
+            </div>
           </div>
         </div>
       </div>
