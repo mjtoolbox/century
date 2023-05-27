@@ -4,16 +4,14 @@ export default function Document() {
   return (
     <Html lang='en' data-theme='corporate'>
       <Head>
-        <title></title>
         <meta charSet='UTF-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <meta
           name='description'
           content='Century Kumdo Club - A Korean non-profit Kumdo sports club'
         />
         <meta
           name='keywords'
-          content='Kendo, Kumdo, Korean, Vancouver, Langley, Coquitlam, Greater Vancouver, 밴쿠버, 검도, 한인'
+          content='Kendo, Kumdo, Korean, Vancouver, Langley, Coquitlam, Greater Vancouver, 밴쿠버, 검도, 한인, 한국'
         />
         <meta name='author' content='Century Kumdo Club' />
 

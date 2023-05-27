@@ -2,8 +2,8 @@ import React from 'react';
 
 const Schedule = () => {
   return (
-    <div class='flex justify-evenly flex-wrap' id='schedule'>
-      <div class='mx-9 my-8 min-h-min'>
+    <div className='flex justify-evenly flex-wrap' id='schedule'>
+      <div className='mx-9 my-8 min-h-min'>
         <div className='card w-96 bg-base-100 shadow-xl'>
           <div className='card-body'>
             <h1 className='card-title font-bold'>LANGLEY</h1>
@@ -15,7 +15,7 @@ const Schedule = () => {
           </div>
         </div>
       </div>
-      <div class='mx-9 my-8 min-h-min'>
+      <div className='mx-9 my-8 min-h-min'>
         <div className='card w-96 bg-base-100 shadow-xl'>
           <div className='card-body'>
             <h1 className='card-title font-bold'>COQUITLAM</h1>

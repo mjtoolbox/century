@@ -1,4 +1,20 @@
+import { useState, useEffect } from 'react';
+
 const Navbar = () => {
+  const [title, setTitle] = useState('Kumdo');
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      console.log('Title is ' + title);
+      if (title === 'Kumdo') {
+        setTitle('Kendo');
+        console.log('Set Kendo');
+      } else if (title === 'Kendo') {
+        setTitle('Kumdo');
+        console.log('Set Kumdo');
+      }
+    }, 5000);
+  }, [title]);
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
@@ -34,7 +50,9 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <a className='btn btn-ghost normal-case text-xl'>Century Kumdo Club</a>
+        <a className='btn btn-ghost normal-case text-xl'>
+          Century {title} Club
+        </a>
       </div>
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
@@ -55,10 +73,10 @@ const Navbar = () => {
         <label className='swap swap-flip text-9xl'>
           <input type='checkbox' />
           <div className='swap-off'>
-            <img class='h-6 w-6 ' src='/korea.png' />
+            <img className='h-6 w-6 ' src='/korea.png' />
           </div>
           <div className='swap-on'>
-            <img class='h-6 w-6 ' src='/canada.png' />
+            <img className='h-6 w-6 ' src='/canada.png' />
           </div>
         </label>
       </div>
