@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const Header = () => {
+const Header = (props) => {
   const [title, setTitle] = useState('Kumdo');
 
   useEffect(() => {
@@ -39,35 +39,35 @@ const Header = () => {
             className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
           >
             <li>
-              <a href='#about'>About</a>
+              <a href='#about'>{props.heading.menu1}</a>
             </li>
             <li>
-              <a href='#schedule'>Schedule</a>
+              <a href='#schedule'>{props.heading.menu2}</a>
             </li>
             <li>
-              <a href='#gallery'>Gallery</a>
+              <a href='#gallery'>{props.heading.menu3}</a>
             </li>
           </ul>
         </div>
         <a className='btn btn-ghost normal-case text-xl'>
-          Century {title} Club
+          {props.heading.heading1} {title} {props.heading.heading2}
         </a>
       </div>
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
           <li>
-            <a href='#about'>About</a>
+            <a href='#about'>{props.heading.menu1}</a>
           </li>
           <li>
-            <a href='#schedule'>Schedule</a>
+            <a href='#schedule'>{props.heading.menu2}</a>
           </li>
           <li>
-            <a href='#gallery'>Gallery</a>
+            <a href='#gallery'>{props.heading.menu3}</a>
           </li>
         </ul>
       </div>
       <div className='navbar-end'>
-        <a className='btn btn-sm mr-3'>Login</a>
+        <a className='btn btn-sm mr-3'>{props.heading.login}</a>
 
         <label className='swap swap-flip text-9xl'>
           <input type='checkbox' />
