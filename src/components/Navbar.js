@@ -5,15 +5,13 @@ const Navbar = () => {
 
   useEffect(() => {
     const id = setInterval(() => {
-      console.log('Title is ' + title);
       if (title === 'Kumdo') {
         setTitle('Kendo');
-        console.log('Set Kendo');
       } else if (title === 'Kendo') {
         setTitle('Kumdo');
-        console.log('Set Kumdo');
       }
     }, 5000);
+    return () => clearInterval(id);
   }, [title]);
   return (
     <div className='navbar bg-base-100'>

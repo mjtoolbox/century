@@ -1,8 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { attributes } from '../content/home.md';
 
 const Home = () => {
   const [title, setTitle] = useState('CENTURY KUMDO');
+  let { landing } = attributes;
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -15,6 +17,7 @@ const Home = () => {
         console.log('Set KUMDO');
       }
     }, 5000);
+    return () => clearInterval(id);
   }, [title]);
 
   return (
@@ -23,11 +26,7 @@ const Home = () => {
       <div className='hero-content text-center text-neutral-content'>
         <div className='max-w-md'>
           <h1 className='mb-5 text-5xl font-bold'>{title}</h1>
-          <p className='mb-5'>
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
-          </p>
+          <p className='mb-5'>{landing.subtitle}</p>
         </div>
       </div>
     </div>
