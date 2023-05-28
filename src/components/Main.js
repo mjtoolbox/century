@@ -3,6 +3,7 @@ import Gallery from './Gallery';
 import About from './About';
 import Schedule from './Schedule';
 import Landing from './Landing';
+import Layout from './Layout';
 
 const Main = () => {
   return (

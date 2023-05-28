@@ -5,7 +5,7 @@ import Footer from './Footer';
 import Head from 'next/head';
 import Main from './Main';
 
-const Layout = () => {
+const Layout = ({children}) => {
   const [title, setTitle] = useState('Century Kumdo');
 
   useEffect(() => {
@@ -18,13 +18,14 @@ const Layout = () => {
     }, 5000);
     return () => clearInterval(id);
   }, [title]);
+
   return (
     <Fragment>
       <Head>
         <title>{title}</title>
       </Head>
       <Header />
-      <Main />
+      {children}
       <Footer />
     </Fragment>
   );
