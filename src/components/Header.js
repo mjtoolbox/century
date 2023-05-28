@@ -1,6 +1,7 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 
-const Navbar = () => {
+const Header = () => {
   const [title, setTitle] = useState('Kumdo');
 
   useEffect(() => {
@@ -82,4 +83,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;

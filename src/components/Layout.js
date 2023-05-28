@@ -1,12 +1,9 @@
 import React, { Fragment } from 'react';
 import { useState, useEffect } from 'react';
-import Navbar from './Navbar';
+import Header from './Header';
 import Footer from './Footer';
-import Main from './Main';
-import About from './About';
-import Schedule from './Schedule';
-import Landing from './Landing';
 import Head from 'next/head';
+import Main from './Main';
 
 const Layout = () => {
   const [title, setTitle] = useState('Century Kumdo');
@@ -26,10 +23,7 @@ const Layout = () => {
       <Head>
         <title>{title}</title>
       </Head>
-      <Navbar />
-      <Landing />
-      <About />
-      <Schedule />
+      <Header />
       <Main />
       <Footer />
     </Fragment>
