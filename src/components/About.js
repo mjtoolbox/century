@@ -8,7 +8,7 @@ const About = (props) => {
     props.about.heading1 + ' ' + props.title + ' ' + props.about.heading2;
 
   return (
-    <div className='hero h-96 bg-base-200' id='about'>
+    <div className='hero h-fit bg-base-200' id='about'>
       <div className='hero-content flex-col sm:flex-row'>
         <img src='/logo.jpg' className='max-w-sm rounded-lg shadow-2xl' />
         <div>
