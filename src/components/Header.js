@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import AppContext from '@/pages/AppContext';
+import AppContext from '@/components/AppContext';
 
 const Header = (props) => {
   const { language, setLanguage } = useContext(AppContext);
   const [title, setTitle] = useState('Kumdo');
 
-  console.log('context value: ' + language);
+  // console.log('context value: ' + language);
 
   useEffect(() => {
     const id = setInterval(() => {

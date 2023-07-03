@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout';
 import '@/styles/globals.css';
-import AppContext from './AppContext';
+import AppContext from '../components/AppContext';
 import { useState } from 'react';
 
 export default function App({ Component, pageProps }) {

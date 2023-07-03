@@ -5,7 +5,7 @@ import Footer from './Footer';
 import Head from 'next/head';
 import Main from './Main';
 import { attributes } from '../content/home.md';
-import AppContext from '@/pages/AppContext';
+import AppContext from '@/components/AppContext';
 
 const Layout = ({ children }) => {
   const [title, setTitle] = useState('Century Kumdo');
