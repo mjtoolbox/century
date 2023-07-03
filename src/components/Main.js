@@ -1,15 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext, useState, useEffect } from 'react';
 import Gallery from './Gallery';
 import About from './About';
 import Schedule from './Schedule';
 import Landing from './Landing';
-import { useState, useEffect } from 'react';
 import { attributes } from '../content/home.md';
+import AppContext from '@/pages/AppContext';
 
 const Main = () => {
   const [title, setTitle] = useState('Kumdo');
-  const [language, setLanguage] = useState('en');
-
   let { landing, about, schedule } = attributes;
 
   useEffect(() => {
@@ -25,9 +23,9 @@ const Main = () => {
 
   return (
     <Fragment>
-      <Landing title={title} landing={landing} language={language} />
-      <About title={title} about={about} language={language} />
-      <Schedule schedule={schedule} language={language} />
+      <Landing title={title} landing={landing} />
+      <About title={title} about={about} />
+      <Schedule schedule={schedule} />
       <Gallery />
     </Fragment>
   );

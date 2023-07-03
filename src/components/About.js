@@ -1,19 +1,11 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import AppContext from '@/pages/AppContext';
 
 const About = (props) => {
-  // const [title, setTitle] = useState('Kumdo');
-
-  // useEffect(() => {
-  //   const id = setInterval(() => {
-  //     if (title === 'Kumdo') {
-  //       setTitle('Kendo');
-  //     } else if (title === 'Kendo') {
-  //       setTitle('Kumdo');
-  //     }
-  //   }, 5000);
-  //   return () => clearInterval(id);
-  // }, [title]);
+  const { language, setLanguage } = useContext(AppContext);
+  var engtext =
+    props.about.heading1 + ' ' + props.title + ' ' + props.about.heading2;
 
   return (
     <div className='hero h-96 bg-base-200' id='about'>
@@ -21,9 +13,13 @@ const About = (props) => {
         <img src='/logo.jpg' className='max-w-sm rounded-lg shadow-2xl' />
         <div>
           <h1 className='text-3xl font-bold tracking-wide'>
-            {props.about.heading1} {props.title} {props.about.heading2}
+            {language === 'en' ? engtext : props.about.kheading}
           </h1>
-          <p className='py-6'>{props.about.description}</p>
+          <p className='py-6'>
+            {language === 'en'
+              ? props.about.description
+              : props.about.kdescription}
+          </p>
         </div>
       </div>
     </div>

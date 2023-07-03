@@ -1,11 +1,12 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import AppContext from '@/pages/AppContext';
 
 const Header = (props) => {
+  const { language, setLanguage } = useContext(AppContext);
   const [title, setTitle] = useState('Kumdo');
-  // const [language, setLanguage] = useState('en');
 
-  console.log('language: ' + props.language);
+  console.log('context value: ' + language);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -43,71 +44,57 @@ const Header = (props) => {
           >
             <li>
               <a href='#about'>
-                {props.language === 'en'
-                  ? props.heading.menu1
-                  : props.heading.kmenu1}
+                {language === 'en' ? props.heading.menu1 : props.heading.kmenu1}
               </a>
             </li>
             <li>
               <a href='#schedule'>
-                {props.language === 'en'
-                  ? props.heading.menu2
-                  : props.heading.kmenu2}
+                {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
               </a>
             </li>
             <li>
               <a href='#gallery'>
-                {props.language === 'en'
-                  ? props.heading.menu3
-                  : props.heading.kmenu3}
+                {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
               </a>
             </li>
           </ul>
         </div>
         <a className='btn btn-ghost normal-case text-xl'>
-          {props.language === 'en'
-            ? props.heading.heading1
-            : props.heading.kheading1}{' '}
-          {props.language === 'en' ? title : ''}{' '}
-          {props.language === 'en'
-            ? props.heading.heading2
-            : props.heading.kheading2}
+          {language === 'en' ? props.heading.heading1 : props.heading.kheading1}{' '}
+          {language === 'en' ? title : ''}{' '}
+          {language === 'en' ? props.heading.heading2 : props.heading.kheading2}
         </a>
       </div>
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
           <li>
             <a href='#about'>
-              {props.language === 'en'
-                ? props.heading.menu1
-                : props.heading.kmenu1}
+              {language === 'en' ? props.heading.menu1 : props.heading.kmenu1}
             </a>
           </li>
           <li>
             <a href='#schedule'>
-              {props.language === 'en'
-                ? props.heading.menu2
-                : props.heading.kmenu2}
+              {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
             </a>
           </li>
           <li>
             <a href='#gallery'>
-              {props.language === 'en'
-                ? props.heading.menu3
-                : props.heading.kmenu3}
+              {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
             </a>
           </li>
         </ul>
       </div>
       <div className='navbar-end'>
         <a className='btn btn-sm mr-3'>
-          {props.language === 'en' ? props.heading.login : props.heading.klogin}
+          {language === 'en' ? props.heading.login : props.heading.klogin}
         </a>
 
         <label className='swap swap-flip text-9xl'>
           <input
             type='checkbox'
-            onClick={(e) => props.handleLanguageToggle(e.target.checked)}
+            onClick={(e) =>
+              e.target.checked ? setLanguage('kr') : setLanguage('en')
+            }
           />
           <div className='swap-off'>
             <img id='iconkorea' className='h-6 w-6 ' src='/korea.png' />
