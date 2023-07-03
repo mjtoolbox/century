@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 
 const Header = (props) => {
   const [title, setTitle] = useState('Kumdo');
+  // const [language, setLanguage] = useState('en');
+
+  console.log('language: ' + props.language);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -39,35 +42,67 @@ const Header = (props) => {
             className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
           >
             <li>
-              <a href='#about'>{props.heading.menu1}</a>
+              <a href='#about'>
+                {props.language === 'en'
+                  ? props.heading.menu1
+                  : props.heading.kmenu1}
+              </a>
             </li>
             <li>
-              <a href='#schedule'>{props.heading.menu2}</a>
+              <a href='#schedule'>
+                {props.language === 'en'
+                  ? props.heading.menu2
+                  : props.heading.kmenu2}
+              </a>
             </li>
             <li>
-              <a href='#gallery'>{props.heading.menu3}</a>
+              <a href='#gallery'>
+                {props.language === 'en'
+                  ? props.heading.menu3
+                  : props.heading.kmenu3}
+              </a>
             </li>
           </ul>
         </div>
         <a className='btn btn-ghost normal-case text-xl'>
-          {props.heading.heading1} {title} {props.heading.heading2}
+          {props.language === 'en'
+            ? props.heading.heading1
+            : props.heading.kheading1}{' '}
+          {props.language === 'en' ? title : ''}{' '}
+          {props.language === 'en'
+            ? props.heading.heading2
+            : props.heading.kheading2}
         </a>
       </div>
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
           <li>
-            <a href='#about'>{props.heading.menu1}</a>
+            <a href='#about'>
+              {props.language === 'en'
+                ? props.heading.menu1
+                : props.heading.kmenu1}
+            </a>
           </li>
           <li>
-            <a href='#schedule'>{props.heading.menu2}</a>
+            <a href='#schedule'>
+              {props.language === 'en'
+                ? props.heading.menu2
+                : props.heading.kmenu2}
+            </a>
           </li>
           <li>
-            <a href='#gallery'>{props.heading.menu3}</a>
+            <a href='#gallery'>
+              {props.language === 'en'
+                ? props.heading.menu3
+                : props.heading.kmenu3}
+            </a>
           </li>
         </ul>
       </div>
       <div className='navbar-end'>
-        <a className='btn btn-sm mr-3'>{props.heading.login}</a>
+        <a className='btn btn-sm mr-3'>
+          {props.language === 'en' ? props.heading.login : props.heading.klogin}
+        </a>
 
         <label className='swap swap-flip text-9xl'>
           <input

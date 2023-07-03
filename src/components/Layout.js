@@ -5,7 +5,6 @@ import Footer from './Footer';
 import Head from 'next/head';
 import Main from './Main';
 import { attributes } from '../content/home.md';
-import { krattributes } from '../content/homekr.md';
 
 const Layout = ({ children }) => {
   const [title, setTitle] = useState('Century Kumdo');
@@ -13,18 +12,12 @@ const Layout = ({ children }) => {
 
   let { heading } = attributes;
 
-  // if (language === 'en') {
-  //   heading = attributes;
-  // } else if (language === 'kr') {
-  //   heading = krattributes;
-  // }
-
   const handleLanguageToggle = (checked) => {
     if (checked) {
-      console.log('checked now kr');
+      // console.log('checked now kr');
       setLanguage('kr');
     } else {
-      console.log('unchecked now en');
+      // console.log('unchecked now en');
       setLanguage('en');
     }
   };
@@ -32,9 +25,9 @@ const Layout = ({ children }) => {
   useEffect(() => {
     const id = setInterval(() => {
       if (title === 'Century Kumdo') {
-        setTitle('센츄리 검도');
+        setTitle(heading.ktitle);
       } else {
-        setTitle('Century Kumdo');
+        setTitle(heading.title);
       }
     }, 5000);
     return () => clearInterval(id);
@@ -47,7 +40,6 @@ const Layout = ({ children }) => {
       </Head>
       <Header
         heading={heading}
-        // krheading={krheading}
         language={language}
         handleLanguageToggle={handleLanguageToggle}
       />
