@@ -70,12 +70,15 @@ const Header = (props) => {
         <a className='btn btn-sm mr-3'>{props.heading.login}</a>
 
         <label className='swap swap-flip text-9xl'>
-          <input type='checkbox' />
+          <input
+            type='checkbox'
+            onClick={(e) => props.handleLanguageToggle(e.target.checked)}
+          />
           <div className='swap-off'>
-            <img className='h-6 w-6 ' src='/korea.png' />
+            <img id='iconkorea' className='h-6 w-6 ' src='/korea.png' />
           </div>
           <div className='swap-on'>
-            <img className='h-6 w-6 ' src='/canada.png' />
+            <img id='iconkorea' className='h-6 w-6 ' src='/canada.png' />
           </div>
         </label>
       </div>

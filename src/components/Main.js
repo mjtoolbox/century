@@ -5,9 +5,12 @@ import Schedule from './Schedule';
 import Landing from './Landing';
 import { useState, useEffect } from 'react';
 import { attributes } from '../content/home.md';
+import { krattributes } from '../content/homekr.md';
+
 
 const Main = () => {
   const [title, setTitle] = useState('Kumdo');
+  const [language, setLanguage] = useState('en');
   let { landing, about, schedule } = attributes;
 
   useEffect(() => {
