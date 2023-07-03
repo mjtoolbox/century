@@ -9,6 +9,7 @@ import { attributes } from '../content/home.md';
 const Main = () => {
   const [title, setTitle] = useState('Kumdo');
   const [language, setLanguage] = useState('en');
+
   let { landing, about, schedule } = attributes;
 
   useEffect(() => {
@@ -24,9 +25,9 @@ const Main = () => {
 
   return (
     <Fragment>
-      <Landing title={title} landing={landing} />
-      <About title={title} about={about} />
-      <Schedule schedule={schedule} />
+      <Landing title={title} landing={landing} language={language} />
+      <About title={title} about={about} language={language} />
+      <Schedule schedule={schedule} language={language} />
       <Gallery />
     </Fragment>
   );
