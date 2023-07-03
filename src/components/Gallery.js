@@ -1,10 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useContext } from 'react';
+import AppContext from '@/pages/AppContext';
+const Gallery = (props) => {
+  const { language, setLanguage } = useContext(AppContext);
 
-const Gallery = () => {
   return (
     <Fragment>
       <div className='text-4xl font-bold text-center m-12' id='gallery'>
-        Gallery
+        {language === 'en' ? props.gallery.title : props.gallery.ktitle}
       </div>
       <div className='carousel w-full'>
         <div id='slide1' className='carousel-item relative w-full'>

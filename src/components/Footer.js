@@ -2,14 +2,13 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className='footer footer-center p-10 bg-base-200 text-base-content rounded'>
-      <div className='grid grid-flow-col gap-4'>
-        <a className='link link-hover' href='#about'>
-          About us
-        </a>
-        <a className='link link-hover' href='#'>
-          Contact
-        </a>
+    <footer
+      className='footer footer-center p-10 bg-base-200 text-base-content rounded'
+      id='contact'
+    >
+      <div className='grid grid-flow-col gap-4 text-xl mt-3'>
+        <p>778.385.0414</p>
+        <p>kmsocorg@gmail.com</p>
       </div>
       <div>
         <div className='grid grid-flow-col gap-4'>

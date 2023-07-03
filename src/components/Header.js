@@ -57,6 +57,11 @@ const Header = (props) => {
                 {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
               </a>
             </li>
+            <li>
+              <a href='#contact'>
+                {language === 'en' ? props.heading.menu4 : props.heading.kmenu4}
+              </a>
+            </li>
           </ul>
         </div>
         <a className='btn btn-ghost normal-case text-xl'>
@@ -80,6 +85,11 @@ const Header = (props) => {
           <li>
             <a href='#gallery'>
               {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
+            </a>
+          </li>
+          <li>
+            <a href='#contact'>
+              {language === 'en' ? props.heading.menu4 : props.heading.kmenu4}
             </a>
           </li>
         </ul>

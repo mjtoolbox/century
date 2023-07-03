@@ -8,7 +8,7 @@ import AppContext from '@/pages/AppContext';
 
 const Main = () => {
   const [title, setTitle] = useState('Kumdo');
-  let { landing, about, schedule } = attributes;
+  let { landing, about, schedule, gallery } = attributes;
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -26,7 +26,7 @@ const Main = () => {
       <Landing title={title} landing={landing} />
       <About title={title} about={about} />
       <Schedule schedule={schedule} />
-      <Gallery />
+      <Gallery gallery={gallery} />
     </Fragment>
   );
 };
