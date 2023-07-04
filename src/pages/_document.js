@@ -7,11 +7,11 @@ export default function Document() {
         <meta charSet='UTF-8' />
         <meta
           name='description'
-          content='Century Kumdo Club - A Korean non-profit Kumdo sports club'
+          content='밴쿠버 한인 센츄리 검도 클럽 Century Kumdo Club - A Korean non-profit Kumdo sports club'
         />
         <meta
           name='keywords'
-          content='Kendo, Kumdo, Korean, Vancouver, Langley, Coquitlam, Greater Vancouver, 밴쿠버, 검도, 한인, 한국'
+          content='밴쿠버 한인 검도 클럽, 센츄리 검도 클럽, Kendo, Kumdo, Korean, Canada, Vancouver, Langley, Coquitlam, Greater Vancouver, 밴쿠버, 검도, 한인, 한국, 캐나다'
         />
         <meta name='author' content='Century Kumdo Club' />
 
@@ -19,7 +19,7 @@ export default function Document() {
         <meta property='og:title' content='Century Kumdo Club' />
         <meta
           property='og:description'
-          content='Century Kumdo Club - A Korean non-profit Kumdo sports club'
+          content='밴쿠버 한인 검도 클럽 Century Kumdo Club - A Korean non-profit Kumdo sports club'
         />
         <meta property='og:type' content='website' />
         <meta
@@ -35,7 +35,7 @@ export default function Document() {
         <meta property='og:title' content='센츄리 검도 클럽' />
         <meta
           property='og:description'
-          content='센츄리 검도 클럽 - 밴쿠버 한인 공동체 비영리 검도 스포츠 클럽'
+          content='캐나다 밴쿠버 유일의 한인 검도 클럽, 센츄리 검도 클럽입니다. 밴쿠버 한인 공동체 비영리 검도 스포츠 클럽입니다.'
         />
         <meta property='og:type' content='website' />
         <meta
