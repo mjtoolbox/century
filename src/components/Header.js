@@ -44,9 +44,9 @@ const Header = (props) => {
             className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
           >
             <li>
-              <a href='#about'>
+              <Link href='/aboutdetail'>
                 {language === 'en' ? props.heading.menu1 : props.heading.kmenu1}
-              </a>
+              </Link>
             </li>
             <li>
               <Link href='/membership'>
@@ -59,13 +59,13 @@ const Header = (props) => {
               </Link>
             </li>
             <li>
-              <Link href='#gallery'>
-                {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
+              <Link href='/instructors'>
+                {language === 'en' ? props.heading.menu8 : props.heading.kmenu8}
               </Link>
             </li>
             <li>
-              <Link href='#contact'>
-                {language === 'en' ? props.heading.menu4 : props.heading.kmenu4}
+              <Link href='/contactus'>
+                {language === 'en' ? props.heading.menu7 : props.heading.kmenu7}
               </Link>
             </li>
           </ul>
@@ -79,9 +79,9 @@ const Header = (props) => {
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
           <li>
-            <a href='#about'>
+            <Link href='/aboutdetail'>
               {language === 'en' ? props.heading.menu1 : props.heading.kmenu1}
-            </a>
+            </Link>
           </li>
           <li>
             <Link href='/membership'>
@@ -94,13 +94,13 @@ const Header = (props) => {
             </Link>
           </li>
           <li>
-            <Link href='#gallery'>
-              {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
+            <Link href='/instructors'>
+              {language === 'en' ? props.heading.menu8 : props.heading.kmenu8}
             </Link>
           </li>
           <li>
-            <Link href='#contact'>
-              {language === 'en' ? props.heading.menu4 : props.heading.kmenu4}
+            <Link href='/contactus'>
+              {language === 'en' ? props.heading.menu7 : props.heading.kmenu7}
             </Link>
           </li>
         </ul>
