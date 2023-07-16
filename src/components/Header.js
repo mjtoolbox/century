@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import AppContext from '@/components/AppContext';
+import Link from 'next/link';
 
 const Header = (props) => {
   const { language, setLanguage } = useContext(AppContext);
@@ -48,27 +49,32 @@ const Header = (props) => {
               </a>
             </li>
             <li>
-              <a href='#schedule'>
+              <Link href='/membership'>
+                {language === 'en' ? props.heading.menu5 : props.heading.kmenu5}
+              </Link>
+            </li>
+            <li>
+              <Link href='#schedule'>
                 {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='#gallery'>
+              <Link href='#gallery'>
                 {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='#contact'>
+              <Link href='#contact'>
                 {language === 'en' ? props.heading.menu4 : props.heading.kmenu4}
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
-        <a className='btn btn-ghost normal-case text-xl'>
+        <Link href='/' className='btn btn-ghost normal-case text-xl'>
           {language === 'en' ? props.heading.heading1 : props.heading.kheading1}{' '}
           {language === 'en' ? title : ''}{' '}
           {language === 'en' ? props.heading.heading2 : props.heading.kheading2}
-        </a>
+        </Link>
       </div>
       <div className='navbar-end hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
@@ -78,19 +84,24 @@ const Header = (props) => {
             </a>
           </li>
           <li>
-            <a href='#schedule'>
+            <Link href='/membership'>
+              {language === 'en' ? props.heading.menu5 : props.heading.kmenu5}
+            </Link>
+          </li>
+          <li>
+            <Link href='#schedule'>
               {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
-            </a>
+            </Link>
           </li>
           <li>
-            <a href='#gallery'>
+            <Link href='#gallery'>
               {language === 'en' ? props.heading.menu3 : props.heading.kmenu3}
-            </a>
+            </Link>
           </li>
           <li>
-            <a href='#contact'>
+            <Link href='#contact'>
               {language === 'en' ? props.heading.menu4 : props.heading.kmenu4}
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
