@@ -19,8 +19,8 @@ const ContactUs = () => {
               <div className='text-lg '>Monday: 7pm - 9pm</div>
               <div className='text-lg '>Wednesday: 7pm - 9pm</div>
               <h3 className='text-xl mt-3 '>Address: </h3>
-              <div className='text-lg '>{contactus.place1}</div>
-              <div className='text-lg '>{contactus.add1}</div>
+              <div className='text-lg '>{contactus.place2}</div>
+              <div className='text-lg '>{contactus.add2}</div>
             </div>
           </div>
         </div>
@@ -31,8 +31,8 @@ const ContactUs = () => {
               <p className='text-lg '>Friday: 7:30pm - 9pm</p>
               <p className='text-lg text-red-500'>{contactus.msg} </p>
               <h3 className='text-xl mt-3 '>Address: </h3>
-              <div className='text-lg '>{contactus.place2}</div>
-              <div className='text-lg '>{contactus.add2}</div>
+              <div className='text-lg '>{contactus.place1}</div>
+              <div className='text-lg '>{contactus.add1}</div>
             </div>
           </div>
         </div>

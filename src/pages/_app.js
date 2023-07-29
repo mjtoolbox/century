@@ -4,7 +4,7 @@ import AppContext from '../components/AppContext';
 import { useState } from 'react';
 
 export default function App({ Component, pageProps }) {
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState('kr');
 
   return (
     <AppContext.Provider value={{ language, setLanguage }}>

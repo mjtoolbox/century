@@ -89,7 +89,7 @@ const Header = (props) => {
             </Link>
           </li>
           <li>
-            <Link href='#schedule'>
+            <Link href='/schedule'>
               {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
             </Link>
           </li>
@@ -114,13 +114,13 @@ const Header = (props) => {
           <input
             type='checkbox'
             onClick={(e) =>
-              e.target.checked ? setLanguage('kr') : setLanguage('en')
+              e.target.checked ? setLanguage('en') : setLanguage('kr')
             }
           />
-          <div className='swap-off'>
+          <div className='swap-on'>
             <img id='iconkorea' className='h-6 w-6 ' src='/korea.png' />
           </div>
-          <div className='swap-on'>
+          <div className='swap-off'>
             <img id='iconkorea' className='h-6 w-6 ' src='/canada.png' />
           </div>
         </label>
