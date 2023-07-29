@@ -54,7 +54,7 @@ const Header = (props) => {
               </Link>
             </li>
             <li>
-              <Link href='#schedule'>
+              <Link href='/schedule'>
                 {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
               </Link>
             </li>
