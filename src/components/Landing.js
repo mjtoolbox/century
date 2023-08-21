@@ -7,7 +7,7 @@ const Home = (props) => {
   var title = 'CENTURY ' + props.title;
 
   return (
-    <div className="hero min-h-screen bg-[url('../../public/kendo.jpg')]">
+    <div className="hero min-h-screen bg-[url('../../public/kendo0.jpg')]">
       <div className='hero-overlay bg-opacity-60'></div>
       <div className='hero-content text-center text-neutral-content'>
         <div className='max-w-md'>
