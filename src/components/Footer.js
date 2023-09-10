@@ -41,7 +41,7 @@ const Footer = () => {
       </div>
       <div>
         <div className='grid grid-flow-col gap-4'>
-          <a>
+          <a href='https://www.instagram.com/century.kumdo.club/' target='_blank'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'
