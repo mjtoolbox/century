@@ -9,6 +9,13 @@ const Header = (props) => {
 
   // console.log('context value: ' + language);
 
+  const handleClick = () => {
+    const elem = document.activeElement;
+    if (elem) {
+      elem?.blur();
+    }
+  };
+
   useEffect(() => {
     const id = setInterval(() => {
       if (title === 'Kumdo') {
@@ -23,7 +30,7 @@ const Header = (props) => {
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
         <div className='dropdown'>
-          <label tabIndex={0} className='btn btn-ghost lg:hidden'>
+          <label for='donut' tabIndex={0} className='btn btn-ghost lg:hidden'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               className='h-5 w-5'
@@ -43,27 +50,27 @@ const Header = (props) => {
             tabIndex={0}
             className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
           >
-            <li>
+            <li onClick={handleClick}>
               <Link href='/aboutdetail'>
                 {language === 'en' ? props.heading.menu1 : props.heading.kmenu1}
               </Link>
             </li>
-            <li>
+            <li onClick={handleClick}>
               <Link href='/membership'>
                 {language === 'en' ? props.heading.menu5 : props.heading.kmenu5}
               </Link>
             </li>
-            <li>
+            <li onClick={handleClick}>
               <Link href='/schedule'>
                 {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
               </Link>
             </li>
-            <li>
+            <li onClick={handleClick}>
               <Link href='/instructors'>
                 {language === 'en' ? props.heading.menu8 : props.heading.kmenu8}
               </Link>
             </li>
-            <li>
+            <li onClick={handleClick}>
               <Link href='/contactus'>
                 {language === 'en' ? props.heading.menu7 : props.heading.kmenu7}
               </Link>
