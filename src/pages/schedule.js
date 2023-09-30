@@ -6,7 +6,7 @@ const Schedule = () => {
   return (
     <div className='bg-base-100 py-8'>
       <div className='flex h-auto w-full justify-center items-center'>
-        <img src='/092023.jpg' className=' max-w-sm' />
+        <img src='/102023.jpg' className=' max-w-sm' />
       </div>
     </div>
   );
