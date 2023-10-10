@@ -1,13 +1,14 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import AppContext from '@/components/AppContext';
+import { AppContext, useAuthContext } from '@/components/AppContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 const Header = (props) => {
   const { language, setLanguage } = useContext(AppContext);
   const [title, setTitle] = useState('Kumdo');
-
-  // console.log('context value: ' + language);
 
   const handleClick = () => {
     const elem = document.activeElement;
@@ -16,7 +17,33 @@ const Header = (props) => {
     }
   };
 
+  const [isLogged, setLoggedin] = useState(false);
+  const { user } = useAuthContext();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        setLoggedin(false);
+        router.push('/');
+        console.log('Signed out successfully');
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  // React.useEffect(() => {
+  //   if (user != null) {
+  //     setLoggedin(true);
+  //   }
+  // }, [user]);
+
   useEffect(() => {
+    if (user != null) {
+      setLoggedin(true);
+    }
     const id = setInterval(() => {
       if (title === 'Kumdo') {
         setTitle('Kendo');
@@ -25,7 +52,7 @@ const Header = (props) => {
       }
     }, 5000);
     return () => clearInterval(id);
-  }, [title]);
+  }, [title, user]);
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
@@ -113,9 +140,22 @@ const Header = (props) => {
         </ul>
       </div>
       <div className='navbar-end'>
-        <a className='btn btn-sm mr-3'>
-          {language === 'en' ? props.heading.login : props.heading.klogin}
-        </a>
+        {!isLogged && (
+          <Link href='/login' className='btn btn-sm mr-3'>
+            {language === 'en' ? props.heading.login : props.heading.klogin}
+          </Link>
+        )}
+        {isLogged && (
+          <div>
+            <label className='btn btn-xs btn-ghost mr-2'>{user.email}</label>
+            <button
+              className='btn btn-sm btn-neutral mr-2'
+              onClick={handleLogout}
+            >
+              {language === 'en' ? props.heading.logout : props.heading.klogout}
+            </button>
+          </div>
+        )}
 
         <label className='swap swap-flip text-9xl'>
           <input

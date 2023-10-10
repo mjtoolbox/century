@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useContext } from 'react';
-import AppContext from '@/components/AppContext';
+import {AppContext} from '@/components/AppContext';
 const Schedule = (props) => {
   const { language, setLanguage } = useContext(AppContext);
 

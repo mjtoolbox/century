@@ -4,7 +4,7 @@ import About from './About';
 import Schedule from './Schedule';
 import Landing from './Landing';
 import { attributes } from '../content/home.md';
-import AppContext from '@/components/AppContext';
+import {AppContext} from '@/components/AppContext';
 
 const Main = () => {
   const [title, setTitle] = useState('Kumdo');

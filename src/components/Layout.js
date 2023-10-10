@@ -5,10 +5,13 @@ import Footer from './Footer';
 import Head from 'next/head';
 import Main from './Main';
 import { attributes } from '../content/home.md';
-import AppContext from '@/components/AppContext';
+import { usePathname } from 'next/navigation';
 
 const Layout = ({ children }) => {
   const [title, setTitle] = useState('Century Kumdo');
+  const pathname = usePathname();
+  console.log('pathname:', pathname);
+
   let { heading } = attributes;
 
   useEffect(() => {
@@ -27,9 +30,9 @@ const Layout = ({ children }) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <Header heading={heading} />
+      {pathname !== '/login' && <Header heading={heading} />}
       {children}
-      <Footer />
+      {pathname !== '/login' && <Footer />}
     </Fragment>
   );
 };

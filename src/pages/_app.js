@@ -1,16 +1,18 @@
 import Layout from '@/components/Layout';
 import '@/styles/globals.css';
-import AppContext from '../components/AppContext';
-import { useState } from 'react';
+import { AppContext, AuthContextProvider } from '../components/AppContext';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
 
 export default function App({ Component, pageProps }) {
   const [language, setLanguage] = useState('kr');
 
   return (
-    <AppContext.Provider value={{ language, setLanguage }}>
+    <AuthContextProvider value={{ language, setLanguage }}>
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </AppContext.Provider>
+    </AuthContextProvider>
   );
 }

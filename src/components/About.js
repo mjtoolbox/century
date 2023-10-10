@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import AppContext from '@/components/AppContext';
+import {AppContext} from '@/components/AppContext';
 
 const About = (props) => {
   const { language, setLanguage } = useContext(AppContext);
