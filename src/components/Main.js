@@ -1,10 +1,9 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Gallery from './Gallery';
 import About from './About';
 import Schedule from './Schedule';
 import Landing from './Landing';
 import { attributes } from '../content/home.md';
-import {AppContext} from '@/components/AppContext';
 
 const Main = () => {
   const [title, setTitle] = useState('Kumdo');

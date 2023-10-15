@@ -31,14 +31,9 @@ const Header = (props) => {
       })
       .catch((error) => {
         // An error happened.
+        console.log(error);
       });
   };
-
-  // React.useEffect(() => {
-  //   if (user != null) {
-  //     setLoggedin(true);
-  //   }
-  // }, [user]);
 
   useEffect(() => {
     if (user != null) {
@@ -102,6 +97,15 @@ const Header = (props) => {
                 {language === 'en' ? props.heading.menu7 : props.heading.kmenu7}
               </Link>
             </li>
+            {isLogged && (
+              <li onClick={handleClick}>
+                <Link href='/admin'>
+                  {language === 'en'
+                    ? props.heading.menu9
+                    : props.heading.kmenu9}
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
         <Link href='/' className='btn btn-ghost normal-case text-xl'>
@@ -137,6 +141,13 @@ const Header = (props) => {
               {language === 'en' ? props.heading.menu7 : props.heading.kmenu7}
             </Link>
           </li>
+          {isLogged && (
+            <li onClick={handleClick}>
+              <Link href='/admin'>
+                {language === 'en' ? props.heading.menu9 : props.heading.kmenu9}
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
       <div className='navbar-end'>

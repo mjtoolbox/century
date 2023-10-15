@@ -11,6 +11,7 @@ heading:
   menu6: Events
   menu7: Contact Us
   menu8: Instructors
+  menu9: Admin
   login: LOGIN
   logout: LOGOUT
   ktitle: 센츄리 검도
@@ -24,6 +25,7 @@ heading:
   kmenu6: 이벤트
   kmenu7: 연락처
   kmenu8: 사범진
+  kmenu9: 관리
   klogin: 로그인
   klogout: 로그아웃
 landing:
