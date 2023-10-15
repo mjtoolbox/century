@@ -1,9 +1,5 @@
-import React from 'react';
-import { AppContext, useAuthContext } from '@/components/AppContext';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
 
 const Admin = () => {
   return (

@@ -1,18 +1,26 @@
 import Layout from '@/components/Layout';
 import '@/styles/globals.css';
-import { AppContext, AuthContextProvider } from '../components/AppContext';
-import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import {
+  AppContext,
+  AuthContextProvider,
+  ProtectRoute,
+} from '../components/AppContext';
+import { useState } from 'react';
+import PrivateRoute from '@/components/PrivateRoute';
 
 export default function App({ Component, pageProps }) {
   const [language, setLanguage] = useState('kr');
 
+  // Add your protected routes here
+  const protectedRoutes = ['/admin'];
+
   return (
     <AuthContextProvider value={{ language, setLanguage }}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <PrivateRoute protectedRoutes={protectedRoutes}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </PrivateRoute>
     </AuthContextProvider>
   );
 }
