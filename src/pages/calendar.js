@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useCallback } from 'react';
 import {
   Calendar as BigCalendar,
   momentLocalizer,
@@ -8,6 +9,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 moment.locale('en-ca');
 //momentLocalizer(moment);
+
 const localizer = momentLocalizer(moment);
 
 const events = [
@@ -58,10 +60,38 @@ const styles = {
 };
 
 export default function CustomCalendar() {
+  const clickRef = useRef(null);
+
+  useEffect(() => {
+    /**
+     * What Is This?
+     * This is to prevent a memory leak, in the off chance that you
+     * teardown your interface prior to the timed method being called.
+     */
+    return () => {
+      window.clearTimeout(clickRef?.current);
+    };
+  }, []);
+
+  const onSelectEvent = useCallback((calEvent) => {
+    /**
+     * Here we are waiting 250 milliseconds (use what you want) prior to firing
+     * our method. Why? Because both 'click' and 'doubleClick'
+     * would fire, in the event of a 'doubleClick'. By doing
+     * this, the 'click' handler is overridden by the 'doubleClick'
+     * action.
+     */
+    window.clearTimeout(clickRef?.current);
+    clickRef.current = window.setTimeout(() => {
+      window.alert(calEvent.title);
+    }, 250);
+  }, []);
+
   return (
     <div style={styles.container}>
       <BigCalendar
-        selectable={false}
+        selectable={true}
+        popup={false}
         localizer={localizer}
         events={events}
         defaultView={Views.MONTH}
@@ -70,6 +100,8 @@ export default function CustomCalendar() {
         resources={resourceMap}
         resourceIdAccessor='resourceId'
         resourceTitleAccessor='resourceTitle'
+        style={{ fontSize: 9 }}
+        onSelectEvent={onSelectEvent}
       />
     </div>
   );
