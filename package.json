@@ -17,6 +17,7 @@
     "formik": "^2.4.5",
     "frontmatter-markdown-loader": "^3.7.0",
     "next": "13.3.2",
+    "pg": "^8.11.3",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-big-calendar": "^1.8.4",

@@ -6,27 +6,14 @@ import {
 } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import pool from '../utils/postgres';
 
 moment.locale('en-ca');
 //momentLocalizer(moment);
 
 const localizer = momentLocalizer(moment);
 
-const events = [
-  {
-    title: 'Langley 7-9pm',
-    start: new Date(2023, 9, 16, 19, 0, 0),
-    end: new Date(2023, 9, 16, 21, 0, 0),
-    type: 1,
-  },
-  {
-    title: 'Coq Harbour View 7:30-9pm',
-    allDay: true,
-    start: new Date(2023, 9, 20, 19, 30, 0),
-    end: new Date(2023, 9, 20, 21, 0, 0),
-    type: 2,
-  },
-];
+//color blue #6495ED (langley), green #8FBC8F (coquitlam), red #DC143C (holiday), gray #2F4F4F (special event), pink #FF1493 (new Coq)
 
 const styles = {
   container: {
@@ -36,7 +23,32 @@ const styles = {
   },
 };
 
-export default function CustomCalendar() {
+const CustomCalendar = ({ serializedData }) => {
+  const events = JSON.parse(serializedData);
+  for (let i = 0; i < events.length; i++) {
+    let start = events[i].start_date;
+    let end = events[i].end_date;
+    var dateParts = start.split('-');
+    var edateParts = end.split('-');
+    events[i].start = new Date(
+      dateParts[0],
+      dateParts[1] - 1,
+      dateParts[2].substr(0, 2),
+      dateParts[2].substr(3, 2),
+      dateParts[2].substr(6, 2),
+      dateParts[2].substr(9, 2)
+    );
+    events[i].end = new Date(
+      edateParts[0],
+      edateParts[1] - 1,
+      edateParts[2].substr(0, 2),
+      edateParts[2].substr(3, 2),
+      edateParts[2].substr(6, 2),
+      edateParts[2].substr(9, 2)
+    );
+  }
+  console.log('Updated events:', events);
+
   const clickRef = useRef(null);
 
   useEffect(() => {
@@ -60,23 +72,21 @@ export default function CustomCalendar() {
      */
     window.clearTimeout(clickRef?.current);
     clickRef.current = window.setTimeout(() => {
-      window.alert(calEvent.title);
+      window.alert(calEvent.detail + ' ' + calEvent.time_duration);
     }, 250);
   }, []);
 
   const eventStyleGetter = (event) => {
     console.log(event);
-    // var backgroundColor = '#' + event.hexColor;
-    if (event.type === 1) {
-      var color = 'red';
-    }
+
     var style = {
-      backgroundColor: color,
+      backgroundColor: event.color,
       borderRadius: '0px',
-      opacity: 0.8,
-      color: 'black',
+      //opacity: 0.8,
+      color: 'white',
       border: '0px',
       display: 'block',
+      bold: 'true',
     };
     return {
       style: style,
@@ -101,4 +111,29 @@ export default function CustomCalendar() {
       />
     </div>
   );
+};
+
+export async function getServerSideProps() {
+  try {
+    const nonSerializableData = await pool.query(
+      'SELECT * FROM event ORDER BY start_date'
+    );
+
+    const serializedData = JSON.stringify(nonSerializableData.rows);
+
+    return {
+      props: {
+        serializedData,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return {
+      props: {
+        serializedData: [],
+      },
+    };
+  }
 }
+
+export default CustomCalendar;
