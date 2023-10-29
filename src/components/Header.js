@@ -83,7 +83,7 @@ const Header = (props) => {
               </Link>
             </li>
             <li onClick={handleClick}>
-              <Link href='/schedule'>
+              <Link href='/calendar'>
                 {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
               </Link>
             </li>
@@ -127,7 +127,7 @@ const Header = (props) => {
             </Link>
           </li>
           <li>
-            <Link href='/schedule'>
+            <Link href='/calendar'>
               {language === 'en' ? props.heading.menu2 : props.heading.kmenu2}
             </Link>
           </li>

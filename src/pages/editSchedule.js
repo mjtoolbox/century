@@ -3,6 +3,8 @@ import React, { Fragment, useState } from 'react';
 const EditSchedule = () => {
   const [inputBox, setInputBox] = useState(false);
 
+  // https://react.dev/reference/react-dom/components/select#controlling-a-select-box-with-a-state-variable
+
   function onChange(value) {
     console.log(value);
     if (value === 'Other') {

@@ -114,6 +114,9 @@ INSERT INTO public.event(
 	VALUES ( 'Coq Harbour View', 'Coquitlam Harbour View Elementary', '7:30-9pm', '2023-11-03', '2023-11-03', '#8FBC8F');
 INSERT INTO public.event(
 	 title, detail, time_duration, start_date, end_date, color)
+	VALUES ( 'Langley Lions Society', 'Lions Society West Langley Hall', '7-9pm', '2023-11-06', '2023-11-06', '#6495ED');
+INSERT INTO public.event(
+	 title, detail, time_duration, start_date, end_date, color)
 	VALUES ( 'BCKF Tornament', 'BCKF Tornament / 검도대회', 'all day', '2023-11-11', '2023-11-11', '#7FFF00');    
 INSERT INTO public.event(
 	 title, detail, time_duration, start_date, end_date, color)
