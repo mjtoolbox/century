@@ -1,16 +1,85 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import Datepicker from 'react-tailwindcss-datepicker';
 
 const EditSchedule = () => {
   const [inputBox, setInputBox] = useState(false);
+  const [title, setTitle] = useState('Langley Langley Lions Society');
+  const [description, setDescription] = useState(
+    'Lions Society West Langley Hall'
+  );
+  const [date, setDate] = useState();
+  const [time, setTime] = useState('7-9pm');
+  const [color, setColor] = useState('#6495ED');
 
-  // https://react.dev/reference/react-dom/components/select#controlling-a-select-box-with-a-state-variable
-
-  function onChange(value) {
-    console.log(value);
-    if (value === 'Other') {
-      setInputBox(true);
+  const handleTitle = (e) => {
+    setTitle(e.target.value);
+    if (title === 'Langley Langley Lions Society') {
+      setColor('#6495ED');
+      setTime('7-9pm');
+      setDescription('Lions Society West Langley Hall');
+    } else if (title === 'coq Harbour View') {
+      setColor('#8FBC8F');
+      setTime('7:30-9pm');
+      setDescription('Coquitlam Harbour View Elementary');
+    } else if (title === 'Coq Lord Baden-Powell') {
+      setColor('#006400');
+      setTime('7:30-9pm');
+      setDescription('Coquitlam Lord Baden-Powell Elementary');
+    } else if (title === 'Holiday') {
+      setColor('#DC143C');
+      setTime('all day');
+      setDescription('Write name of the holiday here');
+    } else {
+      setColor('#2F4F4F');
+      setTime('all day');
+      setDescription('Write event detail here');
     }
-  }
+  };
+
+  const handleDateChange = (newValue) => {
+    setDate(newValue);
+  };
+
+  const handleTime = (e) => {
+    setTime(e.target.value);
+  };
+
+  const handleColor = (e) => {
+    setColor(e.target.value);
+  };
+
+  useEffect(() => {
+    console.log(title, date, time, color);
+    if (title === 'Other') {
+      setInputBox(true);
+    } else {
+      setInputBox(false);
+    }
+
+    if (title === 'Langley Langley Lions Society') {
+      setColor('#6495ED');
+      setTime('7-9pm');
+      setDescription('Lions Society West Langley Hall');
+    } else if (title === 'coq Harbour View') {
+      setColor('#8FBC8F');
+      setTime('7:30-9pm');
+      setDescription('Coquitlam Harbour View Elementary');
+    } else if (title === 'Coq Lord Baden-Powell') {
+      setColor('#006400');
+      setTime('7:30-9pm');
+      setDescription('Coquitlam Lord Baden-Powell Elementary');
+    } else if (title === 'Holiday') {
+      setColor('#DC143C');
+      setTime('all day');
+      setDescription('Write name of the holiday here');
+    } else {
+      setColor('#2F4F4F');
+      setTime('all day');
+      setDescription('Write event detail here');
+    }
+    // Whatever else we want to do after the state has been updated.
+  }, [title, time, color]);
+
   return (
     <div className='container my-12 mx-auto px-4 md:px-12 '>
       <htmlForm className='w-full max-w-md'>
@@ -24,14 +93,19 @@ const EditSchedule = () => {
             </label>
             <div className='inline-block relative w-64'>
               <select
-                className='block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline'
-                onChange={onChange}
+                className='block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
+                onChange={handleTitle}
                 defaultValue='Langley Langley Lions Society'
+                id='grid-title'
               >
                 <option value='Langley Langley Lions Society'>
                   Langley Lions Society
                 </option>
                 <option value='coq Harbour View'>Coq Harbour View</option>
+                <option value='Coq Lord Baden-Powell'>
+                  Coq Lord Baden-Powell
+                </option>
+                <option value='Holiday'>Holiday</option>
                 <option value='Other'>Other</option>
               </select>
               <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
@@ -47,13 +121,13 @@ const EditSchedule = () => {
             {inputBox ? (
               <Fragment>
                 <input
-                  className='appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white'
-                  id='grid-first-name'
+                  className='appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded mt-6 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white'
+                  id='grid-titile'
                   type='text'
-                  placeholder='Jane'
+                  placeholder='Other Event name'
                 />
                 <p className='text-red-500 text-xs italic'>
-                  Please fill out this field.
+                  Fill out name of event
                 </p>
               </Fragment>
             ) : null}
@@ -61,67 +135,53 @@ const EditSchedule = () => {
           <div className='w-full md:w-1/2 px-3'>
             <label
               className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
-              htmlFor='grid-last-name'
+              htmlFor='grid-description'
             >
-              Description
+              Description (max 50 char)
             </label>
             <input
-              className='appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='grid-last-name'
+              className='appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
+              id='grid-description'
               type='text'
-              placeholder='Doe'
+              placeholder='Event detail and Address'
+              defaultValue={description}
             />
           </div>
         </div>
-        <div className='flex flex-wrap -mx-3 mb-6'>
-          <div className='w-full px-3'>
-            <label
-              className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
-              htmlFor='grid-password'
-            >
-              Password
-            </label>
-            <input
-              className='appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='grid-password'
-              type='password'
-              placeholder='******************'
-            />
-            <p className='text-gray-600 text-xs italic'>
-              Make it as long and as crazy as you'd like
-            </p>
-          </div>
-        </div>
+
         <div className='flex flex-wrap -mx-3 mb-2'>
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>
             <label
               className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
-              htmlFor='grid-city'
+              htmlFor='grid-date'
             >
-              City
+              Date
             </label>
-            <input
-              className='appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='grid-city'
-              type='text'
-              placeholder='Albuquerque'
+            <Datepicker
+              inputClassName='appearance-none w-full bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
+              value={date}
+              asSingle={true}
+              useRange={false}
+              onChange={handleDateChange}
             />
           </div>
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>
             <label
               className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
-              htmlFor='grid-state'
+              htmlFor='grid-time'
             >
-              State
+              Time
             </label>
             <div className='relative'>
               <select
-                className='block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-                id='grid-state'
+                className='block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
+                id='grid-time'
+                onChange={handleTime}
+                value={time}
               >
-                <option>New Mexico</option>
-                <option>Missouri</option>
-                <option>Texas</option>
+                <option value='7-9pm'>7-9pm</option>
+                <option value='7:30-9pm'>7:30-9pm</option>
+                <option value='all day'>all day</option>
               </select>
               <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
                 <svg
@@ -137,19 +197,26 @@ const EditSchedule = () => {
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>
             <label
               className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
-              htmlFor='grid-zip'
+              htmlFor='grid-color'
             >
-              Zip
+              Color (Holiday: Red, Event: Black)
             </label>
-            <input
-              className='appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='grid-zip'
-              type='text'
-              placeholder='90210'
-            />
+            <select
+              className='block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
+              id='grid-color'
+              onChange={handleColor}
+              value={color}
+            >
+              <option value='#6495ED'>Blue</option>
+              <option value='#8FBC8F'>Green</option>
+              <option value='#006400'>Dark Green</option>
+              <option value='#DC143C'>Red</option>
+              <option value='#2F4F4F'>Black</option>
+            </select>
           </div>
         </div>
       </htmlForm>
+      <button className='btn btn-neutral mt-6'>Neutral</button>
     </div>
   );
 };
