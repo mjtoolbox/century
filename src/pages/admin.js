@@ -25,7 +25,7 @@ const Admin = () => {
               </h2>
               <p>Manage practice schedule & event</p>
               <div className='card-actions justify-end'>
-                <Link href='/editSchedule'>
+                <Link href='/editCalendar'>
                   <button className='btn  btn-sm bg-accent'>Enter</button>
                 </Link>
               </div>

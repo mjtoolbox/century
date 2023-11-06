@@ -1,129 +1,71 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { useFormik } from 'formik';
 import Datepicker from 'react-tailwindcss-datepicker';
 
-const EditSchedule = () => {
-  const [inputBox, setInputBox] = useState(false);
-  const [title, setTitle] = useState('Langley Langley Lions Society');
-  const [description, setDescription] = useState(
-    'Lions Society West Langley Hall'
-  );
-  const [date, setDate] = useState();
-  const [time, setTime] = useState('7-9pm');
-  const [color, setColor] = useState('#6495ED');
+const EditCalendar = () => {
+  //   const [inputBox, setInputBox] = useState(false);
+  //   const [title, setTitle] = useState('Langley Langley Lions Society');
+  //   const [description, setDescription] = useState(
+  //     'Lions Society West Langley Hall'
+  //   );
+  //   const [date, setDate] = useState();
+  //   const [time, setTime] = useState('7-9pm');
+  //   const [color, setColor] = useState('#6495ED');
 
-  const handleTitle = (e) => {
-    setTitle(e.target.value);
-    if (title === 'Langley Langley Lions Society') {
-      setColor('#6495ED');
-      setTime('7-9pm');
-      setDescription('Lions Society West Langley Hall');
-    } else if (title === 'coq Harbour View') {
-      setColor('#8FBC8F');
-      setTime('7:30-9pm');
-      setDescription('Coquitlam Harbour View Elementary');
-    } else if (title === 'Coq Lord Baden-Powell') {
-      setColor('#006400');
-      setTime('7:30-9pm');
-      setDescription('Coquitlam Lord Baden-Powell Elementary');
-    } else if (title === 'Holiday') {
-      setColor('#DC143C');
-      setTime('all day');
-      setDescription('Write name of the holiday here');
+  const handleOnChange = (event) => {
+    console.log('Form::onChange', event.target.value);
+    if (event.target.value === 'Langley Langley Lions Society') {
+      formik.setFieldValue('description', 'Lions Society West Langley Hall');
+      formik.setFieldValue('time', '7-9pm');
+      formik.setFieldValue('color', '#6495ED');
+    } else if (event.target.value === 'coq Harbour View') {
+      formik.setFieldValue('description', 'Coquitlam Harbour View Elementary');
+      formik.setFieldValue('time', '7:30-9pm');
+      formik.setFieldValue('color', '#8FBC8F');
+    } else if (event.target.value === 'Coq Lord Baden-Powell') {
+      formik.setFieldValue(
+        'description',
+        'Coquitlam Lord Baden-Powell Elementary'
+      );
+      formik.setFieldValue('time', '7:30-9pm');
+      formik.setFieldValue('color', '#006400');
+    } else if (event.target.value === 'Holiday') {
+      formik.setFieldValue('description', 'Write name of the holiday here');
+      formik.setFieldValue('time', 'all day');
+      formik.setFieldValue('color', '#DC143C');
     } else {
-      setColor('#2F4F4F');
-      setTime('all day');
-      setDescription('Write event detail here');
+      formik.setFieldValue('description', 'Write event detail here');
+      formik.setFieldValue('time', 'all day');
+      formik.setFieldValue('color', '#2F4F4F');
     }
   };
 
-  const handleDateChange = (newValue) => {
-    console.log('date', newValue);
-    setDate(newValue);
-  };
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      description: 'Lions Society West Langley Hall',
+      date: '',
+      time: '7-9pm',
+      color: '6495ED',
+    },
+    onSubmit: async (values) => {
+      //   alert(JSON.stringify(values, null, 2));
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
 
-  const handleTime = (e) => {
-    setTime(e.target.value);
-  };
-
-  const handleColor = (e) => {
-    setColor(e.target.value);
-  };
-
-  useEffect(() => {
-    console.log(title, date, time, color);
-    if (title === 'Other') {
-      setInputBox(true);
-    } else {
-      setInputBox(false);
-    }
-
-    if (title === 'Langley Langley Lions Society') {
-      setColor('#6495ED');
-      setTime('7-9pm');
-      setDescription('Lions Society West Langley Hall');
-    } else if (title === 'coq Harbour View') {
-      setColor('#8FBC8F');
-      setTime('7:30-9pm');
-      setDescription('Coquitlam Harbour View Elementary');
-    } else if (title === 'Coq Lord Baden-Powell') {
-      setColor('#006400');
-      setTime('7:30-9pm');
-      setDescription('Coquitlam Lord Baden-Powell Elementary');
-    } else if (title === 'Holiday') {
-      setColor('#DC143C');
-      setTime('all day');
-      setDescription('Write name of the holiday here');
-    } else {
-      setColor('#2F4F4F');
-      setTime('all day');
-      setDescription('Write event detail here');
-    }
-    // Whatever else we want to do after the state has been updated.
-  }, [title, time, color, date]);
-
-  // async function onSubmit(data) {
-  async function onSubmit(values) {
-    console.log('onsubmit', values);
-    // data.preventDefault();
-
-    // const formData = new FormData(event.target);
-    // const formData = new FormData();
-    // formData.append('title', data.title);
-    // formData.append('date', data.date);
-    // formData.append('time', data.time);
-    // formData.append('color', data.color);
-    // formData.append('description', data.description);
-
-    // // console.log('onSubmit formData', formData);
-    // console.log(
-    //   'onsubmit',
-    //   formData.get('title') +
-    //     ', ' +
-    //     formData.get('date') +
-    //     ', ' +
-    //     formData.get('time') +
-    //     ', ' +
-    //     formData.get('color')
-    // );
-
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    });
-
-    // Handle response if necessary
-    const data2 = await response.json();
-    console.log('res', data2);
-    // ...
-  }
-
+      // Handle response if necessary
+      const data2 = await response.json();
+      console.log('res', data2);
+    },
+  });
   return (
     <div className='container my-12 mx-auto px-4 md:px-12'>
-      <form onSubmit={onSubmit}>
-        {/* <htmlForm className='w-1/2 max-w-md'> */}
+      <form onSubmit={formik.handleSubmit} onChange={handleOnChange}>
         <div className='flex flex-wrap -mx-3 mb-6'>
           <div className='w-full md:w-1/2 px-3 mb-6 md:mb-0'>
             <label
@@ -135,10 +77,12 @@ const EditSchedule = () => {
             <div className='inline-block relative w-64'>
               <select
                 className='block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-                onChange={handleTitle}
-                defaultValue='Langley Langley Lions Society'
-                id='grid-title'
+                onChange={formik.handleChange}
+                value={formik.values.title}
+                // defaultValue='Langley Langley Lions Society'
+                id='title'
                 name='title'
+                type='text'
               >
                 <option value='Langley Langley Lions Society'>
                   Langley Lions Society
@@ -160,20 +104,22 @@ const EditSchedule = () => {
                 </svg>
               </div>
             </div>
-            {inputBox ? (
+            {/* {inputBox ? (
               <Fragment>
                 <input
                   className='appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded mt-6 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white'
-                  id='grid-titile'
+                  id='title2'
                   type='text'
                   placeholder='Other Event name'
-                  name='title'
+                  name='title2'
+                  onChange={formik.handleChange}
+                  value={formik.values.title}
                 />
                 <p className='text-red-500 text-xs italic'>
                   Fill out name of event
                 </p>
               </Fragment>
-            ) : null}
+            ) : null} */}
           </div>
           <div className='w-full md:w-1/2 px-3'>
             <label
@@ -184,11 +130,13 @@ const EditSchedule = () => {
             </label>
             <input
               className='appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='grid-description'
+              id='description'
               type='text'
               placeholder='Event detail and Address'
-              defaultValue={description}
+              //   defaultValue={description}
               name='description'
+              onChange={formik.handleChange}
+              value={formik.values.description}
             />
           </div>
         </div>
@@ -203,11 +151,13 @@ const EditSchedule = () => {
             </label>
             <Datepicker
               inputClassName='appearance-none w-full bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              value={date}
               asSingle={true}
               useRange={false}
-              onChange={handleDateChange}
+              id='date'
               name='date'
+              onChange={formik.handleChange}
+              value={formik.values.date}
+              type='text'
             />
           </div>
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>
@@ -220,10 +170,11 @@ const EditSchedule = () => {
             <div className='relative'>
               <select
                 className='block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-                id='grid-time'
-                onChange={handleTime}
-                value={time}
+                id='time'
                 name='time'
+                type='text'
+                onChange={formik.handleChange}
+                value={formik.values.time}
               >
                 <option value='7-9pm'>7-9pm</option>
                 <option value='7:30-9pm'>7:30-9pm</option>
@@ -249,10 +200,11 @@ const EditSchedule = () => {
             </label>
             <select
               className='block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='grid-color'
-              onChange={handleColor}
-              value={color}
+              id='color'
+              onChange={formik.handleChange}
+              value={formik.values.color}
               name='color'
+              type='text'
             >
               <option value='#6495ED'>Blue</option>
               <option value='#8FBC8F'>Green</option>
@@ -262,7 +214,6 @@ const EditSchedule = () => {
             </select>
           </div>
         </div>
-        {/* </htmlForm> */}
         <button className='btn btn-outline btn-sm mt-6' type='submit'>
           Save
         </button>
@@ -270,5 +221,4 @@ const EditSchedule = () => {
     </div>
   );
 };
-
-export default EditSchedule;
+export default EditCalendar;
