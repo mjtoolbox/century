@@ -22,7 +22,7 @@ const EditCalendar = () => {
       formik.setFieldValue('description', 'Lions Society West Langley Hall');
       formik.setFieldValue('time', '7-9pm');
       formik.setFieldValue('color', '#6495ED');
-    } else if (event.target.value === 'coq Harbour View') {
+    } else if (event.target.value === 'Coq Harbour View') {
       formik.setFieldValue('description', 'Coquitlam Harbour View Elementary');
       formik.setFieldValue('time', '7:30-9pm');
       formik.setFieldValue('color', '#8FBC8F');
@@ -99,7 +99,7 @@ const EditCalendar = () => {
                 <option value='Langley Langley Lions Society'>
                   Langley Lions Society
                 </option>
-                <option value='coq Harbour View'>Coq Harbour View</option>
+                <option value='Coq Harbour View'>Coq Harbour View</option>
                 <option value='Coq Lord Baden-Powell'>
                   Coq Lord Baden-Powell
                 </option>
