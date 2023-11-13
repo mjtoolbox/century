@@ -1,13 +1,21 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
-
-import Datepicker from 'react-tailwindcss-datepicker';
-
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useRouter } from 'next/navigation';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(customParseFormat);
+dayjs.tz.setDefault('America/Vancouver');
 
 const EditCalendar = () => {
   const [date, setDate] = useState();
+  const router = useRouter();
+
   const handleOnChange = (event) => {
     console.log('Form::onChange', event.target.value);
     if (event.target.value === 'Langley Langley Lions Society') {
@@ -42,7 +50,10 @@ const EditCalendar = () => {
     initialValues: {
       title: '',
       description: 'Lions Society West Langley Hall',
-      date: dayjs(),
+      date: dayjs(new Date().setHours(0, 0, 0, 0)).tz(
+        'America/Vancouver',
+        true
+      ),
       time: '7-9pm',
       color: '6495ED',
     },
@@ -57,8 +68,11 @@ const EditCalendar = () => {
       });
 
       // Handle response if necessary
-      const data2 = await response.json();
-      console.log('res', data2);
+      const result = await response.json();
+      console.log('res', result);
+      if (result != null) {
+        router.push('/calendar');
+      }
     },
   });
   return (
@@ -137,11 +151,18 @@ const EditCalendar = () => {
               type='text'
               views={['year', 'month', 'day']}
               onChange={(value) => {
-                formik.setFieldValue('date', dayjs(value));
+                formik.setFieldValue(
+                  'date',
+                  dayjs(new Date(value).setHours(0, 0, 0, 0)).tz(
+                    'America/Vancouver',
+                    true
+                  )
+                );
               }}
               //onChange={formik.handleChange}
               value={formik.values.date}
               disablePast
+              timezone='America/Vancouver'
             />
           </div>
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>

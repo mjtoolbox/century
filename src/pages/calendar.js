@@ -47,7 +47,7 @@ const CustomCalendar = ({ serializedData }) => {
       edateParts[2].substr(9, 2)
     );
   }
-  console.log('Updated events:', events);
+  // console.log('Updated events:', events);
 
   const clickRef = useRef(null);
 
@@ -77,7 +77,7 @@ const CustomCalendar = ({ serializedData }) => {
   }, []);
 
   const eventStyleGetter = (event) => {
-    console.log(event);
+    // console.log(event);
 
     var style = {
       backgroundColor: event.color,
