@@ -5,6 +5,8 @@ import Footer from './Footer';
 import Head from 'next/head';
 import { attributes } from '../content/home.md';
 import { usePathname } from 'next/navigation';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const Layout = ({ children }) => {
   const [title, setTitle] = useState('Century Kumdo');
@@ -29,7 +31,9 @@ const Layout = ({ children }) => {
         <title>{title}</title>
       </Head>
       {pathname !== '/login' && <Header heading={heading} />}
-      {children}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {children}
+      </LocalizationProvider>
       {pathname !== '/login' && <Footer />}
     </Fragment>
   );

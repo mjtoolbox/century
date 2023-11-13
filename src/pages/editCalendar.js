@@ -1,17 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
+import dayjs from 'dayjs';
+
 import Datepicker from 'react-tailwindcss-datepicker';
 
-const EditCalendar = () => {
-  //   const [inputBox, setInputBox] = useState(false);
-  //   const [title, setTitle] = useState('Langley Langley Lions Society');
-  //   const [description, setDescription] = useState(
-  //     'Lions Society West Langley Hall'
-  //   );
-  //   const [date, setDate] = useState();
-  //   const [time, setTime] = useState('7-9pm');
-  //   const [color, setColor] = useState('#6495ED');
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+const EditCalendar = () => {
+  const [date, setDate] = useState();
   const handleOnChange = (event) => {
     console.log('Form::onChange', event.target.value);
     if (event.target.value === 'Langley Langley Lions Society') {
@@ -33,10 +29,12 @@ const EditCalendar = () => {
       formik.setFieldValue('description', 'Write name of the holiday here');
       formik.setFieldValue('time', 'all day');
       formik.setFieldValue('color', '#DC143C');
-    } else {
+    } else if (event.target.value === 'Other') {
       formik.setFieldValue('description', 'Write event detail here');
       formik.setFieldValue('time', 'all day');
       formik.setFieldValue('color', '#2F4F4F');
+    } else {
+      formik.setFieldValue('time', 'all day');
     }
   };
 
@@ -44,7 +42,7 @@ const EditCalendar = () => {
     initialValues: {
       title: '',
       description: 'Lions Society West Langley Hall',
-      date: '',
+      date: dayjs(),
       time: '7-9pm',
       color: '6495ED',
     },
@@ -104,22 +102,6 @@ const EditCalendar = () => {
                 </svg>
               </div>
             </div>
-            {/* {inputBox ? (
-              <Fragment>
-                <input
-                  className='appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded mt-6 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white'
-                  id='title2'
-                  type='text'
-                  placeholder='Other Event name'
-                  name='title2'
-                  onChange={formik.handleChange}
-                  value={formik.values.title}
-                />
-                <p className='text-red-500 text-xs italic'>
-                  Fill out name of event
-                </p>
-              </Fragment>
-            ) : null} */}
           </div>
           <div className='w-full md:w-1/2 px-3'>
             <label
@@ -133,7 +115,6 @@ const EditCalendar = () => {
               id='description'
               type='text'
               placeholder='Event detail and Address'
-              //   defaultValue={description}
               name='description'
               onChange={formik.handleChange}
               value={formik.values.description}
@@ -149,15 +130,18 @@ const EditCalendar = () => {
             >
               Date
             </label>
-            <Datepicker
+            <DatePicker
               inputClassName='appearance-none w-full bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              asSingle={true}
-              useRange={false}
               id='date'
               name='date'
-              onChange={formik.handleChange}
-              value={formik.values.date}
               type='text'
+              views={['year', 'month', 'day']}
+              onChange={(value) => {
+                formik.setFieldValue('date', dayjs(value));
+              }}
+              //onChange={formik.handleChange}
+              value={formik.values.date}
+              disablePast
             />
           </div>
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>

@@ -11,8 +11,13 @@
   "dependencies": {
     "@babel/core": "^7.22.1",
     "@babel/preset-react": "^7.22.3",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.17",
+    "@mui/x-date-pickers": "^6.18.1",
     "autoprefixer": "10.4.14",
     "daisyui": "^2.51.6",
+    "dayjs": "^1.11.10",
     "firebase": "^10.4.0",
     "formik": "^2.4.5",
     "frontmatter-markdown-loader": "^3.7.0",
