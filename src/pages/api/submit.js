@@ -4,7 +4,7 @@ import pool from '../../utils/postgres';
 export default async function handler(req, res) {
   // const data = req.body;
   const data = await req.body;
-  // console.log('api/submit', data);
+  console.log('api/submit', data);
 
   const query =
     'INSERT INTO event( title, detail, start_date, end_date, color, time_duration) VALUES ($1, $2, $3, $4, $5, $6) returning event_id';
@@ -25,4 +25,6 @@ export default async function handler(req, res) {
   } catch (err) {
     res.status(500).json({ error: err });
   }
+
+  // res.status(200).json({ result: 'okay' });
 }

@@ -48,14 +48,14 @@ const EditCalendar = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: '',
+      title: 'Langley Langley Lions Society',
       description: 'Lions Society West Langley Hall',
       date: dayjs(new Date().setHours(0, 0, 0, 0)).tz(
         'America/Vancouver',
         true
       ),
       time: '7-9pm',
-      color: '6495ED',
+      color: '#6495ED',
     },
     onSubmit: async (values) => {
       //   alert(JSON.stringify(values, null, 2));
