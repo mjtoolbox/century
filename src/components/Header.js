@@ -158,7 +158,15 @@ const Header = (props) => {
         )}
         {isLogged && (
           <div>
-            <label className='btn btn-xs btn-ghost mr-2'>{user.email}</label>
+            {/* <label className='btn btn-xs btn-ghost mr-2'>{user.email}</label> */}
+            <div
+              className='avatar placeholder mr-2 tooltip tooltip-bottom'
+              data-tip={user.email}
+            >
+              <div className='bg-neutral text-neutral-content rounded-full w-8'>
+                <span className='text-xs'>{user.email.substring(0, 2)}</span>
+              </div>
+            </div>
             <button
               className='btn btn-sm btn-neutral mr-2'
               onClick={handleLogout}
@@ -175,10 +183,16 @@ const Header = (props) => {
               e.target.checked ? setLanguage('en') : setLanguage('kr')
             }
           />
-          <div className='swap-on'>
+          <div
+            className='swap-on tooltip tooltip-bottom'
+            data-tip='Click to Korean'
+          >
             <img id='iconkorea' className='h-6 w-6 ' src='/korea.png' />
           </div>
-          <div className='swap-off'>
+          <div
+            className='swap-off tooltip tooltip-bottom'
+            data-tip='Click to English'
+          >
             <img id='iconkorea' className='h-6 w-6 ' src='/canada.png' />
           </div>
         </label>
