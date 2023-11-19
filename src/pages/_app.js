@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }) {
   const [language, setLanguage] = useState('kr');
 
   // Add your protected routes here
-  const protectedRoutes = ['/admin'];
+  const protectedRoutes = ['/admin', '/editCalendar'];
 
   return (
     <AuthContextProvider value={{ language, setLanguage }}>
