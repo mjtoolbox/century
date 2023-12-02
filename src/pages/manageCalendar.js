@@ -5,6 +5,15 @@ import pool from '../utils/postgres';
 const ManageCalendar = ({ serializedData }) => {
   const events = JSON.parse(serializedData);
 
+  async function handleDelete(event_id) {
+    console.log('eventid', event_id);
+    const result = await pool.query(
+      'SELECT * FROM event ORDER WHERE event_id =?',
+      event_id
+    );
+    console.log(result);
+  }
+
   return (
     <div className='container my-12 mx-auto px-4 md:px-12 '>
       <div className='w-full flex justify-center'>
@@ -28,12 +37,14 @@ const ManageCalendar = ({ serializedData }) => {
                 <td>{event.detail}</td>
                 <td>{event.time_duration}</td>
                 <td>
-                  <Link
+                  <btn
                     className='btn btn-sm btn-error'
-                    href={`/api/manage/${event.event_id}`}
+                    onClick={async () => {
+                      await handleDelete(`${event.event_id}`);
+                    }}
                   >
                     Delete
-                  </Link>
+                  </btn>
                 </td>
               </tr>
             ))}

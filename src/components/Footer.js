@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className='footer footer-center p-10 bg-base-200 text-base-content rounded'>
       <div className='grid grid-flow-col gap-4'>
-        <div>
+        <div className='w-full'>
           <svg
             width='20px'
             height='20px'
@@ -39,9 +39,12 @@ const Footer = () => {
         </div>
         <div>kmsocorg@gmail.com</div>
       </div>
-      <div>
+      <div className='w-full'>
         <div className='grid grid-flow-col gap-4'>
-          <a href='https://www.instagram.com/century.kumdo.club/' target='_blank'>
+          <a
+            href='https://www.instagram.com/century.kumdo.club/'
+            target='_blank'
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -82,7 +85,7 @@ const Footer = () => {
           </a>
         </div>
       </div>
-      <div>
+      <div className='w-full'>
         <p>Copyright © 2023 - All right reserved by Century Kumdo Club</p>
       </div>
     </footer>
