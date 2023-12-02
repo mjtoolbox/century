@@ -151,7 +151,7 @@ const Header = (props) => {
         </ul>
       </div>
       <div className='navbar-end'>
-        <label className='swap swap-flip text-9xl mr-2'>
+        <label className='swap swap-flip text-9xl mr-3'>
           <input
             type='checkbox'
             onClick={(e) =>
@@ -172,7 +172,7 @@ const Header = (props) => {
           </div>
         </label>
         {!isLogged && (
-          <Link href='/login' className='btn btn-sm mr-3'>
+          <Link href='/login' className='btn btn-sm '>
             {language === 'en' ? props.heading.login : props.heading.klogin}
           </Link>
         )}
