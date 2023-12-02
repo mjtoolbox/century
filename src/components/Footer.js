@@ -3,8 +3,8 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer className='footer footer-center p-10 bg-base-200 text-base-content rounded'>
-      <div className='grid grid-flow-col gap-4'>
-        <div className='w-full'>
+      <div className='flex flex-row'>
+        <div className='flex-auto'>
           <svg
             width='20px'
             height='20px'
@@ -20,8 +20,8 @@ const Footer = () => {
             />
           </svg>
         </div>
-        <div>778.385.0414</div>&nbsp;&nbsp;
-        <div>
+        <div className='flex-auto'>778.385.0414</div>&nbsp;&nbsp;
+        <div className='flex-auto'>
           <svg
             width='30px'
             height='30px'
@@ -37,7 +37,7 @@ const Footer = () => {
             />
           </svg>
         </div>
-        <div>kmsocorg@gmail.com</div>
+        <div className='flex-auto'>kmsocorg@gmail.com</div>
       </div>
       <div className='w-full'>
         <div className='grid grid-flow-col gap-4'>
@@ -85,8 +85,15 @@ const Footer = () => {
           </a>
         </div>
       </div>
-      <div className='w-full'>
-        <p>Copyright © 2023 - All right reserved by Century Kumdo Club</p>
+      <div className='flex flex-row'>
+        <div>
+          {' '}
+          <p>Copyright © 2023</p>
+        </div>
+        <div>
+          {' '}
+          <p>All right reserved by Century Kumdo Club</p>
+        </div>
       </div>
     </footer>
   );
