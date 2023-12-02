@@ -114,7 +114,7 @@ const Header = (props) => {
           {language === 'en' ? props.heading.heading2 : props.heading.kheading2}
         </Link>
       </div>
-      <div className='navbar-end hidden lg:flex'>
+      <div className='navbar-center hidden lg:flex'>
         <ul className='menu menu-horizontal px-1'>
           <li>
             <Link href='/aboutdetail'>
@@ -151,32 +151,7 @@ const Header = (props) => {
         </ul>
       </div>
       <div className='navbar-end'>
-        {!isLogged && (
-          <Link href='/login' className='btn btn-sm mr-3'>
-            {language === 'en' ? props.heading.login : props.heading.klogin}
-          </Link>
-        )}
-        {isLogged && (
-          <div>
-            {/* <label className='btn btn-xs btn-ghost mr-2'>{user.email}</label> */}
-            <div
-              className='avatar placeholder mr-2 tooltip tooltip-bottom'
-              data-tip={user.email}
-            >
-              <div className='bg-neutral text-neutral-content rounded-full w-8'>
-                <span className='text-xs'>{user.email.substring(0, 2)}</span>
-              </div>
-            </div>
-            <button
-              className='btn btn-sm btn-neutral mr-2'
-              onClick={handleLogout}
-            >
-              {language === 'en' ? props.heading.logout : props.heading.klogout}
-            </button>
-          </div>
-        )}
-
-        <label className='swap swap-flip text-9xl'>
+        <label className='swap swap-flip text-9xl mr-2'>
           <input
             type='checkbox'
             onClick={(e) =>
@@ -196,6 +171,29 @@ const Header = (props) => {
             <img id='iconkorea' className='h-6 w-6 ' src='/canada.png' />
           </div>
         </label>
+        {!isLogged && (
+          <Link href='/login' className='btn btn-sm mr-3'>
+            {language === 'en' ? props.heading.login : props.heading.klogin}
+          </Link>
+        )}
+        {isLogged && (
+          <frameElement>
+            <div
+              className='avatar placeholder mr-2 tooltip tooltip-bottom'
+              data-tip={user.email}
+            >
+              <div className='bg-neutral text-neutral-content rounded-full w-8'>
+                <span className='text-xs'>{user.email.substring(0, 2)}</span>
+              </div>
+            </div>
+            <button
+              className='btn btn-sm btn-neutral mr-2'
+              onClick={handleLogout}
+            >
+              {language === 'en' ? props.heading.logout : props.heading.klogout}
+            </button>
+          </frameElement>
+        )}
       </div>
     </div>
   );

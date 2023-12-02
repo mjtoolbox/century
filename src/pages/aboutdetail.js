@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppContext} from '@/components/AppContext';
+import { AppContext } from '@/components/AppContext';
 import { useState, useEffect, useContext } from 'react';
 import { attributes } from '../content/home.md';
 
