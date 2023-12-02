@@ -46,7 +46,7 @@ aboutDetail:
 schedule:
   title: Location
   ktitle: 도장 위치
-  msg: Coquitlam practice resumes on Sep 29, 2023
+  msg:
   place: Harbour View Elementary
   address: 960 Lillian St, Coquitlam, BC V3J 5C7
 gallery:
@@ -76,7 +76,7 @@ instructors:
   kli4: 이승준
 contactus:
   title: Contact Us
-  msg: Coquitlam practice resumes on Sep 29, 2023
+  msg:
   place1: Harbour View Elementary
   add1: 960 Lillian St, Coquitlam, BC V3J 5C7
   place2: Lions Society West Langley Hall
