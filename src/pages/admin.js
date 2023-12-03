@@ -10,7 +10,7 @@ const Admin = () => {
             <div className='card-body'>
               <h2 className='card-title'>
                 <svg
-                  class='w-6 h-6 text-gray-800 dark:text-white'
+                  className='w-6 h-6 text-gray-800 dark:text-white'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -24,9 +24,10 @@ const Admin = () => {
                 Calendar
               </h2>
               <p>Manage practice schedule & event</p>
+              <p>캘린더 일정 관리</p>
               <div className='card-actions justify-end'>
-                <Link href='/editCalendar'>
-                  <button className='btn  btn-sm bg-accent'>Enter</button>
+                <Link href='/manageCalendar'>
+                  <button className='btn  btn-sm bg-accent'>Manage</button>
                 </Link>
               </div>
             </div>
@@ -38,7 +39,7 @@ const Admin = () => {
             <div className='card-body'>
               <h2 className='card-title'>
                 <svg
-                  class='w-6 h-6 text-gray-800 dark:text-white'
+                  className='w-6 h-6 text-gray-800 dark:text-white'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -46,15 +47,16 @@ const Admin = () => {
                 >
                   <path
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     d='M16 5h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-2v3l-4-3H8m4-13H2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h2v3l4-3h4a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z'
                   />
                 </svg>
                 send Message
               </h2>
               <p>Send bulk message to members</p>
+              <p>메세지 공고 차후기능</p>
               <div className='card-actions justify-end'>
                 <Link href='/admin'>
                   <button className='btn bg-secondary btn-sm'>Enter</button>
@@ -69,7 +71,7 @@ const Admin = () => {
             <div className='card-body'>
               <h2 className='card-title'>
                 <svg
-                  class='w-6 h-6 text-gray-800 dark:text-white'
+                  className='w-6 h-6 text-gray-800 dark:text-white'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -77,15 +79,16 @@ const Admin = () => {
                 >
                   <path
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     d='m9.046 3.59-.435-2.324m.435 2.324a5.338 5.338 0 0 1 6.033 4.333l.331 1.77c.439 2.344 2.383 2.587 2.599 3.76.11.586.22 1.171-.309 1.271L5 17.101c-.529.1-.639-.488-.749-1.074-.219-1.172 1.506-2.102 1.067-4.447l-.331-1.769a5.338 5.338 0 0 1 4.059-6.22Zm-7.13 4.602a8.472 8.472 0 0 1 2.17-5.048m2.646 13.633A3.472 3.472 0 0 0 13.46 16l.089-.5-6.817 1.277Z'
                   />
                 </svg>
                 Send Reminder
               </h2>
               <p>Manage practice reminder</p>
+              <p>스페셜 메세지</p>
               <div className='card-actions justify-end'>
                 <Link href='/admin'>
                   <button className='btn bg-info btn-sm'>View</button>

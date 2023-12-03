@@ -177,7 +177,7 @@ const Header = (props) => {
           </Link>
         )}
         {isLogged && (
-          <frameElement>
+          <div>
             <div
               className='avatar placeholder mr-2 tooltip tooltip-bottom'
               data-tip={user.email}
@@ -192,7 +192,7 @@ const Header = (props) => {
             >
               {language === 'en' ? props.heading.logout : props.heading.klogout}
             </button>
-          </frameElement>
+          </div>
         )}
       </div>
     </div>
