@@ -49,11 +49,11 @@ const ManageCalendar = ({ serializedData }) => {
         </div>
       </div>
       <div className='flex justify-center'>
-        <table className='table table-auto'>
+        <table className='table table-auto sm:px-5'>
           <thead>
             <tr>
               <th>Date</th>
-              <th>Title</th>
+              <th className='sm:hidden hidden md:table-cell'>Title</th>
               <th>Description</th>
               <th>Action</th>
             </tr>
@@ -62,7 +62,9 @@ const ManageCalendar = ({ serializedData }) => {
             {events.map((event) => (
               <tr key={event.event_id} className='hover bg-slate-50'>
                 <th>{event.start_date.substring(0, 10)}</th>
-                <td>{event.title}</td>
+                <td className='sm:hidden hidden md:table-cell'>
+                  {event.title}
+                </td>
                 <td>{event.detail}</td>
                 <td>
                   {/* <Link
