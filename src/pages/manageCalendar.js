@@ -14,7 +14,7 @@ const ManageCalendar = ({ serializedData }) => {
 
   async function handleDelete(event_id) {
     console.log('eventid', event_id);
-    const response = await fetch('/api/delete', {
+    const response = await fetch('/api/edit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

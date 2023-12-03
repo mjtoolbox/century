@@ -16,35 +16,35 @@ const EditCalendar = () => {
   const [date, setDate] = useState();
   const router = useRouter();
 
-  const handleOnChange = (event) => {
-    console.log('Form::onChange', event.target.value);
-    if (event.target.value === 'Langley Langley Lions Society') {
-      formik.setFieldValue('description', 'Lions Society West Langley Hall');
-      formik.setFieldValue('time', '7-9pm');
-      formik.setFieldValue('color', '#6495ED');
-    } else if (event.target.value === 'Coq Harbour View') {
-      formik.setFieldValue('description', 'Coquitlam Harbour View Elementary');
-      formik.setFieldValue('time', '7:30-9pm');
-      formik.setFieldValue('color', '#8FBC8F');
-    } else if (event.target.value === 'Coq Lord Baden-Powell') {
-      formik.setFieldValue(
-        'description',
-        'Coquitlam Lord Baden-Powell Elementary'
-      );
-      formik.setFieldValue('time', '7:30-9pm');
-      formik.setFieldValue('color', '#006400');
-    } else if (event.target.value === 'Holiday') {
-      formik.setFieldValue('description', 'Write name of the holiday here');
-      formik.setFieldValue('time', 'all day');
-      formik.setFieldValue('color', '#DC143C');
-    } else if (event.target.value === 'Other') {
-      formik.setFieldValue('description', 'Write event detail here');
-      formik.setFieldValue('time', 'all day');
-      formik.setFieldValue('color', '#2F4F4F');
-    } else {
-      formik.setFieldValue('time', 'all day');
-    }
-  };
+  // const handleOnChange = (event) => {
+  //   console.log('Form::onChange', event.target.value);
+  //   if (event.target.value === 'Langley Langley Lions Society') {
+  //     formik.setFieldValue('description', 'Lions Society West Langley Hall');
+  //     formik.setFieldValue('time', '7-9pm');
+  //     formik.setFieldValue('color', '#6495ED');
+  //   } else if (event.target.value === 'Coq Harbour View') {
+  //     formik.setFieldValue('description', 'Coquitlam Harbour View Elementary');
+  //     formik.setFieldValue('time', '7:30-9pm');
+  //     formik.setFieldValue('color', '#8FBC8F');
+  //   } else if (event.target.value === 'Coq Lord Baden-Powell') {
+  //     formik.setFieldValue(
+  //       'description',
+  //       'Coquitlam Lord Baden-Powell Elementary'
+  //     );
+  //     formik.setFieldValue('time', '7:30-9pm');
+  //     formik.setFieldValue('color', '#006400');
+  //   } else if (event.target.value === 'Holiday') {
+  //     formik.setFieldValue('description', 'Write name of the holiday here');
+  //     formik.setFieldValue('time', 'all day');
+  //     formik.setFieldValue('color', '#DC143C');
+  //   } else if (event.target.value === 'Other') {
+  //     formik.setFieldValue('description', 'Write event detail here');
+  //     formik.setFieldValue('time', 'all day');
+  //     formik.setFieldValue('color', '#2F4F4F');
+  //   } else {
+  //     formik.setFieldValue('time', 'all day');
+  //   }
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -226,4 +226,28 @@ const EditCalendar = () => {
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  try {
+    const nonSerializableData = await pool.query(
+      'SELECT * FROM event WHERE event_id = $1'
+    );
+
+    const serializedData = JSON.stringify(nonSerializableData.rows);
+
+    return {
+      props: {
+        serializedData,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return {
+      props: {
+        serializedData: [],
+      },
+    };
+  }
+}
+
 export default EditCalendar;
