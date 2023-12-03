@@ -12,14 +12,17 @@ export const useAuthContext = () => useContext(AppContext);
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [language, setLanguage] = useState('kr');
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(myauth, (user) => {
       if (user) {
         console.log('setting user: ', user.uid);
         setUser(user);
+        setLoading(false);
       } else {
         setUser(null);
+        setLoading(true);
       }
     });
 
@@ -28,7 +31,13 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ isAuthenticated: !!user, user, language, setLanguage }}
+      value={{
+        isAuthenticated: !!user,
+        isLoading: isLoading,
+        user,
+        language,
+        setLanguage,
+      }}
     >
       {children}
     </AppContext.Provider>

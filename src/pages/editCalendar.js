@@ -6,6 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useRouter } from 'next/navigation';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import pool from '../utils/postgres';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

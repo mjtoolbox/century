@@ -14,7 +14,7 @@ const ManageCalendar = ({ serializedData }) => {
 
   async function handleDelete(event_id) {
     console.log('eventid', event_id);
-    const response = await fetch('/api/edit', {
+    const response = await fetch('/api/delete', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,12 +65,12 @@ const ManageCalendar = ({ serializedData }) => {
                 <td>{event.title}</td>
                 <td>{event.detail}</td>
                 <td>
-                  <Link
+                  {/* <Link
                     className='btn btn-xs btn-warning mr-2'
                     href='/editCalendar'
                   >
                     Edit
-                  </Link>
+                  </Link> */}
                   <button
                     className='btn btn-xs btn-error'
                     onClick={async () => {
