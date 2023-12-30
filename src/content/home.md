@@ -46,9 +46,11 @@ aboutDetail:
 schedule:
   title: Location
   ktitle: 도장 위치
-  msg:
-  place: Harbour View Elementary
-  address: 960 Lillian St, Coquitlam, BC V3J 5C7
+  msg: Different COQ location in January
+  place: Lord Baden-Powell Elementary
+  address: 450 Joyce St, Coquitlam, BC V3K 4G4
+  place2: Harbour View Elementary
+  address2: 960 Lillian St, Coquitlam, BC V3J 5C7
 gallery:
   title: Gallery
   ktitle: 겔러리
@@ -76,9 +78,11 @@ instructors:
   kli4: 이승준
 contactus:
   title: Contact Us
-  msg:
-  place1: Harbour View Elementary
-  add1: 960 Lillian St, Coquitlam, BC V3J 5C7
+  msg: Different COQ location in January
+  place1: Lord Baden-Powell Elementary
+  add1: 450 Joyce St, Coquitlam, BC V3K 4G4
   place2: Lions Society West Langley Hall
   add2: 9400 208 St, Langley Twp, BC V1M 2Y9
+  place3: Harbour View Elementary
+  add3: 960 Lillian St, Coquitlam, BC V3J 5C7
 ---
