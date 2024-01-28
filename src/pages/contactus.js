@@ -31,8 +31,8 @@ const ContactUs = () => {
               <p className='text-lg '>Friday: 7:30pm - 9pm</p>
               <p className='text-lg text-red-500'>{contactus.msg} </p>
               <h3 className='text-xl mt-3 '>Address: </h3>
-              <div className='text-lg '>{contactus.place1}</div>
-              <div className='text-lg '>{contactus.add1}</div>
+              <div className='text-lg '>{contactus.place3}</div>
+              <div className='text-lg '>{contactus.add3}</div>
             </div>
           </div>
         </div>

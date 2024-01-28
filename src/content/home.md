@@ -46,7 +46,7 @@ aboutDetail:
 schedule:
   title: Location
   ktitle: 도장 위치
-  msg: Different COQ location in January
+  msg: COQ back to Habourview in Feb
   place: Lord Baden-Powell Elementary
   address: 450 Joyce St, Coquitlam, BC V3K 4G4
   place2: Harbour View Elementary
@@ -78,7 +78,7 @@ instructors:
   kli4: 이승준
 contactus:
   title: Contact Us
-  msg: Different COQ location in January
+  msg: COQ back to Habourview in Feb
   place1: Lord Baden-Powell Elementary
   add1: 450 Joyce St, Coquitlam, BC V3K 4G4
   place2: Lions Society West Langley Hall

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useContext } from 'react';
-import {AppContext} from '@/components/AppContext';
+import { AppContext } from '@/components/AppContext';
 const Schedule = (props) => {
   const { language, setLanguage } = useContext(AppContext);
 
@@ -30,8 +30,8 @@ const Schedule = (props) => {
               <p className='text-lg '>Friday: 7:30pm - 9pm</p>
               <p className='text-lg text-red-500'>{props.schedule.msg} </p>
               <h3 className='text-xl mt-3 '>Address: </h3>
-              <div className='text-lg '>{props.schedule.place}</div>
-              <div className='text-lg '>{props.schedule.address}</div>
+              <div className='text-lg '>{props.schedule.place2}</div>
+              <div className='text-lg '>{props.schedule.address2}</div>
             </div>
           </div>
         </div>
