@@ -56,7 +56,7 @@ gallery:
   ktitle: 겔러리
 membership:
   title: Membership
-  li1: We accept new members all around.
+  li1: New members are accepted only twice a year (January, July). We only accept new members who have ranks (yudansha) at any time.
   li2: Individual - $250 per 6 months. New member joined after January (Feb-Jun) will have a prorated payment.
   li3: Family - $400 per 6 months (up to 4 family members).
   li4: Club Rules (TBD).
