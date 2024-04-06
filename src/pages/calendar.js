@@ -116,7 +116,7 @@ const CustomCalendar = ({ serializedData }) => {
 export async function getServerSideProps() {
   try {
     const nonSerializableData = await pool.query(
-      'SELECT * FROM event ORDER BY start_date'
+      "SELECT * FROM event where start_date >= date_trunc('month', current_timestamp) - interval '1 month' ORDER BY start_date"
     );
 
     const serializedData = JSON.stringify(nonSerializableData.rows);
