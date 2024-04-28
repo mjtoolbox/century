@@ -6,7 +6,8 @@ import {
 } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import pool from '../utils/postgres';
+// import pool from '../utils/postgres';
+import pool from '../utils/vercelpostgres';
 
 moment.locale('en-ca');
 //momentLocalizer(moment);
