@@ -28,7 +28,7 @@ const ContactUs = () => {
           <div className='card w-96 bg-base-100 shadow-xl'>
             <div className='card-body'>
               <h1 className='card-title font-bold'>COQUITLAM</h1>
-              <p className='text-lg '>Friday: 7:30pm - 9pm</p>
+              <p className='text-lg '>Friday: 7pm - 9pm</p>
               <p className='text-lg text-red-500'>{contactus.msg} </p>
               <h3 className='text-xl mt-3 '>Address: </h3>
               <div className='text-lg '>{contactus.place3}</div>
