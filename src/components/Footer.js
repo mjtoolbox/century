@@ -20,7 +20,7 @@ const Footer = () => {
             />
           </svg>
         </div>
-        <div className='flex-auto'>778.385.0414</div>&nbsp;&nbsp;
+        <div className='flex-auto'>TBD</div>&nbsp;&nbsp;
         <div className='flex-auto'>
           <svg
             width='30px'
