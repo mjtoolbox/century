@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import pool from '../../utils/postgres';
+// import pool from '../../utils/postgres';
+import pool from '../../utils/vercelpostgres';
 
 export default async function handler(req, res) {
   // const data = req.body;
@@ -19,8 +20,8 @@ export default async function handler(req, res) {
     data.time,
   ];
 
-  //console.log('query', query);
-  // console.log('values', values);
+  console.log('query', query);
+  console.log('values', values);
 
   try {
     const expense = await pool.query(query, values);
