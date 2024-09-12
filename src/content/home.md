@@ -70,12 +70,10 @@ instructors:
   li1: Junho Lee
   li2: Honggi Park
   li3: Hyunkyu Ryu
-  li4: Seung Jun Lee
   ktitle: 사범진
   kli1: 이준호
   kli2: 박홍기
   kli3: 류현규
-  kli4: 이승준
 contactus:
   title: Contact Us
   msg: 7-9pm in May, June 2024

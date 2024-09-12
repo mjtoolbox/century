@@ -24,9 +24,6 @@ const Instructors = () => {
             <li className='py-1'>
               {language === 'en' ? instructors.li3 : instructors.kli3}
             </li>
-            <li className='py-1'>
-              {language === 'en' ? instructors.li4 : instructors.kli4}
-            </li>
           </ul>
         </div>
       </div>
