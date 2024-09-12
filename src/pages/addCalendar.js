@@ -24,14 +24,14 @@ const EditCalendar = () => {
       formik.setFieldValue('color', '#6495ED');
     } else if (event.target.value === 'Coq Harbour View') {
       formik.setFieldValue('description', 'Coquitlam Harbour View Elementary');
-      formik.setFieldValue('time', '7:30-9pm');
+      formik.setFieldValue('time', '7-9pm');
       formik.setFieldValue('color', '#8FBC8F');
     } else if (event.target.value === 'Coq Lord Baden-Powell') {
       formik.setFieldValue(
         'description',
         'Coquitlam Lord Baden-Powell Elementary'
       );
-      formik.setFieldValue('time', '7:30-9pm');
+      formik.setFieldValue('time', '7-9pm');
       formik.setFieldValue('color', '#006400');
     } else if (event.target.value === 'Holiday') {
       formik.setFieldValue('description', 'Write name of the holiday here');
