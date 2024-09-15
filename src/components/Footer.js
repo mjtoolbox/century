@@ -56,7 +56,7 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            href='https://www.youtube.com/@kumdoclubcentury8741'
+            href='https://www.youtube.com/@CenturyKumdo'
             target='_blank'
           >
             <svg
