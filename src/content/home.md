@@ -67,13 +67,22 @@ membership:
   kli4: 클럽회칙 (차후 업로드)
 instructors:
   title: Instructors
-  li1: Junho Lee
-  li2: Honggi Park
-  li3: Hyunkyu Ryu
-  ktitle: 사범진
-  kli1: 이준호
-  kli2: 박홍기
-  kli3: 류현규
+  profiles:
+    - name: Junho Lee
+      kname: 이준호
+      bio: Head instructor with 40 years of Kendo experience.
+      kbio: 센츄리 검도 관장
+      image: ../lee.jpg
+    - name: Honggi Park
+      kname: 박홍기
+      bio: Assistant instructor and former national competitor.
+      kbio: 성남 중.고등학교 검도 선수단, 제 2회 전국 고교 국가대표 상비군, 용인대학교 검도훈련단 동 대학원, 삼성 레포츠센타 검도 주임강사, 세반검도관 관장, 캐나다 스트리얼 검도 사범. 오랫동안 검도지도를 해왔으며 여러분의 검도 를 배우는데 길잡이가 되어드리겠습니다.
+      image: ../park1.jpg
+    - name: Hyunkyu Ryu
+      kname: 류현규
+      bio: Technical instructor specializing in advanced techniques.
+      kbio: 검도 지도자
+      image: /images/alex.jpg
 contactus:
   title: Contact Us
   msg: 7-9pm from Sep 27, 2024
