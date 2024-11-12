@@ -39,7 +39,7 @@ const Instructors = () => {
             </div>
 
             {/* Decorative Border or Accent Line */}
-            <div className='h-1 bg-indigo-500'></div>
+            <div className='h-1 bg-black-500'></div>
           </div>
         ))}
       </div>
