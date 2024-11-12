@@ -20,7 +20,7 @@ const Instructors = () => {
             className='bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105'
           >
             {/* Profile Picture */}
-            <div className='w-full h-90 overflow-hidden'>
+            <div className='w-full h-65 overflow-hidden'>
               <img
                 src={instructor.image}
                 alt={`${instructor.name} profile`}
