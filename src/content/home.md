@@ -70,12 +70,12 @@ instructors:
   profiles:
     - name: Junho Lee
       kname: 이준호
-      bio: Head instructor with 40 years of Kendo experience.
-      kbio: 센츄리 검도 관장
+      bio: Century’s Head Instructor, bringing over 30 years of teaching experience.
+      kbio: 센츄리 검도 관장. 30년 검도 도장운영.
       image: ../lee.jpg
     - name: Honggi Park
       kname: 박홍기
-      bio: Assistant instructor and former national competitor.
+      bio: Kendo instructor with extensive experience, including roles as coach of the Seongnam middle and high school Kendo team, member of the national reserve team, senior instructor at Samsung Sports Center, and head of Seban Kendo Center in Korea and Strial Kendo in Canada. Dedicated to guiding students in their Kendo journey.
       kbio: 성남 중.고등학교 검도 선수단, 제 2회 전국 고교 국가대표 상비군, 용인대학교 검도훈련단 동 대학원, 삼성 레포츠센타 검도 주임강사, 세반검도관 관장, 캐나다 스트리얼 검도 사범. 오랫동안 검도지도를 해왔으며 여러분의 검도 를 배우는데 길잡이가 되어드리겠습니다.
       image: ../park1.jpg
     - name: Hyunkyu Ryu
