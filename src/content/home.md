@@ -82,7 +82,7 @@ instructors:
       kname: 류현규
       bio: Technical instructor specializing in advanced techniques.
       kbio: 검도 지도자
-      image: /images/alex.jpg
+      image: ../ryu.jpg
 contactus:
   title: Contact Us
   msg: 7-9pm from Sep 27, 2024
