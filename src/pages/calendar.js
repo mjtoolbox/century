@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Calendar as BigCalendar,
   momentLocalizer,
@@ -25,29 +25,33 @@ const styles = {
 };
 
 const CustomCalendar = ({ serializedData }) => {
-  const events = JSON.parse(serializedData);
-  for (let i = 0; i < events.length; i++) {
-    let start = events[i].start_date;
-    let end = events[i].end_date;
-    var dateParts = start.split('-');
-    var edateParts = end.split('-');
-    events[i].start = new Date(
-      dateParts[0],
-      dateParts[1] - 1,
-      dateParts[2].substr(0, 2),
-      dateParts[2].substr(3, 2),
-      dateParts[2].substr(6, 2),
-      dateParts[2].substr(9, 2)
-    );
-    events[i].end = new Date(
-      edateParts[0],
-      edateParts[1] - 1,
-      edateParts[2].substr(0, 2),
-      edateParts[2].substr(3, 2),
-      edateParts[2].substr(6, 2),
-      edateParts[2].substr(9, 2)
-    );
-  }
+  // Parse events only when serializedData changes
+  const events = useMemo(() => {
+    const parsedEvents = JSON.parse(serializedData).map((event) => {
+      const startDateParts = event.start_date.split('-');
+      const endDateParts = event.end_date.split('-');
+      return {
+        ...event,
+        start: new Date(
+          startDateParts[0],
+          startDateParts[1] - 1,
+          startDateParts[2].substr(0, 2),
+          startDateParts[2].substr(3, 2),
+          startDateParts[2].substr(6, 2),
+          startDateParts[2].substr(9, 2)
+        ),
+        end: new Date(
+          endDateParts[0],
+          endDateParts[1] - 1,
+          endDateParts[2].substr(0, 2),
+          endDateParts[2].substr(3, 2),
+          endDateParts[2].substr(6, 2),
+          endDateParts[2].substr(9, 2)
+        ),
+      };
+    });
+    return parsedEvents;
+  }, [serializedData]);
   // console.log('Updated events:', events);
 
   const clickRef = useRef(null);
@@ -77,22 +81,15 @@ const CustomCalendar = ({ serializedData }) => {
     }, 250);
   }, []);
 
-  const eventStyleGetter = (event) => {
-    // console.log(event);
-
-    var style = {
-      backgroundColor: event.color,
-      borderRadius: '0px',
-      //opacity: 0.8,
+  const eventStyleGetter = (event) => ({
+    style: {
+      backgroundColor: event.color || '#6495ED', // Fallback color
+      borderRadius: '4px',
       color: 'white',
-      border: '0px',
-      display: 'block',
-      bold: 'true',
-    };
-    return {
-      style: style,
-    };
-  };
+      border: '1px solid #fff',
+      fontWeight: 'bold',
+    },
+  });
 
   return (
     <div style={styles.container}>
