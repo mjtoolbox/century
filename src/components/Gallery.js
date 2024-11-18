@@ -9,7 +9,7 @@ const Gallery = (props) => {
         {language === 'en' ? props.gallery.title : props.gallery.ktitle}
       </div>
       <div className='carousel w-full'>
-      <div id='slide7' className='carousel-item relative w-full'>
+        <div id='slide7' className='carousel-item relative w-full'>
           <img src='/sample7.jpg' className='w-full' />
           <div className='absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2'>
             <a href='#slide6' className='btn btn-circle'>
@@ -20,11 +20,11 @@ const Gallery = (props) => {
             </a>
           </div>
         </div>
-      
+
         <div id='slide2' className='carousel-item relative w-full'>
           <img src='/sample2.jpg' className='w-full' />
           <div className='absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2'>
-            <a href='#slide1' className='btn btn-circle'>
+            <a href='#slide7' className='btn btn-circle'>
               ❮
             </a>
             <a href='#slide3' className='btn btn-circle'>
