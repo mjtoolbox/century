@@ -20,6 +20,9 @@ const Footer = () => {
             Century Kumdo Club
           </a>
         </div>
+        <div className='flex-auto'>
+          <img src='QR.jpg' width={76} height={76} alt='Kakaotalkqr' />
+        </div>
         &nbsp;&nbsp;
         <div className='flex-auto'>
           <svg
