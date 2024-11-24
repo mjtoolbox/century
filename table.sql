@@ -18,12 +18,12 @@ CREATE SEQUENCE public.event_id_seq
 -- Create Table
 CREATE TABLE public.event (
     event_id integer NOT NULL DEFAULT nextval('event_id_seq'),
-    title character varying(50) NOT NULL,
-    detail character varying(50) NOT NULL,
-    time_duration character varying(15) NULL,
+    title VARCHAR(50) NOT NULL,
+    detail VARCHAR(50) NOT NULL,
+    time_duration VARCHAR(15) NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    color character varying(50),
+    color VARCHAR(50),
     last_update timestamp without time zone DEFAULT now() NOT NULL,
     CONSTRAINT event_id_pk PRIMARY KEY (event_id)
 );
@@ -36,6 +36,48 @@ ALTER TABLE public.event OWNER TO postgres;
 ALTER SEQUENCE public.event_id_seq OWNED BY public.event.event_id;
 -- END OF event --
 
+--------------------
+-- CenturyMembers --
+--------------------
+-- Create Sequence. Create a sequence if we need to control start #
+-- If no need to control, simple combination of "SERIAL PRIMARY KEY" will do
+CREATE SEQUENCE public.member_id_seq
+    START WITH 1000
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+-- Create Table
+CREATE TABLE public.centurymember (
+    member_id integer NOT NULL DEFAULT nextval('member_id_seq'),
+    name VARCHAR(100) NOT NULL,
+	Kname VARCHAR(50) NULL,
+	altname VARCHAR(50) NULL,
+    address VARCHAR(50) NULL,
+    phone VARCHAR(15)  NULL,
+	carrier VARCHAR(10)  NULL,
+	email VARCHAR(20)  NULL,
+    dob DATE NOT NULL,
+    start_date DATE  NULL,
+    level VARCHAR(50),
+	is_adult BOOLEAN NOT NULL,
+	guardian_id INTEGER REFERENCES Members(id) ON DELETE SET NULL,
+    UNIQUE (member_id, guardian_id)
+    last_update timestamp without time zone DEFAULT now() NOT NULL,
+    CONSTRAINT centurymember_id_pk PRIMARY KEY (member_id)
+);
+
+
+
+
+-- Alter Table Owner to postgres
+ALTER TABLE public.centurymember OWNER TO postgres;
+
+-- Alter Sequence Owned by the table primary key to make it more efficient
+-- This means when centurymember table is deleted, automatically delete this sequence.
+ALTER SEQUENCE public.centurymember_id_seq OWNED BY public.centurymember.member_id;
+-- END OF centurymember --
 
 
 ------------------

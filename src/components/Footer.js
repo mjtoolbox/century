@@ -6,14 +6,21 @@ const Footer = () => {
     <footer className='footer footer-center p-10 bg-base-200 text-base-content rounded'>
       <div className='flex flex-row'>
         <div className='flex-auto'>
-          <Image
-            src='../../kakaotalk.svg'
-            width={30}
-            height={30}
-            alt='Kakaotalk'
-          />
+          <a href='https://open.kakao.com/o/gW4gvBWg' target='_blank'>
+            <Image
+              src='../../kakaotalk.svg'
+              width={30}
+              height={30}
+              alt='Kakaotalk'
+            />
+          </a>
         </div>
-        <div className='flex-auto'>Century Kumdo Club</div>&nbsp;&nbsp;
+        <div className='flex-auto'>
+          <a href='https://open.kakao.com/o/gW4gvBWg' target='_blank'>
+            Century Kumdo Club
+          </a>
+        </div>
+        &nbsp;&nbsp;
         <div className='flex-auto'>
           <svg
             width='30px'
