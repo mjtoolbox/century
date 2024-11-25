@@ -52,7 +52,7 @@ CREATE SEQUENCE public.member_id_seq
 CREATE TABLE public.centurymember (
     member_id integer NOT NULL DEFAULT nextval('member_id_seq'),
     name VARCHAR(100) NOT NULL,
-	Kname VARCHAR(50) NULL,
+	hangeul VARCHAR(50) NULL,
 	altname VARCHAR(50) NULL,
     address VARCHAR(50) NULL,
     phone VARCHAR(15)  NULL,
@@ -62,13 +62,12 @@ CREATE TABLE public.centurymember (
     start_date DATE  NULL,
     level VARCHAR(50),
 	is_adult BOOLEAN NOT NULL,
-	guardian_id INTEGER REFERENCES Members(id) ON DELETE SET NULL,
-    UNIQUE (member_id, guardian_id)
+    is_instructor BOOLEAN NOT NULL,
+	guardian_id INTEGER REFERENCES centurymember(member_id) ON DELETE SET NULL,
+    UNIQUE (member_id, guardian_id),
     last_update timestamp without time zone DEFAULT now() NOT NULL,
     CONSTRAINT centurymember_id_pk PRIMARY KEY (member_id)
 );
-
-
 
 
 -- Alter Table Owner to postgres
@@ -76,7 +75,7 @@ ALTER TABLE public.centurymember OWNER TO postgres;
 
 -- Alter Sequence Owned by the table primary key to make it more efficient
 -- This means when centurymember table is deleted, automatically delete this sequence.
-ALTER SEQUENCE public.centurymember_id_seq OWNED BY public.centurymember.member_id;
+ALTER SEQUENCE public.member_id_seq OWNED BY public.centurymember.member_id;
 -- END OF centurymember --
 
 
@@ -181,3 +180,19 @@ INSERT INTO public.event(
 INSERT INTO public.event(
 	 title, detail, time_duration, start_date, end_date, color)
 	VALUES ( 'Langley Lions Society', 'Lions Society West Langley Hall', '7-9pm', '2023-11-29', '2023-11-29', '#6495ED');
+
+
+
+
+-- Members default data
+INSERT INTO public.centurymember(
+	name, hangeul, altname, address, phone, carrier, email, dob, start_date, level, is_adult, is_instructor, guardian_id)
+	VALUES ( 'Seunghyeon Jo', '조승현', 'Michael Jo', '739 Linton St. Coquitlam', '6043568893', 'Telus', 'michael.jo@gmail.com', '1971-01-29', '1997-01-01', '1 Dan', true, false, null);
+
+INSERT INTO public.centurymember(
+	name, hangeul, altname, address, phone, carrier, email, dob, start_date, level, is_adult, is_instructor, guardian_id)
+	VALUES ( 'Aramireu Jo', '조아라미르', null, '739 Linton St. Coquitlam', '7789170337', 'Telus', 'aramireu@gmail.com', '2007-03-13', '2016-01-01', '1 Kyu', false, false, 1000);    
+
+INSERT INTO public.centurymember(
+	name, hangeul, altname, address, phone, carrier, email, dob, start_date, level, is_adult, is_instructor, guardian_id)
+	VALUES ( 'Ayin Jo', '조아인', null, '739 Linton St. Coquitlam', '7789518893', 'Telus', 'ayin.jo@gmail.com', '2009-11-23', '2016-01-01', '1 Kyu', false, false, 1000); 

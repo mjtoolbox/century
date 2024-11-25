@@ -12,6 +12,7 @@ heading:
   menu7: Contact Us
   menu8: Instructors
   menu9: Admin
+  menu10: Members
   login: LOGIN
   logout: LOGOUT
   ktitle: 센츄리 검도
@@ -26,6 +27,7 @@ heading:
   kmenu7: 연락처
   kmenu8: 사범진
   kmenu9: 관리
+  kmenu10: 회원
   klogin: 로그인
   klogout: 로그아웃
 landing:
@@ -53,7 +55,7 @@ schedule:
   address2: 960 Lillian St, Coquitlam, BC V3J 5C7
 gallery:
   title: Gallery
-  ktitle: 겔러리
+  ktitle: 갤러리
 membership:
   title: Membership
   li1: New members are accepted only twice a year (January, July). Peole who have achieved a certain ranks (yudansha) may join at any time of the year.
@@ -67,6 +69,7 @@ membership:
   kli4: 클럽회칙 (차후 업로드)
 instructors:
   title: Instructors
+  ktitle: 사범진
   profiles:
     - name: Honggi Park
       kname: 박홍기
@@ -83,6 +86,15 @@ instructors:
       bio: Technical instructor specializing in advanced techniques.
       kbio: 센츄리 검도 사범님
       image: ../ryu2.jpg
+levels:
+  level1: Kodansha
+  klevel1: 고단자
+  level2: Shodan
+  klevel2: 초단(1단)
+  level3: Mudansha - kyu
+  klevel3: 무단자(급)
+  level4: Mudansha
+  klevel4: 무급
 contactus:
   title: Contact Us
   msg: 7-9pm from Sep 27, 2024

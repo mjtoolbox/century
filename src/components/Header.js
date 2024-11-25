@@ -93,6 +93,11 @@ const Header = (props) => {
               </Link>
             </li>
             <li onClick={handleClick}>
+              <Link href='/members'>
+                {language === 'en' ? props.heading.menu10 : props.heading.kmenu10}
+              </Link>
+            </li>
+            <li onClick={handleClick}>
               <Link href='/contactus'>
                 {language === 'en' ? props.heading.menu7 : props.heading.kmenu7}
               </Link>
@@ -134,6 +139,11 @@ const Header = (props) => {
           <li>
             <Link href='/instructors'>
               {language === 'en' ? props.heading.menu8 : props.heading.kmenu8}
+            </Link>
+          </li>
+          <li>
+            <Link href='/members'>
+              {language === 'en' ? props.heading.menu10 : props.heading.kmenu10}
             </Link>
           </li>
           <li>
