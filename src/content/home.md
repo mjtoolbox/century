@@ -95,6 +95,8 @@ levels:
   klevel3: 무단자(급)
   level4: Mudansha
   klevel4: 무급
+  title: User Profile
+  ktitle: 회원정보
 contactus:
   title: Contact Us
   msg: 7-9pm from Sep 27, 2024

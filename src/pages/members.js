@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { AppContext } from '@/components/AppContext';
 import { attributes } from '../content/home.md';
 import pool from '../utils/vercelpostgres';
+import fs from 'fs';
+import path from 'path';
 
 const Members = ({ members }) => {
   const { language } = useContext(AppContext);
@@ -25,7 +27,9 @@ const Members = ({ members }) => {
 
   return (
     <div className='bg-base-100 py-8'>
-      <h1 className='text-2xl font-bold text-center mb-8'>User Profiles</h1>
+      <h1 className='text-2xl font-bold text-center mb-8'>
+        {language === 'en' ? levels.title : levels.ktitle}
+      </h1>
       <div className='container mx-auto space-y-8'>
         {Object.entries(groupedMembers).map(([level, members], index) => (
           <div key={level} className='space-y-4'>
@@ -43,9 +47,11 @@ const Members = ({ members }) => {
                     alt={user.name}
                     className='w-20 h-20 rounded-full mx-auto mb-3'
                   />
-                  <h3 className='text-lg font-bold'>{user.name}</h3>
-                  <p className='text-sm text-gray-600'>{user.level}</p>
-                  <p className='text-sm text-gray-600'>{user.since}</p>
+                  <h3 className='text-lg font-bold'>
+                    {language === 'en' ? user.name : user.korean}
+                  </h3>
+                  <p className='text-sm text-gray-600'>{user.dan}</p>
+                  <p className='text-sm text-gray-600'>Since {user.since}</p>
                 </div>
               ))}
             </div>
@@ -67,14 +73,50 @@ export async function getServerSideProps() {
       'SELECT name, hangeul, altname, level, start_date FROM centurymember'
     );
 
+    // Define the profile picture directory path
+    const profileDir = path.join(process.cwd(), 'public', 'profile');
+
     // Transform data
-    const members = rows.map((row) => ({
-      name: row.name || row.altname, // Use altname if name is null
-      hangel: row.hangeul,
-      level: row.level || 'level4', // Default to level4 if no level is set
-      since: row.start_date ? row.start_date.toISOString() : 'N/A', // Provide fallback for missing dates
-      profilePicture: `/images/${row.name || row.altname}.jpg`, // Adjust path as needed
-    }));
+    const members = rows.map((row) => {
+      let assignedLevel;
+
+      if (row.level) {
+        if (row.level.includes('1 Dan')) {
+          assignedLevel = 'level2';
+        } else if (row.level.includes('Dan')) {
+          assignedLevel = 'level1';
+        } else if (row.level.includes('Kyu')) {
+          assignedLevel = 'level3';
+        } else {
+          assignedLevel = 'level4';
+        }
+      } else {
+        assignedLevel = 'level4';
+      }
+
+      const formattedDate = row.start_date
+        ? new Date(row.start_date).toISOString().slice(0, 10)
+        : 'N/A';
+
+      // Check if the profile picture exists
+      const imageName = `${row.name || row.altname}.jpg`;
+      const imagePath = path.join(profileDir, imageName);
+
+      const profilePicture = fs.existsSync(imagePath)
+        ? `/profile/${imageName}`
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            row.name || row.altname
+          )}&background=random`;
+
+      return {
+        korean: row.hangeul, // Use altname if name is null
+        name: row.altname || row.name,
+        level: assignedLevel, // Assign level based on enhanced logic
+        dan: row.level || 'n/a',
+        since: formattedDate,
+        profilePicture: profilePicture,
+      };
+    });
 
     return {
       props: {

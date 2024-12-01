@@ -22,6 +22,7 @@
     "firebase": "^10.4.0",
     "formik": "^2.4.5",
     "frontmatter-markdown-loader": "^3.7.0",
+    "fs": "^0.0.1-security",
     "next": "^15.0.3",
     "pg": "^8.11.3",
     "postcss": "8.4.23",
