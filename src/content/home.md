@@ -90,9 +90,9 @@ levels:
   level1: Kodansha
   klevel1: 고단자
   level2: Shodan
-  klevel2: 초단(1단)
+  klevel2: 초단
   level3: Mudansha - kyu
-  klevel3: 무단자(급)
+  klevel3: 초급자
   level4: Mudansha
   klevel4: 무급
   title: User Profile

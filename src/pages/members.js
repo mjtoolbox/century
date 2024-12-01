@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { AppContext } from '@/components/AppContext';
 import { attributes } from '../content/home.md';
 import pool from '../utils/vercelpostgres';
-import fs from 'fs';
-import path from 'path';
 
 const Members = ({ members }) => {
   const { language } = useContext(AppContext);
@@ -16,6 +14,9 @@ const Members = ({ members }) => {
     acc[level].push(member);
     return acc;
   }, {});
+
+  // Define level order
+  const levelOrder = ['level1', 'level2', 'level3', 'level4'];
 
   // Determine levels and labels dynamically
   const levelLabels = {
@@ -31,35 +32,39 @@ const Members = ({ members }) => {
         {language === 'en' ? levels.title : levels.ktitle}
       </h1>
       <div className='container mx-auto space-y-8'>
-        {Object.entries(groupedMembers).map(([level, members], index) => (
-          <div key={level} className='space-y-4'>
-            <h2 className='text-xl font-bold text-left pl-4'>
-              {levelLabels[level]}
-            </h2>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-              {members.map((user, userIndex) => (
-                <div
-                  key={userIndex}
-                  className='w-full bg-white shadow-md rounded-lg p-4 text-center'
-                >
-                  <img
-                    src={user.profilePicture || 'placeholder.svg'} // Graceful fallback
-                    alt={user.name}
-                    className='w-20 h-20 rounded-full mx-auto mb-3'
-                  />
-                  <h3 className='text-lg font-bold'>
-                    {language === 'en' ? user.name : user.korean}
-                  </h3>
-                  <p className='text-sm text-gray-600'>{user.dan}</p>
-                  <p className='text-sm text-gray-600'>Since {user.since}</p>
-                </div>
-              ))}
+        {levelOrder.map((level, index) => {
+          const membersForLevel = groupedMembers[level] || []; // Default to empty array if no members
+
+          return (
+            <div key={level} className='space-y-4'>
+              <h2 className='text-xl font-bold text-left pl-4'>
+                {levelLabels[level]}
+              </h2>
+              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+                {membersForLevel.map((user, userIndex) => (
+                  <div
+                    key={userIndex}
+                    className='w-full bg-white shadow-md rounded-lg p-4 text-center'
+                  >
+                    <img
+                      src={user.profilePicture || 'placeholder.svg'} // Graceful fallback
+                      alt={user.name}
+                      className='w-20 h-20 rounded-full mx-auto mb-3'
+                    />
+                    <h3 className='text-lg font-bold'>
+                      {language === 'en' ? user.name : user.korean}
+                    </h3>
+                    <p className='text-sm text-gray-600'>{user.dan}</p>
+                    <p className='text-sm text-gray-600'>Since {user.since}</p>
+                  </div>
+                ))}
+              </div>
+              {index < levelOrder.length - 1 && (
+                <hr className='border-t border-gray-300 mx-4' />
+              )}
             </div>
-            {index < Object.entries(groupedMembers).length - 1 && (
-              <hr className='border-t border-gray-300 mx-4' />
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -70,11 +75,10 @@ export async function getServerSideProps() {
   try {
     // Fetch members from the database
     const { rows } = await pool.query(
-      'SELECT name, hangeul, altname, level, start_date FROM centurymember'
+      'SELECT name, img, hangeul, altname, level, start_date FROM centurymember'
     );
 
-    // Define the profile picture directory path
-    const profileDir = path.join(process.cwd(), 'public', 'profile');
+    console.log(rows);
 
     // Transform data
     const members = rows.map((row) => {
@@ -98,23 +102,17 @@ export async function getServerSideProps() {
         ? new Date(row.start_date).toISOString().slice(0, 10)
         : 'N/A';
 
-      // Check if the profile picture exists
-      const imageName = `${row.name || row.altname}.jpg`;
-      const imagePath = path.join(profileDir, imageName);
-
-      const profilePicture = fs.existsSync(imagePath)
-        ? `/profile/${imageName}`
-        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            row.name || row.altname
-          )}&background=random`;
-
       return {
-        korean: row.hangeul, // Use altname if name is null
+        korean: row.hangeul,
         name: row.altname || row.name,
-        level: assignedLevel, // Assign level based on enhanced logic
+        level: assignedLevel,
         dan: row.level || 'n/a',
         since: formattedDate,
-        profilePicture: profilePicture,
+        profilePicture:
+          `/profile/${row.img}` ||
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            row.altname || row.name
+          )}&background=random`,
       };
     });
 

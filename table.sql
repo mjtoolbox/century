@@ -52,6 +52,7 @@ CREATE SEQUENCE public.member_id_seq
 CREATE TABLE public.centurymember (
     member_id integer NOT NULL DEFAULT nextval('member_id_seq'),
     name VARCHAR(100) NULL,
+    img VARCHAR(50) NULL,
 	hangeul VARCHAR(50) NOT NULL,
 	altname VARCHAR(50) NULL,
     address VARCHAR(50) NULL,
@@ -71,7 +72,7 @@ CREATE TABLE public.centurymember (
 
 
 -- Alter Table Owner to postgres
-ALTER TABLE public.centurymember OWNER TO postgres;
+--ALTER TABLE public.centurymember OWNER TO postgres;
 
 -- Alter Sequence Owned by the table primary key to make it more efficient
 -- This means when centurymember table is deleted, automatically delete this sequence.
@@ -98,7 +99,7 @@ ALTER SEQUENCE public.member_id_seq OWNED BY public.centurymember.member_id;
 
 
 ----------------------------------------------------
------------------ DEFINE RELATIONSHIP --------------
+----------------- --DEFINE RELATIONSHIP --------------
 ----------------------------------------------------
 -- Define relationship after completing the table creation
 -- Alter Table Add Foreign Key constraint, Reference, Delete Cascade
