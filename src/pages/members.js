@@ -139,17 +139,20 @@ export async function getServerSideProps() {
         ? new Date(row.start_date).toISOString().slice(0, 10)
         : 'N/A';
 
+      // Adjust profile picture logic
+    const profilePicture = row.img
+    ? `/profile/${row.img}`
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        row.altname || row.name
+      )}&background=random`;  
+
       return {
         korean: row.hangeul,
         name: row.altname || row.name,
         level: assignedLevel,
         dan: row.level || 'n/a',
         since: formattedDate,
-        profilePicture:
-          `/profile/${row.img}` ||
-          `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            row.altname || row.name
-          )}&background=random`,
+        profilePicture,
       };
     });
 

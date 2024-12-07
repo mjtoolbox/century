@@ -95,7 +95,7 @@ levels:
   klevel3: 초급자
   level4: Mudansha
   klevel4: 무급
-  title: User Profile
+  title: Member Profile
   ktitle: 회원정보
 contactus:
   title: Contact Us

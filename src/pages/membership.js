@@ -30,7 +30,7 @@ const Membership = () => {
     <div className='bg-gray-100 py-12 px-4'>
       {/* Header */}
       <div className='text-center mb-10'>
-        <h1 className='text-4xl font-extrabold text-gray-800'>
+        <h1 className='text-2xl font-bold text-center mb-8'>
           {language === 'en' ? membership.title : membership.ktitle}
         </h1>
         <p className='text-gray-500 mt-2'>
