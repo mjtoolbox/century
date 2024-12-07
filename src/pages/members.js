@@ -37,13 +37,26 @@ const Members = ({ members }) => {
       const aNumber = extractNumber(a.dan || '');
       const bNumber = extractNumber(b.dan || '');
 
+      // Primary sort: by level (Dan descending, Kyu ascending)
       if (a.dan.includes('Dan') && b.dan.includes('Dan')) {
-        return (bNumber || 0) - (aNumber || 0); // Descending for "Dan"
+        const danComparison = (bNumber || 0) - (aNumber || 0);
+        if (danComparison !== 0) return danComparison;
       }
       if (a.dan.includes('Kyu') && b.dan.includes('Kyu')) {
-        return (aNumber || 0) - (bNumber || 0); // Ascending for "Kyu"
+        const kyuComparison = (aNumber || 0) - (bNumber || 0);
+        if (kyuComparison !== 0) return kyuComparison;
       }
-      return 0; // Keep original order for other cases
+
+      // Secondary sort: by start_date (null/n/a first, then ascending date)
+      const parseDate = (date) =>
+        date === 'N/A' || !date ? null : new Date(date);
+      const aDate = parseDate(a.since);
+      const bDate = parseDate(b.since);
+
+      if (!aDate && !bDate) return 0; // Both null or N/A
+      if (!aDate) return -1; // a comes first if its date is null or N/A
+      if (!bDate) return 1; // b comes first if its date is null or N/A
+      return aDate - bDate; // Otherwise, sort by ascending date
     });
   };
 
@@ -71,7 +84,7 @@ const Members = ({ members }) => {
                     <img
                       src={user.profilePicture || 'placeholder.svg'}
                       alt={user.name}
-                      className='w-20 h-20 rounded-full mr-4'
+                      className='w-20 h-20 rounded-full mr-8'
                     />
                     <div className='text-left'>
                       <h3 className='text-lg font-bold'>
