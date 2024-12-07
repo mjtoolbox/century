@@ -26,6 +26,27 @@ const Members = ({ members }) => {
     level4: language === 'en' ? levels.level4 : levels.klevel4,
   };
 
+  // Custom sort logic for members
+  const sortMembers = (members) => {
+    return members.sort((a, b) => {
+      const extractNumber = (text) => {
+        const match = text.match(/(\d+)/);
+        return match ? parseInt(match[0], 10) : null;
+      };
+
+      const aNumber = extractNumber(a.dan || '');
+      const bNumber = extractNumber(b.dan || '');
+
+      if (a.dan.includes('Dan') && b.dan.includes('Dan')) {
+        return (bNumber || 0) - (aNumber || 0); // Descending for "Dan"
+      }
+      if (a.dan.includes('Kyu') && b.dan.includes('Kyu')) {
+        return (aNumber || 0) - (bNumber || 0); // Ascending for "Kyu"
+      }
+      return 0; // Keep original order for other cases
+    });
+  };
+
   return (
     <div className='bg-base-100 py-8'>
       <h1 className='text-2xl font-bold text-center mb-8'>
@@ -34,6 +55,7 @@ const Members = ({ members }) => {
       <div className='container mx-auto space-y-8'>
         {levelOrder.map((level, index) => {
           const membersForLevel = groupedMembers[level] || []; // Default to empty array if no members
+          const sortedMembers = sortMembers(membersForLevel); // Sort members for the current level
 
           return (
             <div key={level} className='space-y-4'>
@@ -41,21 +63,25 @@ const Members = ({ members }) => {
                 {levelLabels[level]}
               </h2>
               <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-                {membersForLevel.map((user, userIndex) => (
+                {sortedMembers.map((user, userIndex) => (
                   <div
                     key={userIndex}
-                    className='w-full bg-white shadow-md rounded-lg p-4 text-center'
+                    className='w-full bg-white shadow-md rounded-lg p-4 flex items-center'
                   >
                     <img
-                      src={user.profilePicture || 'placeholder.svg'} // Graceful fallback
+                      src={user.profilePicture || 'placeholder.svg'}
                       alt={user.name}
-                      className='w-20 h-20 rounded-full mx-auto mb-3'
+                      className='w-20 h-20 rounded-full mr-4'
                     />
-                    <h3 className='text-lg font-bold'>
-                      {language === 'en' ? user.name : user.korean}
-                    </h3>
-                    <p className='text-sm text-gray-600'>{user.dan}</p>
-                    <p className='text-sm text-gray-600'>Since {user.since}</p>
+                    <div className='text-left'>
+                      <h3 className='text-lg font-bold'>
+                        {language === 'en' ? user.name : user.korean}
+                      </h3>
+                      <p className='text-sm text-gray-600'>{user.dan}</p>
+                      <p className='text-sm text-gray-600'>
+                        Since {user.since}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -75,10 +101,8 @@ export async function getServerSideProps() {
   try {
     // Fetch members from the database
     const { rows } = await pool.query(
-      'SELECT name, img, hangeul, altname, level, start_date FROM centurymember'
+      'SELECT name, hangeul, altname, level, start_date FROM centurymember'
     );
-
-    console.log(rows);
 
     // Transform data
     const members = rows.map((row) => {
@@ -108,11 +132,9 @@ export async function getServerSideProps() {
         level: assignedLevel,
         dan: row.level || 'n/a',
         since: formattedDate,
-        profilePicture:
-          `/profile/${row.img}` ||
-          `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            row.altname || row.name
-          )}&background=random`,
+        profilePicture: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          row.altname || row.name
+        )}&background=random`,
       };
     });
 
