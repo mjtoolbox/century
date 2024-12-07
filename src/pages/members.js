@@ -101,7 +101,7 @@ export async function getServerSideProps() {
   try {
     // Fetch members from the database
     const { rows } = await pool.query(
-      'SELECT name, hangeul, altname, level, start_date FROM centurymember'
+      'SELECT name, img, hangeul, altname, level, start_date FROM centurymember'
     );
 
     // Transform data
@@ -132,9 +132,11 @@ export async function getServerSideProps() {
         level: assignedLevel,
         dan: row.level || 'n/a',
         since: formattedDate,
-        profilePicture: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-          row.altname || row.name
-        )}&background=random`,
+        profilePicture:
+          `/profile/${row.img}` ||
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            row.altname || row.name
+          )}&background=random`,
       };
     });
 
