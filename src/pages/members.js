@@ -16,7 +16,7 @@ const Members = ({ members }) => {
   }, {});
 
   // Define level order
-  const levelOrder = ['level1', 'level2', 'level3', 'level4'];
+  const levelOrder = ['level1', 'level2', 'level3', 'level4', 'level5'];
 
   // Determine levels and labels dynamically
   const levelLabels = {
@@ -24,6 +24,7 @@ const Members = ({ members }) => {
     level2: language === 'en' ? levels.level2 : levels.klevel2,
     level3: language === 'en' ? levels.level3 : levels.klevel3,
     level4: language === 'en' ? levels.level4 : levels.klevel4,
+    level5: language === 'en' ? levels.level5 : levels.klevel5,
   };
 
   // Custom sort logic for members
@@ -90,10 +91,14 @@ const Members = ({ members }) => {
                       <h3 className='text-lg font-bold'>
                         {language === 'en' ? user.name : user.korean}
                       </h3>
+                      {user.is_active && (
+                        <>
                       <p className='text-sm text-gray-600'>{user.dan}</p>
                       <p className='text-sm text-gray-600'>
                         Since {user.since}
                       </p>
+                      </>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -114,14 +119,16 @@ export async function getServerSideProps() {
   try {
     // Fetch members from the database
     const { rows } = await pool.query(
-      'SELECT name, img, hangeul, altname, level, start_date FROM centurymember'
+      'SELECT name, img, hangeul, altname, level, is_active, start_date FROM centurymember'
     );
 
     // Transform data
     const members = rows.map((row) => {
       let assignedLevel;
 
-      if (row.level) {
+      if (!row.is_active) {
+        assignedLevel = 'level5';
+      } else if (row.is_active && row.level) {
         if (row.level.includes('1 Dan')) {
           assignedLevel = 'level2';
         } else if (row.level.includes('Dan')) {
@@ -140,16 +147,17 @@ export async function getServerSideProps() {
         : 'N/A';
 
       // Adjust profile picture logic
-    const profilePicture = row.img
-    ? `/profile/${row.img}`
-    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        row.altname || row.name
-      )}&background=random`;  
+      const profilePicture = row.img
+        ? `/profile/${row.img}`
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            row.altname || row.name
+          )}&background=random`;
 
       return {
         korean: row.hangeul,
         name: row.altname || row.name,
         level: assignedLevel,
+        is_active: row.is_active,
         dan: row.level || 'n/a',
         since: formattedDate,
         profilePicture,

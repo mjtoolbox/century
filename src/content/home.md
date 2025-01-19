@@ -97,6 +97,8 @@ levels:
   klevel4: 무급
   title: Member Profile
   ktitle: 회원정보
+  level5: Friends
+  klevel5: 친구들
 contactus:
   title: Contact Us
   msg: 7-9pm from Sep 27, 2024

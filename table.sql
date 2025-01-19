@@ -63,7 +63,7 @@ CREATE TABLE public.centurymember (
     start_date DATE  NULL,
     level VARCHAR(50) NULL,
 	is_adult BOOLEAN NOT NULL,
-    is_instructor BOOLEAN NOT NULL,
+    is_active BOOLEAN NOT NULL,
 	guardian_id INTEGER REFERENCES centurymember(member_id) ON DELETE SET NULL,
     UNIQUE (member_id, guardian_id),
     last_update timestamp without time zone DEFAULT now() NOT NULL,
