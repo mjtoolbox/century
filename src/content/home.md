@@ -48,7 +48,7 @@ aboutDetail:
 schedule:
   title: Location
   ktitle: 도장 위치
-  msg: 7-9pm from Sep 27, 2024
+  msg: Door opens at 7pm
   place: Lord Baden-Powell Elementary
   address: 450 Joyce St, Coquitlam, BC V3K 4G4
   place2: Harbour View Elementary
@@ -106,7 +106,7 @@ levels:
   klevel5: 친구들
 contactus:
   title: Contact Us
-  msg: 7-9pm from Sep 27, 2024
+  msg: Door opens at 7pm 
   place1: Lord Baden-Powell Elementary
   add1: 450 Joyce St, Coquitlam, BC V3K 4G4
   place2: Lions Society West Langley Hall
