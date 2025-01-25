@@ -81,6 +81,11 @@ instructors:
       bio: Century’s Head Instructor, bringing over 30 years of teaching experience.
       kbio: 30년 검도 도장운영 센츄리 검도 관장님
       image: ../lee.jpg
+    - name: Minjo Kim
+      kname: 김민조
+      bio: Century's Executirve Advisor
+      kbio: 센츄리 상임 고문 8단 선생님
+      image: ../kim.jpg
     - name: Hyunkyu Ryu
       kname: 류현규
       bio: Technical instructor specializing in advanced techniques.
