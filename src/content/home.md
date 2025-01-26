@@ -73,7 +73,7 @@ instructors:
   profiles:
     - name: Honggi Park
       kname: 박홍기
-      bio: Kendo instructor with extensive experience.
+      bio: Century's instructor with extensive experience.
       kbio: 센츄리 검도 사범님
       image: ../park2.jpg
     - name: Junho Lee
@@ -88,7 +88,7 @@ instructors:
       image: ../kim.jpg
     - name: Hyunkyu Ryu
       kname: 류현규
-      bio: Technical instructor specializing in advanced techniques.
+      bio: Century's technical instructor specializing in advanced techniques.
       kbio: 센츄리 검도 사범님
       image: ../ryu2.jpg
 levels:
