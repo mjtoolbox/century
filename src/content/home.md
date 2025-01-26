@@ -83,7 +83,7 @@ instructors:
       image: ../lee.jpg
     - name: Minjo Kim
       kname: 김민조
-      bio: Century's Executirve Advisor
+      bio: Century's Executive Advisor
       kbio: 센츄리 상임 고문 8단 선생님
       image: ../kim.jpg
     - name: Hyunkyu Ryu
@@ -106,7 +106,7 @@ levels:
   klevel5: 친구들
 contactus:
   title: Contact Us
-  msg: Door opens at 7pm 
+  msg: Door opens at 7pm
   place1: Lord Baden-Powell Elementary
   add1: 450 Joyce St, Coquitlam, BC V3K 4G4
   place2: Lions Society West Langley Hall
