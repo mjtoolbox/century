@@ -24,7 +24,7 @@ const Members = ({ members }) => {
     level2: language === 'en' ? levels.level2 : levels.klevel2,
     level3: language === 'en' ? levels.level3 : levels.klevel3,
     level4: language === 'en' ? levels.level4 : levels.klevel4,
-    level5: language === 'en' ? levels.level5 : levels.klevel5,
+    //level5: language === 'en' ? levels.level5 : levels.klevel5,
   };
 
   // Custom sort logic for members
