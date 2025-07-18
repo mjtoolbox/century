@@ -32,7 +32,7 @@ heading:
   klogout: 로그아웃
 landing:
   ktitle: 센츄리 검도
-  subtitle: Century Kendo Club operates in Coquitlam and Langley as the only Korean Community-based Kendo Club in British Columbia.
+  subtitle: Based in Coquitlam and Langley, Century Kendo Club is a Korean community-rooted Kendo club open to all. We welcome beginners and experienced practitioners to train in a respectful, inclusive, and disciplined environment.
   ksubtitle: 밴쿠버, 랭리, 코퀴틀람 지역, 한인 유일의 검도 클럽
 about:
   heading1: Century
