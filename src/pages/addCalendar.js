@@ -71,7 +71,7 @@ const EditCalendar = () => {
       const result = await response.json();
       console.log('res', result);
       if (result != null) {
-        router.push('/calendar');
+        router.push('/addCalendar');
       }
     },
   });
