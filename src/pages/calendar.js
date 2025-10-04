@@ -125,10 +125,11 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching data in getServerSideProps:', error?.stack || error);
     return {
       props: {
-        serializedData: [],
+        // The page expects a JSON string; return an empty array serialized to maintain shape
+        serializedData: JSON.stringify([]),
       },
     };
   }
