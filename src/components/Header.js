@@ -191,8 +191,8 @@ const Header = (props) => {
                 src='/korea.png'
                 alt='Korean language'
               />
-              {/* Small visible label on small screens to indicate clickability */}
-              <span className='text-xs mt-1 text-gray-700 sm:hidden'>한국어</span>
+              {/* Small visible label to indicate clickability */}
+              <span className='text-xs mt-1 text-gray-700'>한국어</span>
             </div>
             <span className='sr-only'>Switch to Korean</span>
           </div>
@@ -212,7 +212,7 @@ const Header = (props) => {
                 src='/canada.png'
                 alt='English language'
               />
-              <span className='text-xs mt-1 text-gray-700 sm:hidden'>EN</span>
+              <span className='text-xs mt-1 text-gray-700'>EN</span>
             </div>
             <span className='sr-only'>Switch to English</span>
           </div>

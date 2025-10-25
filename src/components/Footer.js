@@ -6,7 +6,13 @@ const Footer = () => {
     <footer className='footer footer-center p-10 bg-base-200 text-base-content rounded'>
       <div className='flex flex-row'>
         <div className='flex-auto'>
-          <a href='https://open.kakao.com/o/gW4gvBWg' target='_blank'>
+          <a
+            href='https://open.kakao.com/o/gW4gvBWg'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='tooltip tooltip-bottom'
+            data-tip='Open KakaoTalk chat'
+          >
             <Image
               src='../../kakaotalk.svg'
               width={30}
@@ -16,7 +22,13 @@ const Footer = () => {
           </a>
         </div>
         <div className='flex-auto'>
-          <a href='https://open.kakao.com/o/gW4gvBWg' target='_blank'>
+          <a
+            href='https://open.kakao.com/o/gW4gvBWg'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='tooltip tooltip-bottom'
+            data-tip='Open KakaoTalk chat'
+          >
             Century Kumdo Club
           </a>
         </div>
@@ -25,22 +37,38 @@ const Footer = () => {
         </div>
         &nbsp;&nbsp;
         <div className='flex-auto'>
-          <svg
-            width='30px'
-            height='30px'
-            viewBox='0 0 24 24'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
+          <a
+            href='mailto:centurykendo@gmail.com'
+            aria-label='Email Century Kumdo Club'
+            className='inline-block tooltip tooltip-bottom'
+            data-tip='Send email to centurykendo@gmail.com'
           >
-            <path
-              fillRule='evenodd'
-              clipRule='evenodd'
-              d='M3.75 5.25L3 6V18L3.75 18.75H20.25L21 18V6L20.25 5.25H3.75ZM4.5 7.6955V17.25H19.5V7.69525L11.9999 14.5136L4.5 7.6955ZM18.3099 6.75H5.68986L11.9999 12.4864L18.3099 6.75Z'
-              fill='#080341'
-            />
-          </svg>
+            <svg
+              width='30px'
+              height='30px'
+              viewBox='0 0 24 24'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                fillRule='evenodd'
+                clipRule='evenodd'
+                d='M3.75 5.25L3 6V18L3.75 18.75H20.25L21 18V6L20.25 5.25H3.75ZM4.5 7.6955V17.25H19.5V7.69525L11.9999 14.5136L4.5 7.6955ZM18.3099 6.75H5.68986L11.9999 12.4864L18.3099 6.75Z'
+                fill='#080341'
+              />
+            </svg>
+          </a>
         </div>
-        <div className='flex-auto'>centurykendo@gmail.com</div>
+        <div className='flex-auto'>
+          <a
+            href='mailto:centurykendo@gmail.com'
+            aria-label='Email Century Kumdo Club'
+            className='text-base link link-primary tooltip tooltip-bottom'
+            data-tip='Send email to centurykendo@gmail.com'
+          >
+            centurykendo@gmail.com
+          </a>
+        </div>
       </div>
       <div className='w-full'>
         <div className='grid grid-flow-col gap-4'>
