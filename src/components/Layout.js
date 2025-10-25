@@ -7,6 +7,7 @@ import { attributes } from '../content/home.md';
 import { usePathname } from 'next/navigation';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const Layout = ({ children }) => {
   const [title, setTitle] = useState('Century Kumdo');
