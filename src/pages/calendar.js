@@ -29,11 +29,30 @@ const CustomCalendar = ({ serializedData }) => {
   const events = useMemo(() => {
     try {
       const parsedEvents = JSON.parse(serializedData).map((event) => {
-        // Prefer ISO date strings from the DB so `new Date(...)` parses reliably.
-        // Fallback: if parsing fails, use the current date to avoid crashes.
-        let startDate = new Date(event.start_date);
+        // If the DB returns a date-only string like 'YYYY-MM-DD', new Date('YYYY-MM-DD')
+        // may be parsed as UTC and then displayed in local time, which causes the
+        // date to appear one day earlier in timezones behind UTC (e.g. America/Vancouver).
+        // To avoid that, detect date-only strings and construct a local Date using
+        // the numeric year/month/day so it represents local midnight.
+        const isDateOnly = (s) => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
+
+        let startDate;
+        if (isDateOnly(event.start_date)) {
+          const [y, m, d] = event.start_date.split('-').map((v) => parseInt(v, 10));
+          // monthIndex is zero-based
+          startDate = new Date(y, m - 1, d);
+        } else {
+          startDate = new Date(event.start_date);
+        }
         if (Number.isNaN(startDate.getTime())) startDate = new Date();
-        let endDate = new Date(event.end_date);
+
+        let endDate;
+        if (isDateOnly(event.end_date)) {
+          const [y, m, d] = event.end_date.split('-').map((v) => parseInt(v, 10));
+          endDate = new Date(y, m - 1, d);
+        } else {
+          endDate = new Date(event.end_date);
+        }
         if (Number.isNaN(endDate.getTime())) endDate = new Date(startDate.getTime());
 
         return {
