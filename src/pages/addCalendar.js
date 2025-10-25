@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -71,12 +71,25 @@ const EditCalendar = () => {
       const result = await response.json();
       console.log('res', result);
       if (result != null) {
-        router.push('/addCalendar');
+        // Show a temporary toast message and stay on page briefly
+        const dateLabel = values?.date ? dayjs(values.date).format('YYYY-MM-DD') : '';
+        const titleLabel = values?.title || '';
+        setToastMessage(`${dateLabel} ${titleLabel} event added`);
+        setTimeout(() => {
+          setToastMessage('');
+          router.push('/addCalendar');
+        }, 1000);
       }
     },
   });
+  const [toastMessage, setToastMessage] = useState('');
   return (
     <div className='container my-12 mx-auto px-4 md:px-12'>
+      {toastMessage && (
+        <div className='fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow z-50'>
+          {toastMessage}
+        </div>
+      )}
       <form onSubmit={formik.handleSubmit} onChange={handleOnChange}>
         <div className='flex flex-wrap -mx-3 mb-6'>
           <div className='w-full md:w-1/2 px-3 mb-6 md:mb-0'>
@@ -182,7 +195,6 @@ const EditCalendar = () => {
                 value={formik.values.time}
               >
                 <option value='7-9pm'>7-9pm</option>
-                <option value='7:30-9pm'>7:30-9pm</option>
                 <option value='all day'>all day</option>
               </select>
               <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>

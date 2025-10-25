@@ -27,30 +27,26 @@ const styles = {
 const CustomCalendar = ({ serializedData }) => {
   // Parse events only when serializedData changes
   const events = useMemo(() => {
-    const parsedEvents = JSON.parse(serializedData).map((event) => {
-      const startDateParts = event.start_date.split('-');
-      const endDateParts = event.end_date.split('-');
-      return {
-        ...event,
-        start: new Date(
-          startDateParts[0],
-          startDateParts[1] - 1,
-          startDateParts[2].substr(0, 2),
-          startDateParts[2].substr(3, 2),
-          startDateParts[2].substr(6, 2),
-          startDateParts[2].substr(9, 2)
-        ),
-        end: new Date(
-          endDateParts[0],
-          endDateParts[1] - 1,
-          endDateParts[2].substr(0, 2),
-          endDateParts[2].substr(3, 2),
-          endDateParts[2].substr(6, 2),
-          endDateParts[2].substr(9, 2)
-        ),
-      };
-    });
-    return parsedEvents;
+    try {
+      const parsedEvents = JSON.parse(serializedData).map((event) => {
+        // Prefer ISO date strings from the DB so `new Date(...)` parses reliably.
+        // Fallback: if parsing fails, use the current date to avoid crashes.
+        let startDate = new Date(event.start_date);
+        if (Number.isNaN(startDate.getTime())) startDate = new Date();
+        let endDate = new Date(event.end_date);
+        if (Number.isNaN(endDate.getTime())) endDate = new Date(startDate.getTime());
+
+        return {
+          ...event,
+          start: startDate,
+          end: endDate,
+        };
+      });
+      return parsedEvents;
+    } catch (e) {
+      console.error('Error parsing serializedData for calendar events', e);
+      return [];
+    }
   }, [serializedData]);
   // console.log('Updated events:', events);
 
@@ -111,10 +107,13 @@ const CustomCalendar = ({ serializedData }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const nonSerializableData = await pool.query(
-      "SELECT * FROM event where start_date >= date_trunc('month', current_timestamp) - interval '1 month' ORDER BY start_date"
+      `SELECT event_id, title, start_date, end_date, color, detail, time_duration
+       FROM event
+       WHERE start_date >= date_trunc('month', current_timestamp) - interval '1 month'
+       ORDER BY start_date`
     );
 
     const serializedData = JSON.stringify(nonSerializableData.rows);
@@ -123,14 +122,18 @@ export async function getServerSideProps() {
       props: {
         serializedData,
       },
+      // Regenerate the page in the background at most once every 24 hours.
+      // Since calendar data is updated infrequently, this greatly improves performance.
+      revalidate: 86400, // seconds
     };
   } catch (error) {
-    console.error('Error fetching data in getServerSideProps:', error?.stack || error);
+    console.error('Error fetching data in getStaticProps:', error?.stack || error);
     return {
       props: {
         // The page expects a JSON string; return an empty array serialized to maintain shape
         serializedData: JSON.stringify([]),
       },
+      revalidate: 86400,
     };
   }
 }

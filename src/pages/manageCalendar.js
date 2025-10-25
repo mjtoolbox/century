@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 // import pool from '../utils/postgres';
 import pool from '../utils/vercelpostgres';
@@ -14,20 +14,44 @@ const ManageCalendar = ({ serializedData }) => {
 
   const events = JSON.parse(serializedData);
 
-  async function handleDelete(event_id) {
-    console.log('eventid', event_id);
-    const response = await fetch('/api/delete', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: event_id,
-    });
-    refreshData();
+  const [toastMessage, setToastMessage] = useState('');
+
+  async function handleDelete(event_id, start_date) {
+    try {
+      const response = await fetch('/api/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ event_id }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        console.error('Delete failed', err);
+        alert('Failed to delete event');
+        return;
+      }
+
+      const dateLabel = start_date ? start_date.substring(0, 10) : '';
+      setToastMessage(`${dateLabel} event deleted`);
+      setTimeout(() => {
+        setToastMessage('');
+        refreshData();
+      }, 1000);
+    } catch (err) {
+      console.error('Error calling delete API', err);
+      alert('Error deleting event');
+    }
   }
 
   return (
     <div className='container my-12 mx-auto px-4 md:px-12 '>
+      {toastMessage && (
+        <div className='fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow z-50'>
+          {toastMessage}
+        </div>
+      )}
       <div className='flex flex-row justify-center'>
         <div className='text-2xl font-bold text-center m-5'>All Events</div>
         <div className='m-6 tooltip' data-tip='Add new event'>
@@ -78,7 +102,7 @@ const ManageCalendar = ({ serializedData }) => {
                   <button
                     className='btn btn-xs btn-error'
                     onClick={async () => {
-                      await handleDelete(`${event.event_id}`);
+                      await handleDelete(`${event.event_id}`, event.start_date);
                     }}
                   >
                     Delete
@@ -96,7 +120,7 @@ const ManageCalendar = ({ serializedData }) => {
 export async function getServerSideProps() {
   try {
     const nonSerializableData = await pool.query(
-      'SELECT * FROM event ORDER BY start_date desc'
+      'SELECT * FROM event ORDER BY start_date'
     );
 
     const serializedData = JSON.stringify(nonSerializableData.rows);
@@ -110,7 +134,7 @@ export async function getServerSideProps() {
     console.error('Error fetching data:', error);
     return {
       props: {
-        serializedData: [],
+        serializedData: JSON.stringify([]),
       },
     };
   }
