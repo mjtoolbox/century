@@ -20,6 +20,7 @@ const Header = (props) => {
   const [isLogged, setLoggedin] = useState(false);
   const { user } = useAuthContext();
   const router = useRouter();
+  const [showLangPulse, setShowLangPulse] = useState(true);
 
   const handleLogout = () => {
     signOut(auth)
@@ -48,6 +49,12 @@ const Header = (props) => {
     }, 5000);
     return () => clearInterval(id);
   }, [title, user]);
+
+  // Briefly pulse the language icon on first load to hint it's interactive
+  useEffect(() => {
+    const t = setTimeout(() => setShowLangPulse(false), 3000);
+    return () => clearTimeout(t);
+  }, []);
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
@@ -164,21 +171,50 @@ const Header = (props) => {
         <label className='swap swap-flip text-9xl mr-3'>
           <input
             type='checkbox'
-            onClick={(e) =>
+            onChange={(e) =>
               e.target.checked ? setLanguage('en') : setLanguage('kr')
             }
           />
           <div
-            className='swap-on tooltip tooltip-bottom'
+            className={`swap-on tooltip tooltip-bottom ${showLangPulse ? 'animate-pulse' : ''}`}
             data-tip='Click to Korean'
+            role='button'
+            tabIndex={0}
+            onClick={() => setLanguage('kr')}
+            onKeyDown={(e) => (e.key === 'Enter' ? setLanguage('kr') : null)}
+            aria-label='Switch to Korean'
           >
-            <img id='iconkorea' className='h-6 w-6 ' src='/korea.png' />
+            <div className='flex flex-col items-center'>
+              <img
+                id='iconkorea'
+                className='h-6 w-6 cursor-pointer rounded-full transition-transform transform hover:scale-110 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary'
+                src='/korea.png'
+                alt='Korean language'
+              />
+              {/* Small visible label on small screens to indicate clickability */}
+              <span className='text-xs mt-1 text-gray-700 sm:hidden'>한국어</span>
+            </div>
+            <span className='sr-only'>Switch to Korean</span>
           </div>
           <div
-            className='swap-off tooltip tooltip-bottom'
+            className={`swap-off tooltip tooltip-bottom ${showLangPulse ? 'animate-pulse' : ''}`}
             data-tip='Click to English'
+            role='button'
+            tabIndex={0}
+            onClick={() => setLanguage('en')}
+            onKeyDown={(e) => (e.key === 'Enter' ? setLanguage('en') : null)}
+            aria-label='Switch to English'
           >
-            <img id='iconkorea' className='h-6 w-6 ' src='/canada.png' />
+            <div className='flex flex-col items-center'>
+              <img
+                id='iconcanada'
+                className='h-6 w-6 cursor-pointer rounded-full transition-transform transform hover:scale-110 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary'
+                src='/canada.png'
+                alt='English language'
+              />
+              <span className='text-xs mt-1 text-gray-700 sm:hidden'>EN</span>
+            </div>
+            <span className='sr-only'>Switch to English</span>
           </div>
         </label>
         {!isLogged && (
