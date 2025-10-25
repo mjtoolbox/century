@@ -128,8 +128,12 @@ const CustomCalendar = ({ serializedData }) => {
 
 export async function getStaticProps() {
   try {
+    // Force date-only (no time) on DB side to avoid timezone shifts when parsing on client
+    // Use to_char to ensure the DB returns a plain 'YYYY-MM-DD' string (JSON-serializable)
     const nonSerializableData = await pool.query(
-      `SELECT event_id, title, start_date, end_date, color, detail, time_duration
+      `SELECT event_id, title, to_char(start_date::date, 'YYYY-MM-DD') as start_date,
+              to_char(end_date::date, 'YYYY-MM-DD') as end_date,
+              color, detail, time_duration
        FROM event
        WHERE start_date >= date_trunc('month', current_timestamp) - interval '1 month'
        ORDER BY start_date`

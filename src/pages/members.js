@@ -152,7 +152,7 @@ export async function getStaticProps() {
   try {
     // Fetch members from the database (include member_id for stable keys)
     const { rows } = await pool.query(
-      'SELECT member_id, name, img, hangeul, altname, level, is_active, start_date FROM centurymember'
+      "SELECT member_id, name, img, hangeul, altname, level, is_active, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember"
     );
 
     // Transform data
@@ -175,9 +175,8 @@ export async function getStaticProps() {
         assignedLevel = 'level4';
       }
 
-      const formattedDate = row.start_date
-        ? new Date(row.start_date).toISOString().slice(0, 10)
-        : 'N/A';
+      // start_date is returned as a date-only string (YYYY-MM-DD) from the DB
+      const formattedDate = row.start_date ? row.start_date : 'N/A';
 
       // Adjust profile picture logic
       const profilePicture = row.img
