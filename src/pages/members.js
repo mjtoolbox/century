@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { AppContext } from '@/components/AppContext';
 import { attributes } from '../content/home.md';
 import pool from '../utils/vercelpostgres';
@@ -7,13 +7,47 @@ const Members = ({ members }) => {
   const { language } = useContext(AppContext);
   const { levels } = attributes;
 
-  // Group members by their level
-  const groupedMembers = members.reduce((acc, member) => {
-    const level = member.level || 'level4'; // Default to level4 if undefined
-    if (!acc[level]) acc[level] = [];
-    acc[level].push(member);
+  // Group and sort members (memoized to avoid recomputation on each render)
+  const groupedMembers = useMemo(() => {
+    const acc = {};
+    for (const member of members) {
+      const level = member.level || 'level4';
+      if (!acc[level]) acc[level] = [];
+      acc[level].push(member);
+    }
+
+    // Sort members within each level
+    const extractNumber = (text) => {
+      const match = (text || '').match(/(\d+)/);
+      return match ? parseInt(match[0], 10) : null;
+    };
+
+    const parseDate = (date) => (date === 'N/A' || !date ? null : new Date(date));
+
+    const sortFn = (a, b) => {
+      const aNumber = extractNumber(a.dan || '');
+      const bNumber = extractNumber(b.dan || '');
+
+      if ((a.dan || '').includes('Dan') && (b.dan || '').includes('Dan')) {
+        const danComparison = (bNumber || 0) - (aNumber || 0);
+        if (danComparison !== 0) return danComparison;
+      }
+      if ((a.dan || '').includes('Kyu') && (b.dan || '').includes('Kyu')) {
+        const kyuComparison = (aNumber || 0) - (bNumber || 0);
+        if (kyuComparison !== 0) return kyuComparison;
+      }
+
+      const aDate = parseDate(a.since);
+      const bDate = parseDate(b.since);
+      if (!aDate && !bDate) return 0;
+      if (!aDate) return -1;
+      if (!bDate) return 1;
+      return aDate - bDate;
+    };
+
+    for (const key of Object.keys(acc)) acc[key].sort(sortFn);
     return acc;
-  }, {});
+  }, [members]);
 
   // Define level order
   const levelOrder = ['level1', 'level2', 'level3', 'level4', 'level5'];
@@ -76,33 +110,32 @@ const Members = ({ members }) => {
               <h2 className='text-xl font-bold text-left pl-4'>
                 {levelLabels[level]}
               </h2>
-              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-                {sortedMembers.map((user, userIndex) => (
-                  <div
-                    key={userIndex}
-                    className='w-full bg-white shadow-md rounded-lg p-4 flex items-center'
-                  >
-                    <img
-                      src={user.profilePicture || 'placeholder.svg'}
-                      alt={user.name}
-                      className='w-20 h-20 rounded-full mr-8'
-                    />
-                    <div className='text-left'>
-                      <h3 className='text-lg font-bold'>
-                        {language === 'en' ? user.name : user.korean}
-                      </h3>
-                      {user.is_active && (
-                        <>
-                      <p className='text-sm text-gray-600'>{user.dan}</p>
-                      <p className='text-sm text-gray-600'>
-                        Since {user.since}
-                      </p>
-                      </>
-                      )}
-                    </div>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+                    {(groupedMembers[level] || []).map((user, userIndex) => (
+                      <div
+                        key={user.id || userIndex}
+                        className='w-full bg-white shadow-md rounded-lg p-4 flex items-center'
+                      >
+                        <img
+                          src={user.profilePicture || '/placeholder.svg'}
+                          alt={user.name}
+                          loading='lazy'
+                          className='w-20 h-20 rounded-full mr-8'
+                        />
+                        <div className='text-left'>
+                          <h3 className='text-lg font-bold'>
+                            {language === 'en' ? user.name : user.korean}
+                          </h3>
+                          {user.is_active && (
+                            <>
+                              <p className='text-sm text-gray-600'>{user.dan}</p>
+                              <p className='text-sm text-gray-600'>Since {user.since}</p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
               {index < levelOrder.length - 1 && (
                 <hr className='border-t border-gray-300 mx-4' />
               )}
@@ -114,12 +147,12 @@ const Members = ({ members }) => {
   );
 };
 
-// Fetch data using getServerSideProps
-export async function getServerSideProps() {
+// Fetch data using getStaticProps (ISR) because member data changes infrequently
+export async function getStaticProps() {
   try {
-    // Fetch members from the database
+    // Fetch members from the database (include member_id for stable keys)
     const { rows } = await pool.query(
-      'SELECT name, img, hangeul, altname, level, is_active, start_date FROM centurymember'
+      'SELECT member_id, name, img, hangeul, altname, level, is_active, start_date FROM centurymember'
     );
 
     // Transform data
@@ -154,6 +187,7 @@ export async function getServerSideProps() {
           )}&background=random`;
 
       return {
+        id: row.member_id,
         korean: row.hangeul,
         name: row.altname || row.name,
         level: assignedLevel,
@@ -168,6 +202,8 @@ export async function getServerSideProps() {
       props: {
         members,
       },
+      // Revalidate once a week. Adjust as needed.
+      revalidate: 604800,
     };
   } catch (error) {
     console.error('Error fetching members:', error);
@@ -175,6 +211,7 @@ export async function getServerSideProps() {
       props: {
         members: [], // Return empty array on error
       },
+      revalidate: 86400,
     };
   }
 }
