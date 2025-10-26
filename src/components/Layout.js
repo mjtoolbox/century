@@ -34,6 +34,7 @@ const Layout = ({ children }) => {
       {pathname !== '/login' && <Header heading={heading} />}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         {children}
+      <SpeedInsights />
       </LocalizationProvider>
       {pathname !== '/login' && <Footer />}
     </Fragment>
