@@ -1,7 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 const Admin = () => {
+  const [loadingRefresh, setLoadingRefresh] = useState(false);
+  const [message, setMessage] = useState(null);
+
+  const handleAdminRefresh = async () => {
+    try {
+      setMessage(null);
+      setLoadingRefresh(true);
+
+      const res = await fetch('/api/refresh-members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        setMessage('Refresh failed: ' + (json?.error || res.statusText));
+        setLoadingRefresh(false);
+        return;
+      }
+
+      // Fetch current members to reflect immediate changes in UI if needed
+      const membersRes = await fetch('/api/members');
+      if (!membersRes.ok) throw new Error('Failed to fetch live members');
+      const payload = await membersRes.json();
+
+      setMessage(`Refreshed ${payload.members?.length || 0} members`);
+    } catch (err) {
+      console.error('Admin refresh error:', err);
+      setMessage('Refresh error: ' + String(err?.message || err));
+    } finally {
+      setLoadingRefresh(false);
+      setTimeout(() => setMessage(null), 4000);
+    }
+  };
+
   return (
     <div className='container my-12 mx-auto px-4 md:px-12 '>
       <div className='flex flex-wrap -mx-1 lg:-mx-4'>
@@ -85,14 +120,18 @@ const Admin = () => {
                     d='m9.046 3.59-.435-2.324m.435 2.324a5.338 5.338 0 0 1 6.033 4.333l.331 1.77c.439 2.344 2.383 2.587 2.599 3.76.11.586.22 1.171-.309 1.271L5 17.101c-.529.1-.639-.488-.749-1.074-.219-1.172 1.506-2.102 1.067-4.447l-.331-1.769a5.338 5.338 0 0 1 4.059-6.22Zm-7.13 4.602a8.472 8.472 0 0 1 2.17-5.048m2.646 13.633A3.472 3.472 0 0 0 13.46 16l.089-.5-6.817 1.277Z'
                   />
                 </svg>
-                Send Reminder
+                Refresh DB
               </h2>
-              <p>Manage practice reminder</p>
-              <p>스페셜 메세지</p>
+              <p>Refresh DB change for members</p>
+              <p>멤버페이지 고침</p>
               <div className='card-actions justify-end'>
-                <Link href='/admin'>
-                  <button className='btn bg-info btn-sm'>View</button>
-                </Link>
+                <button
+                  className='btn bg-info btn-sm'
+                  onClick={handleAdminRefresh}
+                  disabled={loadingRefresh}
+                >
+                  {loadingRefresh ? 'Refreshing...' : 'Refresh'}
+                </button>
               </div>
             </div>
           </div>{' '}

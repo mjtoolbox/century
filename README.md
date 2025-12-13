@@ -36,3 +36,27 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## On-demand Revalidation
+
+This project supports on-demand ISR revalidation via an API route. To protect this endpoint, set `REVALIDATE_SECRET` in your environment (e.g., Vercel environment variables).
+
+Usage example (curl):
+
+```bash
+curl -X POST https://<YOUR_DEPLOYMENT_URL>/api/revalidate \
+	-H 'Content-Type: application/json' \
+	-d '{"secret":"<REVALIDATE_SECRET>", "path":"/members"}'
+```
+
+Replace `<YOUR_DEPLOYMENT_URL>` and `<REVALIDATE_SECRET>` with your host URL and secret.
+
+Optionally, call this endpoint from admin actions or database webhooks after mutating data so ISR pages update immediately.
+
+For quick local refresh from the UI (admin usage):
+
+- Navigate to the members page and use the "Refresh" button. The button will prompt for the revalidation secret and call the server-side revalidation endpoint; it will also fetch fresh members data from `/api/members` to update the view immediately.
+- To use the button with a revalidation secret, set `REVALIDATE_SECRET` and provide the same secret when prompted in the UI.
+
+The API `GET /api/members` returns a JSON list of member data (used by the UI for immediate refreshes) and `POST /api/refresh-members` triggers server-side ISR revalidation for `/members`.
+

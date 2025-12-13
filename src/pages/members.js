@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { AppContext } from '@/components/AppContext';
 import { attributes } from '../content/home.md';
 import pool from '../utils/vercelpostgres';
@@ -7,10 +7,14 @@ const Members = ({ members }) => {
   const { language } = useContext(AppContext);
   const { levels } = attributes;
 
+  const [clientMembers, setClientMembers] = useState(members || []);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+
   // Group and sort members (memoized to avoid recomputation on each render)
   const groupedMembers = useMemo(() => {
     const acc = {};
-    for (const member of members) {
+    for (const member of clientMembers) {
       const level = member.level || 'level4';
       if (!acc[level]) acc[level] = [];
       acc[level].push(member);
@@ -47,7 +51,7 @@ const Members = ({ members }) => {
 
     for (const key of Object.keys(acc)) acc[key].sort(sortFn);
     return acc;
-  }, [members]);
+  }, [clientMembers]);
 
   // Define level order
   const levelOrder = ['level1', 'level2', 'level3', 'level4', 'level5'];
@@ -95,11 +99,43 @@ const Members = ({ members }) => {
     });
   };
 
+  const handleRefresh = async () => {
+    try {
+      setMessage(null);
+      setLoading(true);
+      // Fetch the live data from the API to update the UI immediately (no revalidation)
+      const membersRes = await fetch('/api/members');
+      if (!membersRes.ok) throw new Error('Failed to fetch live members');
+      const payload = await membersRes.json();
+      setClientMembers(payload.members || []);
+      setMessage('Members refreshed');
+    } catch (err) {
+      console.error('Refresh error:', err);
+      setMessage('Error refreshing members: ' + String(err?.message || err));
+    } finally {
+      setLoading(false);
+      setTimeout(() => setMessage(null), 4000);
+    }
+  };
+
   return (
     <div className='bg-base-100 py-8'>
-      <h1 className='text-2xl font-bold text-center mb-8'>
-        {language === 'en' ? levels.title : levels.ktitle}
-      </h1>
+      <div className='flex items-center justify-between container mx-auto mb-6'>
+        <h1 className='text-2xl font-bold text-left'>
+          {language === 'en' ? levels.title : levels.ktitle}
+        </h1>
+        <div className='flex items-center space-x-2'>
+          {message && <div className='text-sm text-gray-600'>{message}</div>}
+          <button
+            className='btn btn-sm btn-outline'
+            onClick={handleRefresh}
+            disabled={loading}
+            aria-label='Refresh members'
+          >
+            {loading ? 'Refreshing...' : 'Refresh view'}
+          </button>
+        </div>
+      </div>
       <div className='container mx-auto space-y-8'>
         {levelOrder.map((level, index) => {
           const membersForLevel = groupedMembers[level] || []; // Default to empty array if no members
@@ -147,7 +183,7 @@ const Members = ({ members }) => {
   );
 };
 
-// Fetch data using getStaticProps (ISR) because member data changes infrequently
+  // Fetch data using getStaticProps (ISR) because member data changes infrequently
 export async function getStaticProps() {
   try {
     // Fetch members from the database (include member_id for stable keys)
