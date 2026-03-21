@@ -191,13 +191,11 @@ export async function getStaticProps() {
       "SELECT member_id, name, img, hangeul, altname, level, is_active, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember"
     );
 
-    // Transform data
-    const members = rows.map((row) => {
+    // Transform data (exclude inactive members)
+    const members = rows.filter((row) => row.is_active).map((row) => {
       let assignedLevel;
 
-      if (!row.is_active) {
-        assignedLevel = 'level5';
-      } else if (row.is_active && row.level) {
+      if (row.level) {
         if (row.level.includes('1 Dan')) {
           assignedLevel = 'level2';
         } else if (row.level.includes('Dan')) {
