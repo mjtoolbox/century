@@ -54,7 +54,7 @@ const Members = ({ members }) => {
   }, [clientMembers]);
 
   // Define level order
-  const levelOrder = ['level1', 'level2', 'level3', 'level4', 'level5'];
+  const levelOrder = ['level1', 'level2', 'level3', 'level4'];
 
   // Determine levels and labels dynamically
   const levelLabels = {
@@ -62,41 +62,6 @@ const Members = ({ members }) => {
     level2: language === 'en' ? levels.level2 : levels.klevel2,
     level3: language === 'en' ? levels.level3 : levels.klevel3,
     level4: language === 'en' ? levels.level4 : levels.klevel4,
-    //level5: language === 'en' ? levels.level5 : levels.klevel5,
-  };
-
-  // Custom sort logic for members
-  const sortMembers = (members) => {
-    return members.sort((a, b) => {
-      const extractNumber = (text) => {
-        const match = text.match(/(\d+)/);
-        return match ? parseInt(match[0], 10) : null;
-      };
-
-      const aNumber = extractNumber(a.dan || '');
-      const bNumber = extractNumber(b.dan || '');
-
-      // Primary sort: by level (Dan descending, Kyu ascending)
-      if (a.dan.includes('Dan') && b.dan.includes('Dan')) {
-        const danComparison = (bNumber || 0) - (aNumber || 0);
-        if (danComparison !== 0) return danComparison;
-      }
-      if (a.dan.includes('Kyu') && b.dan.includes('Kyu')) {
-        const kyuComparison = (aNumber || 0) - (bNumber || 0);
-        if (kyuComparison !== 0) return kyuComparison;
-      }
-
-      // Secondary sort: by start_date (null/n/a first, then ascending date)
-      const parseDate = (date) =>
-        date === 'N/A' || !date ? null : new Date(date);
-      const aDate = parseDate(a.since);
-      const bDate = parseDate(b.since);
-
-      if (!aDate && !bDate) return 0; // Both null or N/A
-      if (!aDate) return -1; // a comes first if its date is null or N/A
-      if (!bDate) return 1; // b comes first if its date is null or N/A
-      return aDate - bDate; // Otherwise, sort by ascending date
-    });
   };
 
   const handleRefresh = async () => {
@@ -138,9 +103,6 @@ const Members = ({ members }) => {
       </div>
       <div className='container mx-auto space-y-8'>
         {levelOrder.map((level, index) => {
-          const membersForLevel = groupedMembers[level] || []; // Default to empty array if no members
-          const sortedMembers = sortMembers(membersForLevel); // Sort members for the current level
-
           return (
             <div key={level} className='space-y-4'>
               <h2 className='text-xl font-bold text-left pl-4'>

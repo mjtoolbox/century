@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -6,6 +6,8 @@ import timezone from 'dayjs/plugin/timezone';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useRouter } from 'next/navigation';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -13,11 +15,10 @@ dayjs.extend(customParseFormat);
 dayjs.tz.setDefault('America/Vancouver');
 
 const EditCalendar = () => {
-  const [date, setDate] = useState();
   const router = useRouter();
 
   const handleOnChange = (event) => {
-    console.log('Form::onChange', event.target.value);
+    if (event.target.name !== 'title') return;
     if (event.target.value === 'Langley Langley Lions Society') {
       formik.setFieldValue('description', 'Lions Society West Langley Hall');
       formik.setFieldValue('time', '7-9pm');
@@ -67,11 +68,7 @@ const EditCalendar = () => {
         body: JSON.stringify(values),
       });
 
-      // Handle response if necessary
-      const result = await response.json();
-      console.log('res', result);
-      if (result != null) {
-        // Show a temporary toast message and stay on page briefly
+      if (response.ok) {
         const dateLabel = values?.date ? dayjs(values.date).format('YYYY-MM-DD') : '';
         const titleLabel = values?.title || '';
         setToastMessage(`${dateLabel} ${titleLabel} event added`);
@@ -79,6 +76,10 @@ const EditCalendar = () => {
           setToastMessage('');
           router.push('/addCalendar');
         }, 1000);
+      } else {
+        const result = await response.json();
+        setToastMessage(`Error saving event: ${result?.error || response.statusText}`);
+        setTimeout(() => setToastMessage(''), 4000);
       }
     },
   });
@@ -157,26 +158,25 @@ const EditCalendar = () => {
             >
               Date
             </label>
-            <DatePicker
-              inputClassName='appearance-none w-full bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
-              id='date'
-              name='date'
-              type='text'
-              views={['year', 'month', 'day']}
-              onChange={(value) => {
-                formik.setFieldValue(
-                  'date',
-                  dayjs(new Date(value).setHours(0, 0, 0, 0)).tz(
-                    'America/Vancouver',
-                    true
-                  )
-                );
-              }}
-              //onChange={formik.handleChange}
-              value={formik.values.date}
-              disablePast
-              timezone='America/Vancouver'
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                id='date'
+                name='date'
+                views={['year', 'month', 'day']}
+                onChange={(value) => {
+                  formik.setFieldValue(
+                    'date',
+                    dayjs(new Date(value).setHours(0, 0, 0, 0)).tz(
+                      'America/Vancouver',
+                      true
+                    )
+                  );
+                }}
+                value={formik.values.date}
+                disablePast
+                timezone='America/Vancouver'
+              />
+            </LocalizationProvider>
           </div>
           <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>
             <label

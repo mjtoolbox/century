@@ -10,24 +10,22 @@ const Admin = () => {
       setMessage(null);
       setLoadingRefresh(true);
 
-      const res = await fetch('/api/refresh-members', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const [membersRes, calendarRes] = await Promise.all([
+        fetch('/api/refresh-members', { method: 'POST' }),
+        fetch('/api/refresh-calendar', { method: 'POST' }),
+      ]);
 
-      if (!res.ok) {
-        const json = await res.json().catch(() => ({}));
-        setMessage('Refresh failed: ' + (json?.error || res.statusText));
-        setLoadingRefresh(false);
+      const errors = [];
+      if (!membersRes.ok) errors.push('members');
+      if (!calendarRes.ok) errors.push('calendar');
+
+      if (errors.length) {
+        setMessage(`Refresh failed for: ${errors.join(', ')}`);
         return;
       }
 
-      // Fetch current members to reflect immediate changes in UI if needed
-      const membersRes = await fetch('/api/members');
-      if (!membersRes.ok) throw new Error('Failed to fetch live members');
-      const payload = await membersRes.json();
-
-      setMessage(`Refreshed ${payload.members?.length || 0} members`);
+      const payload = await fetch('/api/members').then((r) => r.json()).catch(() => ({}));
+      setMessage(`Refreshed members (${payload.members?.length ?? 0}) & calendar`);
     } catch (err) {
       console.error('Admin refresh error:', err);
       setMessage('Refresh error: ' + String(err?.message || err));
@@ -122,8 +120,8 @@ const Admin = () => {
                 </svg>
                 Refresh DB
               </h2>
-              <p>Refresh DB change for members</p>
-              <p>멤버페이지 고침</p>
+              <p>Refresh members & calendar cache</p>
+              <p>멤버 & 캘린더 페이지 고침</p>
               <div className='card-actions justify-end'>
                 <button
                   className='btn bg-info btn-sm'
