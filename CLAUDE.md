@@ -3,6 +3,10 @@
 Live site: https://www.centurykumdo.com  
 Repo: d:\workspace\js\centurynew
 
+## Saving Sessions
+
+At the end of a work session run `/ingest` (no argument) in the zettelkasten vault (`D:\MJData\zettelkasten`). This exports a structured session summary to `raw/sessions/YYYY-MM-DD-<topic>.md` and promotes durable knowledge into `LLM/mireutech/century-kumdo-site.md`. The ingest command definition is at `D:\MJData\zettelkasten\.claude\commands\ingest.md`.
+
 ## Project Overview
 
 Next.js website for Century Kendo Club (BC, Canada). Bilingual (English/Korean). Members-only section, event calendar, admin panel. Deployed to Vercel with Vercel Postgres as the database.
