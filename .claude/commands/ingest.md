@@ -2,11 +2,10 @@
 description: Export this session and promote it into the zettelkasten wiki
 ---
 
-<!-- ── PROJECT CONFIG ── change these 3 lines when copying to a new project ── -->
-<!-- PROJECT_NAME:      Century Kumdo Site                                       -->
-<!-- PROJECT_PATH:      d:\workspace\js\centurynew                               -->
-<!-- LLM_WIKI_PAGE:     LLM/mireutech/century-kumdo-site.md                      -->
-<!-- ─────────────────────────────────────────────────────────────────────────── -->
+
+PROJECT_NAME:      Century Kumdo Site    
+PROJECT_PATH:      d:\workspace\js\centurynew
+LLM_WIKI_PAGE:     LLM/mireutech/century-kumdo-site.md
 
 Run the end-of-session knowledge capture pipeline. Do not ask for confirmation — proceed immediately through all steps.
 
@@ -45,17 +44,25 @@ Omit sections that have nothing to report.
 
 ---
 
-## Step 2 — Hand off to the zettelkasten agent
+## Step 2 — Resolve the zettelkasten path
+
+Run `$env:ZETTELKASTEN_PATH` in PowerShell. If the variable is set and non-empty, use that value as the zettelkasten path. Otherwise fall back to `D:\MJData\zettelkasten`.
+
+This allows the same skill file to work on multiple machines (home MSI, work Dell, etc.) without modification — each machine sets `ZETTELKASTEN_PATH` once in its Windows user environment variables.
+
+---
+
+## Step 3 — Hand off to the zettelkasten agent
 
 Spawn an Agent with the following:
-- **Working directory:** `D:\MJData\zettelkasten`
+- **Working directory:** the zettelkasten path resolved in Step 2
 - **Prompt:** Construct the prompt by combining:
   1. The instruction: *"You are in the zettelkasten directory. A dev-project agent has provided the following session summary. Follow the instructions in `.claude/commands/ingest-external.md` using this summary as your source. The relevant LLM wiki page for this project is `LLM/mireutech/century-kumdo-site.md` — prefer updating it over creating a new page."*
   2. The full session summary text you generated in Step 1.
 
 ---
 
-## Step 3 — Report
+## Step 4 — Report
 
 After the agent completes, report:
 - Which session file was written (`raw/sessions/…`)
