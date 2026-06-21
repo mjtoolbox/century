@@ -18,6 +18,7 @@ export default function App({ Component, pageProps }) {
     '/addCalendar',
     '/manageCalendar',
     '/editCalendar',
+    '/manageMembers',
   ];
 
   return (

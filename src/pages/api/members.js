@@ -11,12 +11,10 @@ export default async function handler(req, res) {
       "SELECT member_id, name, img, hangeul, altname, level, is_active, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember"
     );
 
-    const members = rows.map((row) => {
+    const members = rows.filter((row) => row.is_active).map((row) => {
       let assignedLevel;
 
-      if (!row.is_active) {
-        assignedLevel = 'level5';
-      } else if (row.is_active && row.level) {
+      if (row.level) {
         if (row.level.includes('1 Dan')) {
           assignedLevel = 'level2';
         } else if (row.level.includes('Dan')) {
@@ -33,7 +31,7 @@ export default async function handler(req, res) {
       const formattedDate = row.start_date ? row.start_date : 'N/A';
 
       const profilePicture = row.img
-        ? `/profile/${row.img}`
+        ? (row.img.startsWith('http') ? row.img : `/profile/${row.img}`)
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(row.altname || row.name)}&background=random`;
 
       return {

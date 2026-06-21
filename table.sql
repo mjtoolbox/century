@@ -52,7 +52,7 @@ CREATE SEQUENCE public.member_id_seq
 CREATE TABLE public.centurymember (
     member_id integer NOT NULL DEFAULT nextval('member_id_seq'),
     name VARCHAR(100) NULL,
-    img VARCHAR(50) NULL,
+    img TEXT NULL,
 	hangeul VARCHAR(50) NOT NULL,
 	altname VARCHAR(50) NULL,
     address VARCHAR(50) NULL,

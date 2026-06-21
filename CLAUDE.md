@@ -23,6 +23,9 @@ Next.js website for Century Kendo Club (BC, Canada). Bilingual (English/Korean).
 | Database | PostgreSQL via `pg` — Vercel Postgres in prod |
 | Content | Markdown with frontmatter (`frontmatter-markdown-loader`) |
 | Date utils | dayjs |
+| Image processing | `sharp` — resize to 500×500, grayscale conversion |
+| File uploads | `formidable` — multipart/form-data parsing in Pages Router API routes |
+| Blob storage | `@vercel/blob` — profile photo storage (persists across deployments) |
 | Deployment | Vercel (with Speed Insights) |
 
 ## Environment Variables
@@ -33,6 +36,9 @@ VERCELDB_URL=
 
 # ISR revalidation
 REVALIDATE_SECRET=
+
+# Vercel Blob (profile photos + future file sharing)
+BLOB_READ_WRITE_TOKEN=       # from Vercel dashboard → Storage → Blob store
 
 # Local dev PostgreSQL (optional fallback)
 DB_USER=
@@ -52,7 +58,9 @@ Two DB utility files:
 ```sql
 member_id INTEGER PK (seq starts 1000)
 name          VARCHAR(100)
-img           VARCHAR(50)          -- filename in /public/profile/
+img           VARCHAR(255)         -- legacy: bare filename served from /public/profile/
+                                   -- new uploads: full Vercel Blob URL (starts with https://)
+                                   -- profilePicture logic handles both: if startsWith('http') use as-is, else prepend /profile/
 hangeul       VARCHAR(50) NOT NULL -- Korean name
 altname       VARCHAR(50)          -- display name override
 address       VARCHAR(50)
@@ -104,10 +112,11 @@ src/
     index.js             # Landing page (uses Main component)
     members.js           # Member directory (ISR, getStaticProps)
     calendar.js          # Event calendar (react-big-calendar)
-    admin.js             # Admin panel (protected)
+    admin.js             # Admin panel (protected) — tiles: Calendar, Send Message, Refresh DB, Manage Members
     addCalendar.js       # Add event (protected)
     editCalendar.js      # Edit event (protected)
     manageCalendar.js    # Manage/delete events (protected)
+    manageMembers.js     # Search + edit member info + upload profile photo (protected)
     login.js             # Firebase login
     schedule.js          # Class schedule
     instructors.js       # Instructor profiles
@@ -119,6 +128,8 @@ src/
       delete.js          # POST delete event
       refresh-members.js # POST trigger ISR revalidate for /members
       revalidate.js      # POST generic ISR revalidate (REVALIDATE_SECRET required)
+      search-member.js   # GET /api/search-member?q= — name search, returns matching centurymember rows
+      update-member.js   # POST multipart — update member fields + process/upload photo to Vercel Blob
   components/
     AppContext.js        # Auth state + language state (Context)
     PrivateRoute.js      # Redirect to /login if not authenticated
@@ -134,7 +145,7 @@ src/
     vercelpostgres.js    # pg Pool — Vercel Postgres (all API routes use this)
     postgres.js          # pg Pool — local direct connection
 public/
-  profile/              # Member profile photos (named by img column value)
+  profile/              # Legacy member profile photos (bare filenames). New uploads go to Vercel Blob.
 table.sql               # Schema DDL
 insert.sql              # Sample event inserts
 ```
@@ -175,28 +186,29 @@ Full feature roadmap and prioritized work plan:
 `D:\MJData\zettelkasten\projects\Century\roadmap.md`
 
 **Phases at a glance:**
-1. Bug fixes (P0 — immediate)
-2. Auth upgrade — keyword-gated Google login + role system (P1)
-3. Calendar management UX — unified add/edit/delete (P2)
-4. Google Maps for practice locations (P3)
-5. New membership sign-up form (P4)
-6. PWA push notifications with admin compose page (P5)
-7. XLSX member data import with diff preview (P6)
-8. Admin file sharing via Vercel Blob (P7)
-9. Library modernization — DaisyUI v4, MUI v7, etc. (P8)
+1. ✅ Bug fixes (complete 2026-06-21)
+2. Auth upgrade — keyword-gated Google login + role system
+3. Calendar management UX — unified add/edit/delete
+4. Google Maps for practice locations
+5. New membership sign-up form (`/join`)
+6. PWA push notifications with admin compose page
+7. XLSX member data import with diff preview
+8. Admin file sharing via Vercel Blob (Blob infrastructure already used by Manage Members photo upload)
+9. Library modernization — DaisyUI v4, MUI v7, etc.
+
+**Manage Members** (between Phase 1 and Phase 2, implemented 2026-06-21):
+- `/admin` → new "Manage Members" tile → `/manageMembers`
+- Search by name/Korean name/preferred name
+- Edit all member fields inline
+- Upload profile photo: auto-resized to 500×500 grayscale JPEG, stored in Vercel Blob
+- Save triggers ISR revalidation of `/members` for immediate reflection
 
 ## Known Bugs / Issues
 
-1. **Dead `sortedMembers` variable in members.js** ([src/pages/members.js:150](src/pages/members.js#L150)): `sortedMembers` is computed on line 143 but the render at line 150 uses `groupedMembers[level]` directly (already sorted by the `useMemo`). The `sortMembers` function and its call are dead code — duplicates the memoized sort.
-
-2. ~~**`level5` header undefined**~~ — resolved: `level5` removed from `levelOrder` and `levelLabels` entirely (no members in that category).
-
-3. **addCalendar save does not work** — multiple issues in [src/pages/addCalendar.js](src/pages/addCalendar.js) and [src/pages/api/submit.js](src/pages/api/submit.js):
-   - Missing `LocalizationProvider` + `AdapterDayjs` wrapper for MUI `DatePicker` — picker fails without it
-   - `submit.js` uses `await req.body` but Pages Router body is synchronous; should be `req.body`
-   - `NextResponse` imported from `next/server` in a Pages Router handler — unused, remove it
-   - Client checks `if (result != null)` which is always true; should check `response.ok`
-   - Form-level `onChange` cascade: changing color/time select triggers the else branch in `handleOnChange` and resets `time` to `'all day'`
+All Phase 1 bugs resolved as of 2026-06-21:
+- ~~Dead `sortedMembers` variable~~ — removed; render uses `groupedMembers` directly
+- ~~`level5` header undefined~~ — `level5` removed from `levelOrder` and `levelLabels`
+- ~~addCalendar save broken~~ — `LocalizationProvider` added, `req.body` fix, `NextResponse` removed, `response.ok` check, `handleOnChange` guarded on `event.target.name !== 'title'`
 
 ## Admin Workflow
 
@@ -204,9 +216,25 @@ Full feature roadmap and prioritized work plan:
 2. Manage events at `/manageCalendar` (view, delete)
 3. Add events at `/addCalendar`
 4. Edit events at `/editCalendar`
-5. After member DB changes, use the "Refresh view" button on `/members` or trigger ISR via `/api/refresh-members`
+5. Manage members at `/manageMembers` — search by name, edit fields, upload photo
+6. After member DB changes, use the "Refresh view" button on `/members` or trigger ISR via `/api/refresh-members`
 
 ## Profile Images
 
-- Store member photos in `/public/profile/` named exactly as the `img` column value in the DB.
-- If `img` is null, falls back to `ui-avatars.com` generated avatar using the member's display name.
+**Legacy (existing photos):** bare filenames in `img` column (e.g., `derek lee.jpg`), served from `/public/profile/`.
+
+**New uploads (Manage Members feature):** full Vercel Blob URL stored in `img` column. The `profilePicture` resolution guard in both `api/members.js` and `members.js` (getStaticProps) handles both:
+```js
+const profilePicture = row.img
+  ? (row.img.startsWith('http') ? row.img : `/profile/${row.img}`)
+  : `https://ui-avatars.com/api/?name=${encodeURIComponent(row.altname || row.name)}&background=random`;
+```
+
+**Upload pipeline (POST /api/update-member):**
+1. `formidable` parses multipart/form-data → file buffer
+2. `sharp` resizes to 500×500px, converts to grayscale JPEG
+3. `@vercel/blob` `put()` uploads buffer with path `profile/firstname lastname.jpg` (lowercased, space-separated from `name`/`altname`)
+4. Returned blob URL stored in `centurymember.img`
+5. `res.revalidate('/members')` clears ISR cache so members page reflects the change immediately
+
+**Blob path convention:** `profile/<firstname> <lastname>.jpg` — all lowercase, first+last of the display name (`altname` if set, else `name`).

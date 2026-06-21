@@ -134,6 +134,38 @@ const Admin = () => {
             </div>
           </div>{' '}
         </div>
+
+        <div className='my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3'>
+          <div className='card w-75 bg-base-100 shadow-xl'>
+            <div className='card-body'>
+              <h2 className='card-title'>
+                <svg
+                  className='w-6 h-6 text-gray-800 dark:text-white'
+                  aria-hidden='true'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    stroke='currentColor'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M17 20H7a5 5 0 0 1 5-5 5 5 0 0 1 5 5Zm0 0h2a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-1M12 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5 4a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z'
+                  />
+                </svg>
+                Manage Members
+              </h2>
+              <p>Edit member info & profile photo</p>
+              <p>회원 정보 및 사진 관리</p>
+              <div className='card-actions justify-end'>
+                <Link href='/manageMembers'>
+                  <button className='btn btn-sm bg-primary text-white'>Manage</button>
+                </Link>
+              </div>
+            </div>
+          </div>{' '}
+        </div>
       </div>
     </div>
   );

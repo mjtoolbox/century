@@ -176,7 +176,7 @@ export async function getStaticProps() {
 
       // Adjust profile picture logic
       const profilePicture = row.img
-        ? `/profile/${row.img}`
+        ? (row.img.startsWith('http') ? row.img : `/profile/${row.img}`)
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(
             row.altname || row.name
           )}&background=random`;
