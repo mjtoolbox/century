@@ -1,47 +1,92 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 // import pool from '../utils/postgres';
 import pool from '../utils/vercelpostgres';
 
-import { useRouter } from 'next/navigation';
-
 const ManageCalendar = ({ serializedData }) => {
-  const router = useRouter();
-
-  const refreshData = () => {
-    router.push('/manageCalendar');
-  };
-
-  const events = JSON.parse(serializedData);
-
+  const [events, setEvents] = useState(() => JSON.parse(serializedData));
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  async function handleDelete(event_id, start_date) {
-    try {
-      const response = await fetch('/api/delete', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ event_id }),
-      });
+  useEffect(() => {
+    setEvents(JSON.parse(serializedData));
+    setSelectedIds([]);
+  }, [serializedData]);
 
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        console.error('Delete failed', err);
-        alert('Failed to delete event');
-        return;
+  const allSelected = events.length > 0 && selectedIds.length === events.length;
+
+  const toggleOne = (event_id) => {
+    setSelectedIds((prev) =>
+      prev.includes(event_id)
+        ? prev.filter((id) => id !== event_id)
+        : [...prev, event_id]
+    );
+  };
+
+  const toggleAll = () => {
+    setSelectedIds(allSelected ? [] : events.map((event) => event.event_id));
+  };
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(''), 500);
+  };
+
+  async function handleDeleteSelected() {
+    if (selectedIds.length === 0 || isDeleting) return;
+
+    const count = selectedIds.length;
+    if (
+      !window.confirm(
+        `Delete ${count} selected event${count > 1 ? 's' : ''}?`
+      )
+    ) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const results = await Promise.all(
+        selectedIds.map(async (event_id) => {
+          const response = await fetch('/api/delete', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ event_id }),
+          });
+
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            console.error('Delete failed', event_id, err);
+            return { event_id, ok: false };
+          }
+          return { event_id, ok: true };
+        })
+      );
+
+      const deletedIds = results.filter((r) => r.ok).map((r) => r.event_id);
+      const failedCount = results.length - deletedIds.length;
+
+      if (deletedIds.length > 0) {
+        setEvents((prev) =>
+          prev.filter((event) => !deletedIds.includes(event.event_id))
+        );
+        setSelectedIds((prev) => prev.filter((id) => !deletedIds.includes(id)));
+        showToast(
+          `${deletedIds.length} event${deletedIds.length > 1 ? 's' : ''} deleted`
+        );
       }
 
-      const dateLabel = start_date ? start_date.substring(0, 10) : '';
-      setToastMessage(`${dateLabel} event deleted`);
-      setTimeout(() => {
-        setToastMessage('');
-        refreshData();
-      }, 1000);
+      if (failedCount > 0) {
+        alert(`Failed to delete ${failedCount} event(s)`);
+      }
     } catch (err) {
       console.error('Error calling delete API', err);
-      alert('Error deleting event');
+      alert('Error deleting events');
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -74,40 +119,54 @@ const ManageCalendar = ({ serializedData }) => {
           </Link>
         </div>
       </div>
+      <div className='flex justify-center mb-3'>
+        <button
+          className='btn btn-sm btn-error'
+          disabled={selectedIds.length === 0 || isDeleting}
+          onClick={handleDeleteSelected}
+        >
+          {isDeleting
+            ? 'Deleting...'
+            : `Delete selected${
+                selectedIds.length > 0 ? ` (${selectedIds.length})` : ''
+              }`}
+        </button>
+      </div>
       <div className='flex justify-center'>
         <table className='table table-auto sm:px-5'>
           <thead>
             <tr>
+              <th>
+                <input
+                  type='checkbox'
+                  className='checkbox checkbox-sm'
+                  aria-label='Select all events'
+                  checked={allSelected}
+                  onChange={toggleAll}
+                />
+              </th>
               <th>Date</th>
               <th className='sm:hidden hidden md:table-cell'>Title</th>
               <th>Description</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {events.map((event) => (
               <tr key={event.event_id} className='hover bg-slate-50'>
+                <td>
+                  <input
+                    type='checkbox'
+                    className='checkbox checkbox-sm'
+                    aria-label={`Select event ${event.title}`}
+                    checked={selectedIds.includes(event.event_id)}
+                    onChange={() => toggleOne(event.event_id)}
+                  />
+                </td>
                 <th>{event.start_date.substring(0, 10)}</th>
                 <td className='sm:hidden hidden md:table-cell'>
                   {event.title}
                 </td>
                 <td>{event.detail}</td>
-                <td>
-                  {/* <Link
-                    className='btn btn-xs btn-warning mr-2'
-                    href='/editCalendar'
-                  >
-                    Edit
-                  </Link> */}
-                  <button
-                    className='btn btn-xs btn-error'
-                    onClick={async () => {
-                      await handleDelete(`${event.event_id}`, event.start_date);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>
