@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
+import { authFetch } from '../utils/authFetch';
 
 const SignupForm = () => {
   // Note that we have to initialize ALL of fields with values. These
@@ -14,7 +15,7 @@ const SignupForm = () => {
     },
     onSubmit: async (values) => {
       //   alert(JSON.stringify(values, null, 2));
-      const response = await fetch('/api/submit', {
+      const response = await authFetch('/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

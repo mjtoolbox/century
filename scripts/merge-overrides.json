@@ -16,10 +16,12 @@
   "insert": [14, 16, 27, 28, 32, 34, 35, 36, 44, 45, 50, 56],
 
   "_insert_note": [
-    "All 12 unmatched sheet rows are created as new people, including both 김하랑 rows",
-    "(14 and 56). Decision: do not guess which existing 김하랑 (1044 Emma Kim, 1059 Harang",
-    "Kim) either one is; insert both and let the club dedupe by hand afterwards. This",
-    "leaves four 김하랑 rows in the table until that manual pass happens."
+    "All 12 unmatched sheet rows were created as new people, including both 김하랑 rows",
+    "(14 and 56). The club then adjudicated the four resulting 김하랑 rows on 2026-08-22:",
+    "1059 and the newly inserted 1073 are the same person (merged into 1059, see",
+    "migrations/003), 1044 Emma Kim is a different person, and 1084 was deleted as",
+    "incomplete. Leave rows 14 and 56 in this list: the script recognises both as already",
+    "present via hangeul + dob (14 → 1059, 56 → 1044) and will not re-insert them."
   ],
 
   "values": {

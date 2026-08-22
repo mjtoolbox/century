@@ -1,3 +1,4 @@
+import { requireAuth } from '../../utils/requireAuth';
 import formidable from 'formidable';
 import fs from 'fs';
 import sharp from 'sharp';
@@ -24,6 +25,7 @@ const UPDATABLE_FIELDS = {
   level: (v) => v || null,
   status: (v) => (STATUS_VALUES.includes(v) ? v : 'active'),
   is_adult: (v) => v === 'true',
+  is_instructor: (v) => v === 'true',
   gender: (v) => (v === 'M' || v === 'F' ? v : null),
   height_cm: (v) => (v === '' || v == null ? null : Number.parseInt(v, 10) || null),
   occupation: (v) => v || null,
@@ -37,7 +39,7 @@ const UPDATABLE_FIELDS = {
   notes: (v) => v || null,
 };
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
@@ -133,3 +135,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Database update failed: ' + String(err) });
   }
 }
+
+export default requireAuth(handler);

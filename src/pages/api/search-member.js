@@ -1,6 +1,7 @@
+import { requireAuth } from '../../utils/requireAuth';
 import pool from '../../utils/vercelpostgres';
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ error: 'Method not allowed' });
@@ -14,7 +15,7 @@ export default async function handler(req, res) {
   try {
     const term = `%${q.trim()}%`;
     const { rows } = await pool.query(
-      `SELECT member_id, name, img, hangeul, altname, level, status, is_active, is_adult,
+      `SELECT member_id, name, img, hangeul, altname, level, status, is_active, is_adult, is_instructor,
               last_name, first_name, gender, height_cm, occupation, household_id, notes,
               phone, email,
               to_char(start_date::date, 'YYYY-MM-DD') as start_date,
@@ -35,3 +36,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+export default requireAuth(handler);

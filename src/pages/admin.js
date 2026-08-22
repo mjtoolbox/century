@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { authFetch } from '../utils/authFetch';
 
 const Admin = () => {
   const [loadingRefresh, setLoadingRefresh] = useState(false);
@@ -11,8 +12,8 @@ const Admin = () => {
       setLoadingRefresh(true);
 
       const [membersRes, calendarRes] = await Promise.all([
-        fetch('/api/refresh-members', { method: 'POST' }),
-        fetch('/api/refresh-calendar', { method: 'POST' }),
+        authFetch('/api/refresh-members', { method: 'POST' }),
+        authFetch('/api/refresh-calendar', { method: 'POST' }),
       ]);
 
       const errors = [];

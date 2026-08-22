@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 // import pool from '../utils/postgres';
 import pool from '../utils/vercelpostgres';
+import { authFetch } from '../utils/authFetch';
 
 const ManageCalendar = ({ serializedData }) => {
   const [events, setEvents] = useState(() => JSON.parse(serializedData));
@@ -49,7 +50,7 @@ const ManageCalendar = ({ serializedData }) => {
     try {
       const results = await Promise.all(
         selectedIds.map(async (event_id) => {
-          const response = await fetch('/api/delete', {
+          const response = await authFetch('/api/delete', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

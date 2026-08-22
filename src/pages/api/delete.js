@@ -1,6 +1,7 @@
+import { requireAuth } from '../../utils/requireAuth';
 import pool from '../../utils/vercelpostgres';
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
@@ -35,3 +36,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Internal server error', details: String(err) });
   }
 }
+
+export default requireAuth(handler);

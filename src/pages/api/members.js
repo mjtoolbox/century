@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const { rows } = await pool.query(
-      "SELECT member_id, name, img, hangeul, altname, level, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember WHERE status = 'active'"
+      "SELECT member_id, name, img, hangeul, altname, level, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember WHERE status = 'active' AND NOT is_instructor"
     );
 
     const members = rows.map((row) => {

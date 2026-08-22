@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { authFetch } from '../utils/authFetch';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,7 +61,7 @@ const EditCalendar = () => {
     },
     onSubmit: async (values) => {
       //   alert(JSON.stringify(values, null, 2));
-      const response = await fetch('/api/submit', {
+      const response = await authFetch('/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

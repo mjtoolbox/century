@@ -10,8 +10,17 @@
 | 3 — merge dry run | done, re-run post-migration against the real columns: 46 matched, 291 field changes, 9 DB-only, 12 XLSX-only, 0 truncations. Report at `reports/merge-2026-08-22.md`. |
 | 4 — adjudication | done. Recorded in `scripts/merge-overrides.json`: keep all 9 DB-only rows; insert all 12 XLSX-only rows including both 김하랑 (deliberately not paired to the existing 1044/1059 — the club dedupes by hand later); 박홍기 dob corrected 2025-08-25 → 1977-08-25; 유현규 recorded as adult (no dob on file). |
 | 5 — apply | done. 46 updates + 12 inserts (member_id 1073–1084) in one transaction. Table now 67 rows / 59 active. dob 3→56, gender 0→56, email 4→23, phone 4→43, height 24, occupation 8. Every pre-existing rank preserved. Re-run is clean: 0 updates, 0 inserts. |
-| 6 — households | not started. Clusters previewed in the report (27 addresses, 12 multi-member, 35 people); the plan requires the club to confirm them before they drive anything user-visible. |
-| 7 — application changes | done. `npm run build` green against the migrated schema; `/members` prerenders 47 cards and the payload no longer carries `is_active`. Not yet deployed. |
+| 6 — households | done. Club confirmed a shared address is a family. `scripts/derive-households.js` created 27 households (ids 100–126), assigned 50 members and set 6 guardian links (16 total). 17 members have no household: the 9 with no spreadsheet row plus 8 whose row carries no address. Re-run is clean. Report at `reports/households-2026-08-22.md`. |
+| 6a — `is_adult` repair | done. `migrations/002_fix_is_adult_against_dob.sql`. The imported birthdays exposed 3 wrong flags: 1026 김성희 (53) and 1005 조아라미르 (19) were marked minors, 1030 이소희 (9) was marked an adult. `is_adult` means legal age 18+ (confirmed with the club). 0 mismatches remain among the 56 members with a birthday. |
+| 8 — 김하랑 dedupe | done. `migrations/003_merge_harang_kim_duplicates.sql`. Club adjudication: 1059 and 1073 are the same person — folded 1073's spreadsheet fields into 1059 (which kept the photo, start_date and lower id) and deleted 1073; 1044 Emma Kim is a different person, untouched; 1084 deleted as incomplete. Table now 65 rows / 57 active. Both merge scripts still no-op on re-run. |
+| 7 — application changes | done, deployed 2026-08-22. Build green against the migrated schema; the `/api/members` payload no longer carries `is_active` and filters in SQL. |
+
+**Unexplained edit, worth knowing about:** `centurymember.dob` for 1044 (Emma Kim) was NULL in
+the Step 0 backup and NULL when the merge ran, but reads `2012-02-05` afterwards with
+`last_update` still at 2024-12-16. Every script in this migration stamps `last_update`, so the
+value did not come from one of them — most likely a hand edit in the Neon console. It happens to
+be correct and it is what lets the merge recognise sheet row 56 as already present, but a writer
+that bypasses `last_update` means that column cannot be trusted as a change log.
 
 **Only 2 of the 291 merged changes overwrote a populated DB value:** a phone reformatted
 (`6043568893` → `604-356-8893`, same number) and one dob differing by ten days
@@ -22,6 +31,24 @@ fills into empty columns.
 strict subsets of `ㄱ` (58) keyed on hangeul — zero rows in either that `ㄱ` lacks, while `ㄱ`
 holds 5 people `A` omits (박윤희, 김이연, 김태이, 김하준, 김유훈). They are stale re-sorted views of
 the same roster, so parsing `ㄱ` only loses nothing. `Sheet3` is empty.
+
+**Household derivation deviates slightly from the estimate below:** 27 clusters, not 26, and 12
+multi-member households holding 35 people, not 11 and 33. One extra cluster (household 109,
+Coquitlam V3J 6K4) keys on a postal code with a blank street, and the 12 members inserted in
+Step 5 enlarged several families.
+
+**Guardians are derived from the oldest adult in the household, not the primary contact.** The
+household's primary phone is whichever member sits first in the spreadsheet, which for
+800 Rochester Ave. was 한지송, the minor's 19-year-old sibling, rather than 한상석, their father.
+The oldest-adult rule picks the parent in all 6 cases, with age gaps of 30–40 years, and the
+script flags any guardian less than 16 years older than the minor.
+
+6 minors are left with no guardian because no adult in their household is a club member. The
+club confirms this is normal: some households are siblings only, with no parent enrolled. A
+null `guardian_id` on a minor is therefore valid data, not a hole to be filled — do not add a
+NOT NULL guardian requirement for minors, and do not treat these rows as incomplete on a later
+pass. `/join` should likewise accept a household of children with an adult signing the waiver
+who is not themselves a member.
 
 **Correction to the profile below:** the dry run matches **46**, not 47. Excluding the doubled `김하랑` on each side gives 7 real DB-only and 10 real XLSX-only rows — exactly as stated below — but the matched count cannot also include a 김하랑 pair. 46 + 9 = 55 and 46 + 12 = 58 reconcile; 47 + 7 = 54 did not.
 
@@ -291,7 +318,7 @@ The dry run writes no rows: `SELECT max(last_update) FROM centurymember` is unch
 Nothing below this line runs until these are settled. Record the decisions in the work package's **Open decisions** section so they are not re-litigated.
 
 1. **The 17 unmatched rows.** Are the 7 DB-only members (5 of them active) people never added to the spreadsheet, and the 10 XLSX-only members people never added to the DB? Each needs a call: create, retire, or manually pair.
-2. **`김하랑` × 2 on both sides.** Two different people, or one person entered twice? > It is one person.
+2. **`김하랑` × 2 on both sides.** Two different people, or one person entered twice? 
 3. **`applied_date` vs `start_date`.** Confirm the interpretation above, or rule that one source wins and the other is discarded.
 
 Feed the resolutions back as an explicit override file (`scripts/merge-overrides.json`) mapping spreadsheet row → member_id, so the apply pass is reproducible rather than depending on a one-off manual edit.

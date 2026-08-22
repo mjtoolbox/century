@@ -72,17 +72,50 @@ img           VARCHAR(255)         -- legacy: bare filename served from /public/
 hangeul       VARCHAR(50) NOT NULL -- Korean name
 altname       VARCHAR(50)          -- display name override
 address       VARCHAR(50)
-phone         VARCHAR(15)
+phone         VARCHAR(20)          -- widened in Phase 4.5 (was 15)
 carrier       VARCHAR(10)
-email         VARCHAR(20)
+email         VARCHAR(255)         -- widened in Phase 4.5 (was 20, and truncating)
 dob           DATE
 start_date    DATE
 level         VARCHAR(50)          -- e.g. "1 Dan", "2 Dan", "3 Kyu"
-is_adult      BOOLEAN NOT NULL
-is_active     BOOLEAN NOT NULL
+is_adult      BOOLEAN NOT NULL     -- legal age 18+, not training class
+is_active     BOOLEAN GENERATED ALWAYS AS (status = 'active') STORED  -- read-only, cannot be written
+status        VARCHAR(20) NOT NULL DEFAULT 'active'  -- 'active' | 'inactive' | 'pending'; source of truth
+is_instructor BOOLEAN NOT NULL DEFAULT false         -- excluded from /members; see /instructors
 guardian_id   INTEGER FK → centurymember(member_id)
-last_update   TIMESTAMP DEFAULT now()
+household_id  INTEGER FK → household(household_id) ON DELETE SET NULL
+last_name     VARCHAR(60)
+first_name    VARCHAR(60)
+gender        CHAR(1)              -- 'M' | 'F'
+height_cm     SMALLINT
+occupation    VARCHAR(60)
+dan_issue_date DATE
+applied_date  DATE                 -- spreadsheet's application date; distinct from start_date
+notes         TEXT
+last_update   TIMESTAMP DEFAULT now()   -- set by hand in write paths; NOT a trigger, so a
+                                        -- direct console edit will not update it
 ```
+
+**`is_active` is generated and cannot be written** — write `status` instead. Any new writer that
+sets `is_active` will throw.
+
+### `household`
+```sql
+household_id       INTEGER PK (seq starts 100)
+street             VARCHAR(120)
+city               VARCHAR(60)
+province           VARCHAR(2) DEFAULT 'BC'
+postal_code        VARCHAR(10)
+primary_phone      VARCHAR(20)
+primary_email      VARCHAR(255)
+waiver_version     VARCHAR(20)      -- populated only by /join, never back-filled
+waiver_accepted_at TIMESTAMP
+waiver_signed_by   VARCHAR(100)     -- free text: the signer need not be a member
+last_update        TIMESTAMP DEFAULT now()  -- maintained by the last_updated trigger
+```
+
+One row per address. A minor's `guardian_id` may legitimately be NULL — some households are
+siblings with no parent enrolled.
 
 **Level → display group mapping:**
 - `1 Dan` → `level2` (Shodan)
@@ -212,13 +245,30 @@ Full feature roadmap and prioritized work plan:
 - Upload profile photo: auto-resized to 500×500 grayscale JPEG, stored in Vercel Blob
 - Save triggers ISR revalidation of `/members` for immediate reflection
 
+## API Authentication
+
+All routes that return member PII or write to the database verify a Firebase ID token
+server-side via [src/utils/requireAuth.js](src/utils/requireAuth.js). `PrivateRoute` is
+client-side only and does **not** protect API routes.
+
+Guarded: `search-member`, `update-member`, `submit`, `delete`, `refresh-members`,
+`refresh-calendar`. Public: `members` (display fields only). Secret-gated: `revalidate`.
+
+Clients call these through [src/utils/authFetch.js](src/utils/authFetch.js), which attaches the
+token. Verification uses Google's public JWKS, so no service account or private key is needed —
+only `FIREBASE_PROJECT_ID` (defaults to `century-cb33e`). Set `ADMIN_EMAILS` (comma-separated)
+to restrict beyond "any account in the Firebase project"; required once Google sign-in lands.
+
+**Adding a route that reads `centurymember` means wrapping it in `requireAuth`, unless every
+column it returns is safe for the public.**
+
 ## Known Bugs / Issues
 
-**OPEN — `manageMembers.js` silently rewrites ranks.** `LEVEL_OPTIONS` ([src/pages/manageMembers.js:3-13](src/pages/manageMembers.js#L3-L13)) offers `3 Dan` … `5 Kyu` only, but the live table also holds `4 Dan` (1 member), `6 Kyu` (4) and `7 Kyu` (7). Opening any of those 12 members and saving writes back the select's fallback value, destroying their rank. Fix is Step 1 of the Phase 4.5 migration — do it before any bulk member editing.
+~~**`manageMembers.js` silently rewrites ranks.**~~ Fixed 2026-08-22 (Phase 4.5 Step 1): the ladder covers 5 Dan → 7 Kyu and an unrecognized stored level stays selectable. Original report: `LEVEL_OPTIONS` ([src/pages/manageMembers.js:3-13](src/pages/manageMembers.js#L3-L13)) offers `3 Dan` … `5 Kyu` only, but the live table also holds `4 Dan` (1 member), `6 Kyu` (4) and `7 Kyu` (7). Opening any of those 12 members and saving writes back the select's fallback value, destroying their rank. Fix is Step 1 of the Phase 4.5 migration — do it before any bulk member editing.
 
-**OPEN — `email VARCHAR(20)` is truncating.** The longest live value is exactly 20 characters and the membership spreadsheet has addresses up to 26. Data has already been lost. Widened in Phase 4.5 Step 2.
+~~**`email VARCHAR(20)` is truncating.**~~ Fixed 2026-08-22 (Step 2) — now VARCHAR(255); the longest live value is 26 chars. Original report: The longest live value is exactly 20 characters and the membership spreadsheet has addresses up to 26. Data has already been lost. Widened in Phase 4.5 Step 2.
 
-**OPEN — `/api/members` fetches every row then filters in JS.** [api/members.js:14](src/pages/api/members.js#L14) and [members.js:157](src/pages/members.js#L157) both do `rows.filter(row => row.is_active)`. The endpoint is public and unauthenticated; once Phase 4.5 adds addresses, DOBs and phone numbers, this pattern is one careless edit away from leaking PII for 58 people, 25 of them minors. Move the filter into SQL — Phase 4.5 Step 7.
+~~**`/api/members` fetches every row then filters in JS.**~~ Fixed 2026-08-22 (Step 7): both paths filter in SQL (`WHERE status = 'active' AND NOT is_instructor`) and the payload carries no PII. The endpoint was also unauthenticated *and* writable via `update-member`; both are now behind `requireAuth`. Original report: [api/members.js:14](src/pages/api/members.js#L14) and [members.js:157](src/pages/members.js#L157) both do `rows.filter(row => row.is_active)`. The endpoint is public and unauthenticated; once Phase 4.5 adds addresses, DOBs and phone numbers, this pattern is one careless edit away from leaking PII for 58 people, 25 of them minors. Move the filter into SQL — Phase 4.5 Step 7.
 
 All Phase 1 bugs resolved as of 2026-06-21:
 - ~~Dead `sortedMembers` variable~~ — removed; render uses `groupedMembers` directly

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
+import { authFetch } from '../utils/authFetch';
 
 // Canonical rank ladder. Must cover every value present in centurymember.level —
 // see selectMember/levelOptions below for the guard that preserves anything not listed here.
@@ -26,6 +27,7 @@ const emptyForm = {
   level: '',
   status: 'active',
   is_adult: true,
+  is_instructor: false,
   start_date: '',
 };
 
@@ -52,7 +54,7 @@ const ManageMembers = () => {
     setSearchMsg('');
     setSearchResults([]);
     try {
-      const res = await fetch(`/api/search-member?q=${encodeURIComponent(query.trim())}`);
+      const res = await authFetch(`/api/search-member?q=${encodeURIComponent(query.trim())}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Search failed');
       if (data.members.length === 0) {
@@ -78,6 +80,7 @@ const ManageMembers = () => {
       level: member.level || '',
       status: member.status || (member.is_active ? 'active' : 'inactive'),
       is_adult: !!member.is_adult,
+      is_instructor: !!member.is_instructor,
       start_date: member.start_date || '',
     });
     setCurrentPhoto(member.img
@@ -120,7 +123,7 @@ const ManageMembers = () => {
     if (photoFile) fd.append('photo', photoFile);
 
     try {
-      const res = await fetch('/api/update-member', { method: 'POST', body: fd });
+      const res = await authFetch('/api/update-member', { method: 'POST', body: fd });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Save failed');
       if (data.img) setCurrentPhoto(data.img);
@@ -292,6 +295,16 @@ const ManageMembers = () => {
                 <option value='inactive'>Inactive</option>
                 <option value='pending'>Pending</option>
               </select>
+            </label>
+            <label className='flex items-center gap-2 cursor-pointer'>
+              <input
+                type='checkbox'
+                className='checkbox'
+                name='is_instructor'
+                checked={form.is_instructor}
+                onChange={handleFieldChange}
+              />
+              <span className='text-sm'>Instructor (hidden from the members page)</span>
             </label>
             <label className='flex items-center gap-2 cursor-pointer'>
               <input

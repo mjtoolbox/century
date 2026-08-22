@@ -146,7 +146,7 @@ export async function getStaticProps() {
   try {
     // Fetch members from the database (include member_id for stable keys)
     const { rows } = await pool.query(
-      "SELECT member_id, name, img, hangeul, altname, level, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember WHERE status = 'active'"
+      "SELECT member_id, name, img, hangeul, altname, level, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember WHERE status = 'active' AND NOT is_instructor"
     );
 
     // Inactive members are excluded in SQL above, not here: /api/members runs the
