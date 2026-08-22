@@ -40,6 +40,12 @@ REVALIDATE_SECRET=
 # Vercel Blob (profile photos + future file sharing)
 BLOB_READ_WRITE_TOKEN=       # from Vercel dashboard → Storage → Blob store
 
+# Auth (Phase 2)
+INVITE_CODE=                 # keyword a NEW account must supply to register.
+                             # Unset = no new sign-ups at all (fails closed).
+ADMIN_EMAILS=                # optional, comma-separated: auto-promote these to admin
+FIREBASE_PROJECT_ID=         # optional, defaults to century-cb33e
+
 # Local dev PostgreSQL (optional fallback)
 DB_USER=
 DB_HOST=
@@ -254,10 +260,30 @@ client-side only and does **not** protect API routes.
 Guarded: `search-member`, `update-member`, `submit`, `delete`, `refresh-members`,
 `refresh-calendar`. Public: `members` (display fields only). Secret-gated: `revalidate`.
 
-Clients call these through [src/utils/authFetch.js](src/utils/authFetch.js), which attaches the
-token. Verification uses Google's public JWKS, so no service account or private key is needed —
-only `FIREBASE_PROJECT_ID` (defaults to `century-cb33e`). Set `ADMIN_EMAILS` (comma-separated)
-to restrict beyond "any account in the Firebase project"; required once Google sign-in lands.
+All six require `role: 'admin'`. Clients call them through
+[src/utils/authFetch.js](src/utils/authFetch.js), which attaches the token. Verification uses
+Google's public JWKS, so no service account or private key is needed — only
+`FIREBASE_PROJECT_ID`, which defaults to `century-cb33e`.
+
+### Roles and sign-up
+
+`centuryusers` holds who may sign in; `centurymember` holds who trains. They are different sets
+— a parent may hold one login for three children, and most members never sign in.
+
+Sign-in offers email/password (existing accounts) and Google. A Firebase identity alone grants
+nothing: [src/pages/api/auth/register.js](src/pages/api/auth/register.js) must mint a
+`centuryusers` row first, and for a new account that requires the `INVITE_CODE` keyword, proved
+via a short-lived HMAC-signed httpOnly cookie
+([src/utils/inviteCookie.js](src/utils/inviteCookie.js)). Returning users never see the prompt —
+the login page only shows it when registration returns 403.
+
+**Bootstrap:** the table starts empty, and the club's existing Firebase login has no row, so the
+first account to authenticate is created as `admin`. Without that, turning on role checks would
+lock everyone out. Afterwards the only automatic promotion is `ADMIN_EMAILS`; otherwise set
+`role='admin'` in the table by hand.
+
+**`INVITE_CODE` unset means no new sign-ups** — `/api/auth/verify-invite` returns 503 rather
+than admitting anyone. Existing accounts keep working.
 
 **Adding a route that reads `centurymember` means wrapping it in `requireAuth`, unless every
 column it returns is safe for the public.**

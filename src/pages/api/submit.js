@@ -42,4 +42,4 @@ async function handler(req, res) {
   }
 }
 
-export default requireAuth(handler);
+export default requireAuth(handler, { role: 'admin' });
