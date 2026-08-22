@@ -8,10 +8,10 @@ export default async function handler(req, res) {
 
   try {
     const { rows } = await pool.query(
-      "SELECT member_id, name, img, hangeul, altname, level, is_active, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember"
+      "SELECT member_id, name, img, hangeul, altname, level, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember WHERE status = 'active'"
     );
 
-    const members = rows.filter((row) => row.is_active).map((row) => {
+    const members = rows.map((row) => {
       let assignedLevel;
 
       if (row.level) {
@@ -39,7 +39,6 @@ export default async function handler(req, res) {
         korean: row.hangeul,
         name: row.altname || row.name,
         level: assignedLevel,
-        is_active: row.is_active,
         dan: row.level || 'n/a',
         since: formattedDate,
         profilePicture,

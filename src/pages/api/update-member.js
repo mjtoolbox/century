@@ -8,6 +8,35 @@ export const config = {
   api: { bodyParser: false },
 };
 
+const STATUS_VALUES = ['active', 'inactive', 'pending'];
+
+// Fields the admin form may update, with the parser that turns the multipart
+// string into the value the column expects. `is_active` is deliberately absent:
+// since migration 001 it is a generated column derived from `status` and cannot
+// be written. Only keys actually present in the submitted form are updated, so a
+// form that does not yet render a field never blanks it.
+const UPDATABLE_FIELDS = {
+  name: (v) => v || null,
+  hangeul: (v) => v || null,
+  altname: (v) => v || null,
+  last_name: (v) => v || null,
+  first_name: (v) => v || null,
+  level: (v) => v || null,
+  status: (v) => (STATUS_VALUES.includes(v) ? v : 'active'),
+  is_adult: (v) => v === 'true',
+  gender: (v) => (v === 'M' || v === 'F' ? v : null),
+  height_cm: (v) => (v === '' || v == null ? null : Number.parseInt(v, 10) || null),
+  occupation: (v) => v || null,
+  start_date: (v) => v || null,
+  dob: (v) => v || null,
+  dan_issue_date: (v) => v || null,
+  applied_date: (v) => v || null,
+  phone: (v) => v || null,
+  email: (v) => v || null,
+  household_id: (v) => (v === '' || v == null ? null : Number.parseInt(v, 10) || null),
+  notes: (v) => v || null,
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -23,18 +52,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Failed to parse form: ' + String(err) });
   }
 
+  const has = (key) => Object.prototype.hasOwnProperty.call(fields, key);
   const get = (key) => (Array.isArray(fields[key]) ? fields[key][0] : fields[key]);
 
   const memberId = get('member_id');
   if (!memberId) return res.status(400).json({ error: 'member_id is required' });
 
   const name = get('name');
-  const hangeul = get('hangeul');
   const altname = get('altname') || null;
-  const level = get('level') || null;
-  const isActive = get('is_active') === 'true';
-  const isAdult = get('is_adult') === 'true';
-  const startDate = get('start_date') || null;
 
   let imgValue = null;
 
@@ -68,22 +93,25 @@ export default async function handler(req, res) {
   }
 
   try {
-    const setClauses = [
-      'name = $1',
-      'hangeul = $2',
-      'altname = $3',
-      'level = $4',
-      'is_active = $5',
-      'is_adult = $6',
-      'start_date = $7',
-      'last_update = now()',
-    ];
-    const values = [name, hangeul, altname, level, isActive, isAdult, startDate || null];
+    const setClauses = [];
+    const values = [];
+
+    for (const [column, parse] of Object.entries(UPDATABLE_FIELDS)) {
+      if (!has(column)) continue;
+      values.push(parse(get(column)));
+      setClauses.push(`${column} = $${values.length}`);
+    }
 
     if (imgValue) {
-      setClauses.push(`img = $${values.length + 1}`);
       values.push(imgValue);
+      setClauses.push(`img = $${values.length}`);
     }
+
+    if (setClauses.length === 0) {
+      return res.status(400).json({ error: 'No updatable fields submitted' });
+    }
+
+    setClauses.push('last_update = now()');
 
     values.push(memberId);
     const idParam = `$${values.length}`;

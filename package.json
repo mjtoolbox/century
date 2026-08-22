@@ -36,5 +36,8 @@
     "react-tailwindcss-datepicker": "^1.7.4",
     "sharp": "^0.35.2",
     "tailwindcss": "3.4.17"
+  },
+  "devDependencies": {
+    "xlsx": "^0.18.5"
   }
 }

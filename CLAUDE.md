@@ -52,6 +52,14 @@ Two DB utility files:
 - [src/utils/vercelpostgres.js](src/utils/vercelpostgres.js) — used by all API routes (production)
 - [src/utils/postgres.js](src/utils/postgres.js) — local dev direct connection
 
+## Active Migration — Phase 4.5
+
+**[MIGRATION-Phase4.5-MemberDataModel.md](MIGRATION-Phase4.5-MemberDataModel.md) — read this before touching `centurymember` or any member API route.**
+
+The schema below is the **current** state. Phase 4.5 extends it: a new `household` table, nine new `centurymember` columns, `email`/`phone` widened, and `status` replacing `is_active` as the source of truth (`is_active` becomes a generated column). The migration doc has the full DDL, the merge procedure against `raw/century/Century_Membership_List.xlsx`, and per-step verification.
+
+Planning and rationale live in the vault: `D:\MJData\zettelkasten\projects\Century\MemberData-Model-Merge-WorkPackage.md`.
+
 ## Database Schema
 
 ### `centurymember`
@@ -190,9 +198,10 @@ Full feature roadmap and prioritized work plan:
 2. Auth upgrade — keyword-gated Google login + role system
 3. Calendar management UX — unified add/edit/delete
 4. Google Maps for practice locations
-5. New membership sign-up form (`/join`)
+4.5. **Member data model + membership list merge** — [MIGRATION-Phase4.5-MemberDataModel.md](MIGRATION-Phase4.5-MemberDataModel.md). Blocks Phase 5.
+5. New membership sign-up form (`/join`) — household + waiver, built on the Phase 4.5 model
 6. PWA push notifications with admin compose page
-7. XLSX member data import with diff preview
+7. XLSX member data import with diff preview — reuses the Phase 4.5 merge script's matching/precedence logic
 8. Admin file sharing via Vercel Blob (Blob infrastructure already used by Manage Members photo upload)
 9. Library modernization — DaisyUI v4, MUI v7, etc.
 
@@ -204,6 +213,12 @@ Full feature roadmap and prioritized work plan:
 - Save triggers ISR revalidation of `/members` for immediate reflection
 
 ## Known Bugs / Issues
+
+**OPEN — `manageMembers.js` silently rewrites ranks.** `LEVEL_OPTIONS` ([src/pages/manageMembers.js:3-13](src/pages/manageMembers.js#L3-L13)) offers `3 Dan` … `5 Kyu` only, but the live table also holds `4 Dan` (1 member), `6 Kyu` (4) and `7 Kyu` (7). Opening any of those 12 members and saving writes back the select's fallback value, destroying their rank. Fix is Step 1 of the Phase 4.5 migration — do it before any bulk member editing.
+
+**OPEN — `email VARCHAR(20)` is truncating.** The longest live value is exactly 20 characters and the membership spreadsheet has addresses up to 26. Data has already been lost. Widened in Phase 4.5 Step 2.
+
+**OPEN — `/api/members` fetches every row then filters in JS.** [api/members.js:14](src/pages/api/members.js#L14) and [members.js:157](src/pages/members.js#L157) both do `rows.filter(row => row.is_active)`. The endpoint is public and unauthenticated; once Phase 4.5 adds addresses, DOBs and phone numbers, this pattern is one careless edit away from leaking PII for 58 people, 25 of them minors. Move the filter into SQL — Phase 4.5 Step 7.
 
 All Phase 1 bugs resolved as of 2026-06-21:
 - ~~Dead `sortedMembers` variable~~ — removed; render uses `groupedMembers` directly

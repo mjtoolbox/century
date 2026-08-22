@@ -124,12 +124,8 @@ const Members = ({ members }) => {
                           <h3 className='text-lg font-bold'>
                             {language === 'en' ? user.name : user.korean}
                           </h3>
-                          {user.is_active && (
-                            <>
-                              <p className='text-sm text-gray-600'>{user.dan}</p>
-                              <p className='text-sm text-gray-600'>Since {user.since}</p>
-                            </>
-                          )}
+                          <p className='text-sm text-gray-600'>{user.dan}</p>
+                          <p className='text-sm text-gray-600'>Since {user.since}</p>
                         </div>
                       </div>
                     ))}
@@ -150,11 +146,12 @@ export async function getStaticProps() {
   try {
     // Fetch members from the database (include member_id for stable keys)
     const { rows } = await pool.query(
-      "SELECT member_id, name, img, hangeul, altname, level, is_active, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember"
+      "SELECT member_id, name, img, hangeul, altname, level, to_char(start_date::date, 'YYYY-MM-DD') as start_date FROM centurymember WHERE status = 'active'"
     );
 
-    // Transform data (exclude inactive members)
-    const members = rows.filter((row) => row.is_active).map((row) => {
+    // Inactive members are excluded in SQL above, not here: /api/members runs the
+    // same query and is public, and centurymember now holds addresses, DOBs and phones.
+    const members = rows.map((row) => {
       let assignedLevel;
 
       if (row.level) {
@@ -186,7 +183,6 @@ export async function getStaticProps() {
         korean: row.hangeul,
         name: row.altname || row.name,
         level: assignedLevel,
-        is_active: row.is_active,
         dan: row.level || 'n/a',
         since: formattedDate,
         profilePicture,

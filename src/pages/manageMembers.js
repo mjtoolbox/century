@@ -1,6 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 
+// Canonical rank ladder. Must cover every value present in centurymember.level —
+// see selectMember/levelOptions below for the guard that preserves anything not listed here.
 const LEVEL_OPTIONS = [
+  { value: '5 Dan', label: '5 Dan' },
+  { value: '4 Dan', label: '4 Dan' },
   { value: '3 Dan', label: '3 Dan' },
   { value: '2 Dan', label: '2 Dan' },
   { value: '1 Dan', label: '1 Dan (Shodan)' },
@@ -9,6 +13,8 @@ const LEVEL_OPTIONS = [
   { value: '3 Kyu', label: '3 Kyu' },
   { value: '4 Kyu', label: '4 Kyu' },
   { value: '5 Kyu', label: '5 Kyu' },
+  { value: '6 Kyu', label: '6 Kyu' },
+  { value: '7 Kyu', label: '7 Kyu' },
   { value: '', label: 'Beginner / No rank' },
 ];
 
@@ -18,7 +24,7 @@ const emptyForm = {
   hangeul: '',
   altname: '',
   level: '',
-  is_active: true,
+  status: 'active',
   is_adult: true,
   start_date: '',
 };
@@ -70,7 +76,7 @@ const ManageMembers = () => {
       hangeul: member.hangeul || '',
       altname: member.altname || '',
       level: member.level || '',
-      is_active: !!member.is_active,
+      status: member.status || (member.is_active ? 'active' : 'inactive'),
       is_adult: !!member.is_adult,
       start_date: member.start_date || '',
     });
@@ -82,6 +88,14 @@ const ManageMembers = () => {
     setSearchResults([]);
     setSaveMsg('');
   };
+
+  // A level in the DB that is not on the ladder above stays selectable rather than
+  // falling back to the first option and silently overwriting the member's rank.
+  const levelOptions = useMemo(() => (
+    form.level && !LEVEL_OPTIONS.some((o) => o.value === form.level)
+      ? [{ value: form.level, label: `${form.level} (existing)` }, ...LEVEL_OPTIONS]
+      : LEVEL_OPTIONS
+  ), [form.level]);
 
   const handleFieldChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -244,7 +258,7 @@ const ManageMembers = () => {
                 value={form.level}
                 onChange={handleFieldChange}
               >
-                {LEVEL_OPTIONS.map((opt) => (
+                {levelOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>
@@ -266,15 +280,18 @@ const ManageMembers = () => {
           </div>
 
           <div className='flex gap-6'>
-            <label className='flex items-center gap-2 cursor-pointer'>
-              <input
-                type='checkbox'
-                className='checkbox'
-                name='is_active'
-                checked={form.is_active}
+            <label className='flex items-center gap-2'>
+              <span className='text-sm'>Status</span>
+              <select
+                className='select select-bordered select-sm'
+                name='status'
+                value={form.status}
                 onChange={handleFieldChange}
-              />
-              <span className='text-sm'>Active member</span>
+              >
+                <option value='active'>Active</option>
+                <option value='inactive'>Inactive</option>
+                <option value='pending'>Pending</option>
+              </select>
             </label>
             <label className='flex items-center gap-2 cursor-pointer'>
               <input

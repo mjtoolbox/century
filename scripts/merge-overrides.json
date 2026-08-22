@@ -1,0 +1,48 @@
+{
+  "_comment": [
+    "Phase 4.5 Step 4 adjudications, decided 2026-08-22. Keeping them here rather than",
+    "editing the workbook means re-downloading the spreadsheet cannot silently undo them,",
+    "and the apply pass stays reproducible.",
+    "",
+    "pairs      sheet row -> member_id, forcing a match the hangeul key cannot make.",
+    "insert     sheet rows to create as new centurymember rows.",
+    "values     corrections to the source data, applied before diffing.",
+    "isAdult    overrides the dob-derived is_adult (no dob defaults to adult).",
+    "keepDbOnly members with no spreadsheet counterpart, confirmed valid; no action taken."
+  ],
+
+  "pairs": {},
+
+  "insert": [14, 16, 27, 28, 32, 34, 35, 36, 44, 45, 50, 56],
+
+  "_insert_note": [
+    "All 12 unmatched sheet rows are created as new people, including both 김하랑 rows",
+    "(14 and 56). Decision: do not guess which existing 김하랑 (1044 Emma Kim, 1059 Harang",
+    "Kim) either one is; insert both and let the club dedupe by hand afterwards. This",
+    "leaves four 김하랑 rows in the table until that manual pass happens."
+  ],
+
+  "values": {
+    "27": { "dob": "1977-08-25" }
+  },
+
+  "_values_note": [
+    "Sheet row 27, 박홍기 (Park Hong Ki): the workbook reads 2025-08-25, which would make",
+    "him a one-year-old. Corrected to 1977-08-25."
+  ],
+
+  "isAdult": {
+    "36": true
+  },
+
+  "_isAdult_note": [
+    "Sheet row 36, 유현규 (Ryu Hyun Gyu): no birthday in the workbook, recorded as an adult."
+  ],
+
+  "keepDbOnly": [1040, 1044, 1056, 1058, 1059, 1064, 1065, 1067, 1072],
+
+  "_keepDbOnly_note": [
+    "황주희, Emma Kim, 유진형, 이예은 (inactive), Harang Kim, 김민준, 단윤재, 캐일런 슈와르츠,",
+    "and the inactive 'Test' row — all confirmed valid and left untouched by the merge."
+  ]
+}
